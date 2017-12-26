@@ -18,7 +18,6 @@ import Logic.IUpdate;
 import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
-import Products.Product;
 import Products.ProductType;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
