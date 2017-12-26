@@ -96,14 +96,7 @@ public class DbQuery {
 			ResultSet rs = stmt.executeQuery(qry);
 			while(rs.next())
 			{
-				try
-				{
-					objList.add(objSelect.createObject(rs));
-				}
-				catch (SQLException e)
-				{
-					e.printStackTrace();
-				}
+				objList.add(objSelect.createObject(rs));
 			}
 			
 			packet.setParameterList(objList);
