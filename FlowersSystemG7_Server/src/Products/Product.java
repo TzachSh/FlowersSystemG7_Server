@@ -13,6 +13,12 @@ public class Product {
 	public int getId() {
 		return id;
 	}
+	public Product(int id, ProductType productType, double price) {
+		super();
+		this.id = id;
+		this.productType = productType;
+		this.price = price;
+	}
 	public void setId(int id) {
 		this.id = id;
 	}

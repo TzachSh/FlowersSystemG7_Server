@@ -14,7 +14,8 @@ public class Packet implements Serializable
 	 * private attributes
 	 */
 	private static final long serialVersionUID = 1L;
-	private String msgKey;
+	private Command msgKey;
+	private String exceptionMessage;
 	private ArrayList<Object> paramList = new ArrayList<Object>();
 	
 	private boolean resultSuccess = true;
@@ -24,7 +25,7 @@ public class Packet implements Serializable
 	 * 
 	 * @param msgKey The key for the specific request
 	 */
-	public Packet(String msgKey)
+	public Packet(Command msgKey)
 	{
 		this.msgKey = msgKey;
 	}
@@ -72,7 +73,7 @@ public class Packet implements Serializable
 	 * 
 	 * @return message key that sent to server
 	 */
-	public String getmsgKey()
+	public Command getmsgKey()
 	{
 		return msgKey;
 	}
@@ -112,7 +113,7 @@ public class Packet implements Serializable
 	 */
 	public void setExceptionMessage(Exception e)
 	{
-		this.msgKey = e.getMessage();
+		this.exceptionMessage = e.getMessage();
 		resultSuccess = false;
 	}
 	
@@ -122,6 +123,6 @@ public class Packet implements Serializable
 	 */
 	public String getExceptionMessage()
 	{
-		return msgKey;
+		return exceptionMessage;
 	}
 }
