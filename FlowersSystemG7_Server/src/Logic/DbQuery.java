@@ -1,14 +1,10 @@
 package Logic;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import PacketSender.Packet;
+
 import ocsf.server.ConnectionToClient;
 
 public class DbQuery {
@@ -22,9 +18,22 @@ public class DbQuery {
 		this.password = password;
 		this.packet = packet;
 		this.client = client;
+		
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 
-	private Connection connectToDB() {
+	public Packet getPacket() {
+		return packet;
+	}
+
+	public ConnectionToClient getClient() {
+		return client;
+	}
+
+	public Connection connectToDB() {
 		Connection conn = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -42,83 +51,5 @@ public class DbQuery {
 		return conn;
 	}
 
-	/**
-	 * uses for update, insert and delete queries
-	 * 
-	 * @param objUpdate the interface that implements the relevant update
-	 */
-	public <T> void performAction(IUpdate<T> objUpdate)
-	{
-		try {
-			Connection con = connectToDB();
-			@SuppressWarnings("unchecked")
-			T obj = (T)packet.getParameterList().get(0);
-
-			String query = objUpdate.getQuery();
-			PreparedStatement stmt = con.prepareStatement(query);
-			objUpdate.setStatements(stmt, obj);
-			stmt.executeUpdate();
-
-			con.close();
-		} 
-		catch (Exception e)
-		{
-			packet.setExceptionMessage(e);
-		} 
-		finally 
-		{
-			try
-			{
-				client.sendToClient(packet);
-			} 
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-	}
 	
-	/**
-	 * uses for select query
-	 * 
-	 * @param objSelect the interface implements the select operation
-	 */
-	public void select(ISelect objSelect)
-	{
-		try 
-		{
-			ArrayList<Object> objList = new ArrayList<>();
-			
-			Connection con = connectToDB();
-			
-			Statement stmt = con.createStatement();
-			String qry = objSelect.getQuery();
-			ResultSet rs = stmt.executeQuery(qry);
-			while(rs.next())
-			{
-				objList.add(objSelect.createObject(rs));
-			}
-			
-			packet.setParameterList(objList);
-			
-			client.sendToClient(packet);
-		    con.close();
-		}
-		catch (Exception e)
-		{
-			packet.setExceptionMessage(e);
-		}
-		finally
-		{
-			try 
-			{
-				client.sendToClient(packet);
-			}
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-			
-		}
-	}
 }
