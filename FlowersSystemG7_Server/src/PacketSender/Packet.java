@@ -56,6 +56,7 @@ public class Packet implements Serializable
 	 * 
 	 * @return the result list on type excepted
 	 */
+	/*
 	@SuppressWarnings("unchecked")
 	public <T> ArrayList<T> convertedResultList()
 	{
@@ -66,7 +67,7 @@ public class Packet implements Serializable
 		
 		return genericList;
 	}
-	
+	*/
 	
 	/**
 	 * Getter for msgKey attribute for server uses
@@ -111,9 +112,9 @@ public class Packet implements Serializable
 	 * Set an exception that server throw for the request
 	 * @param e Exception instance
 	 */
-	public void setExceptionMessage(Exception e)
+	public void setExceptionMessage(String e)
 	{
-		this.exceptionMessage = e.getMessage();
+		this.exceptionMessage = e;
 		resultSuccess = false;
 	}
 	

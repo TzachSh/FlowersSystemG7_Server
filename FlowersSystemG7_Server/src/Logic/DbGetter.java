@@ -42,7 +42,7 @@ public class DbGetter<T> {
 			con.close();
 		} 
 		catch (Exception e) {
-			packet.setExceptionMessage(e);
+			packet.setExceptionMessage(e.getMessage());
 		}
 	}
 
@@ -66,7 +66,7 @@ public class DbGetter<T> {
 				ResultSet rs = stmt.executeQuery(qry);
 
 				while (rs.next()) {
-					E obj = objSelect.createObject(rs);
+					E obj = objSelect.createObject(rs, objConverted);
 					collectionInObject.add(obj);
 				}
 				
@@ -76,7 +76,7 @@ public class DbGetter<T> {
 			con.close();
 		} 
 		catch (Exception e) {
-			packet.setExceptionMessage(e);
+			packet.setExceptionMessage(e.getMessage());
 		}
 	}
 	
