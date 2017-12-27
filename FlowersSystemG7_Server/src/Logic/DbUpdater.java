@@ -40,7 +40,7 @@ public class DbUpdater<T>
 		} 
 		catch (Exception e)
 		{
-			packet.setExceptionMessage(e);
+			packet.setExceptionMessage(e.getMessage());
 		} 
 		finally 
 		{

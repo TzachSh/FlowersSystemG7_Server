@@ -1,6 +1,6 @@
 package Products;
 
-public class ProductType {
+public class ProductType  {
 	private int id;
 	private String description;
 	
