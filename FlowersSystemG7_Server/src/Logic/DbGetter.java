@@ -14,7 +14,7 @@ import ocsf.server.ConnectionToClient;
  *
  * @param <T> The main object type
  */
-public class DbGetter<T> {
+public class DbGetter {
 	private ArrayList<Object> queryResult = new ArrayList<>();
 	private DbQuery db;
 	private Packet packet;
@@ -26,7 +26,7 @@ public class DbGetter<T> {
 		this.client = db.getClient();
 	}
 
-	public void setMainGetter(ISelect objSelect) {
+	public void performAction(ISelect objSelect) {
 		try {
 			Connection con = db.connectToDB();
 			String qry = objSelect.getQuery();
@@ -40,61 +40,22 @@ public class DbGetter<T> {
 			}
 
 			con.close();
+			
+			packet.setParameterList(queryResult);
 		} 
 		catch (Exception e) {
 			packet.setExceptionMessage(e.getMessage());
 		}
-	}
-
-	public <E> void setCollectionInObject(ISelectCollection<T, E> objSelect) {
-		if (!packet.getResultState())
-			return;
-
-		try 
+		finally
 		{
-			Connection con = db.connectToDB();
-			ArrayList<E> collectionInObject = new ArrayList<>();
-			for (int i = 0; i < queryResult.size(); i++) 
+			try
 			{
-				@SuppressWarnings("unchecked")
-				T objConverted = (T) queryResult.get(i);
-
-				String qry = objSelect.getQuery();
-				PreparedStatement stmt = con.prepareStatement(qry);
-				objSelect.setStatements(stmt, objConverted);
-
-				ResultSet rs = stmt.executeQuery();
-
-				while (rs.next()) {
-					E obj = objSelect.createObject(rs, objConverted);
-					collectionInObject.add(obj);
-				}
-				
-				objSelect.addCollectionToObject(objConverted, collectionInObject);
+				client.sendToClient(packet);
 			}
-
-			con.close();
-		} 
-		catch (Exception e) {
-			packet.setExceptionMessage(e.getMessage());
-		}
-	}
-	
-	public void performAction()
-	{
-		try 
-		{
-			if (packet.getResultState())
+			catch (IOException e)
 			{
-				packet.setParameterList(queryResult);
+				e.printStackTrace();
 			}
-			
-			client.sendToClient(packet);
-			
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
 		}
 	}
 
