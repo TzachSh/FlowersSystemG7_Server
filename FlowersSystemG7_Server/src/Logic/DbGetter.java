@@ -1,12 +1,26 @@
 package Logic;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import Commons.ProductInOrder;
+import Commons.Refund;
+import Commons.Status;
+import Customers.Customer;
+import Orders.Order;
+
 import PacketSender.Packet;
+import Products.CatalogProduct;
+import Products.Flower;
+import Products.FlowerInProduct;
+import Products.Product;
+import Products.ProductType;
+import Users.Permission;
 import ocsf.server.ConnectionToClient;
 
 /**
@@ -80,17 +94,22 @@ public class DbGetter<T> {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void performAction()
 	{
 		try 
 		{
 			if (packet.getResultState())
 			{
-				packet.setParameterList(queryResult);
+		//		packet.setParameterList(queryResult);
 			}
-			
-			client.sendToClient(packet);
-			
+			ArrayList<Object> list = new ArrayList<>();
+			list.add(Status.Canceled);
+			list.add(new Flower("asag", 5, 5));
+			list.add((new CatalogProduct(1, new ProductType(4, "sdgg"), 5.5, new ArrayList<FlowerInProduct>(), new ArrayList<ProductInOrder>(), "sss", 5, null)));
+			list.add(new CatalogProduct(2, null, 5.5, null, null, "sss", 5, null));
+			packet.setParameterList(list);
+			client.sendToClient(packet);		
 		}
 		catch (IOException e) 
 		{
