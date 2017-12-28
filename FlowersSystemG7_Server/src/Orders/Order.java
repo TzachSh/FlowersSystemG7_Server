@@ -48,11 +48,11 @@ public class Order implements Serializable {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	public OrderPayment getOrderPayment() {
-		return orderPayment;
+	public int getOrderPaymentId() {
+		return orderPaymentId;
 	}
-	public void setOrderPayment(OrderPayment orderPayment) {
-		this.orderPayment = orderPayment;
+	public void setOrderPaymentId(int orderPaymentId) {
+		this.orderPaymentId = orderPaymentId;
 	}
 	public ArrayList<ProductInOrder> getProductInOrderList() {
 		return productInOrderList;
