@@ -1,6 +1,8 @@
 package Products;
 
-public class ProductType  {
+import java.io.Serializable;
+
+public class ProductType implements Serializable {
 	private int id;
 	private String description;
 	

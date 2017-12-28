@@ -1,12 +1,13 @@
 package Orders;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 
 import Commons.*;
 import Customers.Customer;
 
-public class Order {
+public class Order implements Serializable {
 	private int id;
 	private Date creationDate;
 	private Date requestedDate;

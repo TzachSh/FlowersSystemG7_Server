@@ -1,8 +1,10 @@
 package Branches;
 
+import java.io.Serializable;
+
 import Users.*;
 
-public class Employee extends User {
+public class Employee extends User implements Serializable {
 	
 	private int eId;
 	private Role role;

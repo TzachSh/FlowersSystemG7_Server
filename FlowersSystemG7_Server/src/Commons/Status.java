@@ -1,6 +1,8 @@
 package Commons;
 
-public enum Status {
+import java.io.Serializable;
+
+public enum Status implements Serializable {
 	Pending,
 	Canceled,
 	Completed

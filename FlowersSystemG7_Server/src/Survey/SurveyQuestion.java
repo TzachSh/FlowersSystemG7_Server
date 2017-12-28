@@ -1,8 +1,9 @@
 package Survey;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SurveyQuestion {
+public class SurveyQuestion implements Serializable {
 	private int id;
 	private Survey survey;
 	private ArrayList<AnswerSurvey> answerSurveyList;

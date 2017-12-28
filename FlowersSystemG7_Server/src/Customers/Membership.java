@@ -1,6 +1,8 @@
 package Customers;
 
-public class Membership {
+import java.io.Serializable;
+
+public class Membership implements Serializable {
 	private int num;
 	private MembershipType membershipType;
 	

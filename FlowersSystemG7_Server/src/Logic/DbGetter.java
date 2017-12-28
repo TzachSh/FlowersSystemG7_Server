@@ -32,7 +32,7 @@ public class DbGetter<T> {
 			String qry = objSelect.getQuery();
 			PreparedStatement stmt = con.prepareStatement(qry);
 			objSelect.setStatements(stmt, db.getPacket());
-			ResultSet rs = stmt.executeQuery(qry);
+			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
 				Object obj = objSelect.createObject(rs);
@@ -63,7 +63,7 @@ public class DbGetter<T> {
 				PreparedStatement stmt = con.prepareStatement(qry);
 				objSelect.setStatements(stmt, objConverted);
 
-				ResultSet rs = stmt.executeQuery(qry);
+				ResultSet rs = stmt.executeQuery();
 
 				while (rs.next()) {
 					E obj = objSelect.createObject(rs, objConverted);

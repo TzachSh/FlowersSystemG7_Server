@@ -1,11 +1,12 @@
 package Survey;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 
 import Branches.Branch;
 
-public class SurveyBranch {
+public class SurveyBranch implements Serializable {
 	private int id;
 	private Date creationDate;
 	private Branch branch;

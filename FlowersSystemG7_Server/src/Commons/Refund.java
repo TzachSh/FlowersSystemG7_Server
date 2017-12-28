@@ -1,11 +1,12 @@
 package Commons;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import Customers.Complain;
 import Orders.Order;
 
-public class Refund {
+public class Refund implements Serializable {
 	private int id;
 	private Date creationDate;
 	private double amount;

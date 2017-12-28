@@ -1,6 +1,8 @@
 package Products;
 
-public class FlowerInProduct {
+import java.io.Serializable;
+
+public class FlowerInProduct implements Serializable {
 	
 	private Flower flower;
 	private Product product;

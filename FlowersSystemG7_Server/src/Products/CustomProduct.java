@@ -1,10 +1,11 @@
 package Products;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Commons.ProductInOrder;
 
-public class CustomProduct extends Product{
+public class CustomProduct extends Product implements Serializable {
 	private String blessing;
 
 	public String getBlessing() {

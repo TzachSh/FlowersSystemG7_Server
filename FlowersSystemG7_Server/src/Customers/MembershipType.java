@@ -1,6 +1,8 @@
 package Customers;
 
-public enum MembershipType {
+import java.io.Serializable;
+
+public enum MembershipType implements Serializable {
 	Normal,
 	Monthly,
 	Yearly

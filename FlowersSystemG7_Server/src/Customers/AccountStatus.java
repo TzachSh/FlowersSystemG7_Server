@@ -1,6 +1,8 @@
 package Customers;
 
-public enum AccountStatus {
+import java.io.Serializable;
+
+public enum AccountStatus implements Serializable {
 	Active,
 	Blocked,
 	Closed,
