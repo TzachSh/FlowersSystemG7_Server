@@ -35,5 +35,4 @@ public class ProductInOrder implements Serializable {
 		this.productId = productId;
 		this.quantity = quantity;
 	}
-	
 }

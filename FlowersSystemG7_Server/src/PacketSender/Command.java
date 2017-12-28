@@ -5,5 +5,6 @@ import java.io.Serializable;
 public enum Command implements Serializable
 {
 	getCatalogProducts,
-	updateCatalogProduct
+	updateCatalogProduct,
+	getFlowers
 }

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import PacketSender.Command;
 import PacketSender.Packet;
 import ocsf.server.ConnectionToClient;
 
@@ -20,11 +21,13 @@ public class DbGetter {
 	private DbQuery db;
 	private Packet packet;
 	private ConnectionToClient client;
-
-	public DbGetter(DbQuery db) {
+	private Command cmd;
+	
+	public DbGetter(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
 		this.client = db.getClient();
+		this.cmd = cmd;
 	}
 
 	public void performAction(ISelect objSelect) {
@@ -42,22 +45,10 @@ public class DbGetter {
 
 			con.close();
 			
-			packet.setParameterList(queryResult);
+			packet.setParametersForCommand(cmd, queryResult);
 		} 
 		catch (Exception e) {
 			packet.setExceptionMessage(e.getMessage());
-		}
-		finally
-		{
-			try
-			{
-
-				client.sendToClient(packet);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
 		}
 	}
 

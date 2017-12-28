@@ -24,4 +24,10 @@ public class ProductType implements Serializable {
 		this.id = id;
 		this.description = description;
 	}
+	
+	public ProductType(ProductType proType)
+	{
+		this.id = proType.id;
+		this.description = proType.description;
+	}
 }

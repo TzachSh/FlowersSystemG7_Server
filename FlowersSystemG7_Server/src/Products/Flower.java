@@ -43,5 +43,10 @@ public class Flower implements Serializable {
 		this.color = color;
 		this.flowerInProduct = new ArrayList<>();
 	}
+	
+	public Flower(Flower flower)
+	{
+		this(flower.name, flower.price, flower.color);
+	}
 
 }

@@ -48,11 +48,11 @@ public class Order implements Serializable {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	public OrderPayment getOrderPayment() {
-		return orderPayment;
+	public int getOrderPaymentId() {
+		return orderPaymentId;
 	}
-	public void setOrderPayment(OrderPayment orderPayment) {
-		this.orderPayment = orderPayment;
+	public void setOrderPaymentId(int orderPaymentId) {
+		this.orderPaymentId = orderPaymentId;
 	}
 	public ArrayList<ProductInOrder> getProductInOrderList() {
 		return productInOrderList;
@@ -70,20 +70,6 @@ public class Order implements Serializable {
 		return deliery;
 	}
 	public void setDeliery(Delivery deliery) {
-		this.deliery = deliery;
-	}
-	public Order(int id, Date creationDate, Date requestedDate, Customer customer, Status status,
-			OrderPayment orderPayment, ArrayList<ProductInOrder> productInOrderList, Commons.Refund refund,
-			Delivery deliery) {
-
-		this.id = id;
-		this.creationDate = creationDate;
-		this.requestedDate = requestedDate;
-		this.customerId = customerId;
-		this.status = status;
-		this.orderPaymentId = orderPaymentId;
-		this.productInOrderList = productInOrderList;
-		Refund = refund;
 		this.deliery = deliery;
 	}
 

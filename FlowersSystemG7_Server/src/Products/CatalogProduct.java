@@ -36,5 +36,4 @@ public class CatalogProduct extends Product implements Serializable {
 		this.saleDiscountPercent = saleDiscountPercent;
 		this.imgUrl = imgUrl;
 	}
-
 }
