@@ -9,10 +9,10 @@ import Branches.Branch;
 public class SurveyBranch implements Serializable {
 	private int id;
 	private Date creationDate;
-	private Branch branch;
+	private int branchId;
 	private ArrayList<AnswerSurvey> answerSurvey;
-	private Survey survey;
-	private SurveyConclusion surveyConclusion;
+	private int surveyId;
+	private int surveyConclusionId;
 	public int getId() {
 		return id;
 	}
@@ -25,11 +25,11 @@ public class SurveyBranch implements Serializable {
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	public Branch getBranch() {
-		return branch;
+	public int getBranchId() {
+		return branchId;
 	}
-	public void setBranch(Branch branch) {
-		this.branch = branch;
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
 	}
 	public ArrayList<AnswerSurvey> getAnswerSurvey() {
 		return answerSurvey;
@@ -37,27 +37,27 @@ public class SurveyBranch implements Serializable {
 	public void setAnswerSurvey(ArrayList<AnswerSurvey> answerSurvey) {
 		this.answerSurvey = answerSurvey;
 	}
-	public Survey getSurvey() {
-		return survey;
+	public int getSurveyId() {
+		return surveyId;
 	}
-	public void setSurvey(Survey survey) {
-		this.survey = survey;
+	public void setSurveyId(int surveyId) {
+		this.surveyId = surveyId;
 	}
-	public SurveyConclusion getSurveyConclusion() {
-		return surveyConclusion;
+	public int getSurveyConclusionId() {
+		return surveyConclusionId;
 	}
-	public void setSurveyConclusion(SurveyConclusion surveyConclusion) {
-		this.surveyConclusion = surveyConclusion;
+	public void setSurveyConclusionId(int surveyConclusionId) {
+		this.surveyConclusionId = surveyConclusionId;
 	}
-	public SurveyBranch(int id, Date creationDate, Branch branch, ArrayList<AnswerSurvey> answerSurvey, Survey survey,
-			SurveyConclusion surveyConclusion) {
-
+	
+	public SurveyBranch(int id, Date creationDate, int branchId, ArrayList<AnswerSurvey> answerSurvey, int surveyId,
+			int surveyConclusionId) {
+		super();
 		this.id = id;
 		this.creationDate = creationDate;
-		this.branch = branch;
+		this.branchId = branchId;
 		this.answerSurvey = answerSurvey;
-		this.survey = survey;
-		this.surveyConclusion = surveyConclusion;
+		this.surveyId = surveyId;
+		this.surveyConclusionId = surveyConclusionId;
 	}
-
 }

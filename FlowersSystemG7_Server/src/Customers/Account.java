@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
 	private int num;
-	private Customer customer;
+	private int customerId;
 	private AccountStatus accountStatus;
 	private String creditCard;
 	public int getNum() {
@@ -13,11 +13,11 @@ public class Account implements Serializable {
 	public void setNum(int num) {
 		this.num = num;
 	}
-	public Customer getCustomer() {
-		return customer;
+	public int getCustomerId() {
+		return customerId;
 	}
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 	public AccountStatus getAccountStatus() {
 		return accountStatus;
@@ -31,10 +31,10 @@ public class Account implements Serializable {
 	public void setCreditCard(String creditCard) {
 		this.creditCard = creditCard;
 	}
-	public Account(int num, Customer customer, AccountStatus accountStatus, String creditCard) {
+	public Account(int num, int customerId, AccountStatus accountStatus, String creditCard) {
 		super();
 		this.num = num;
-		this.customer = customer;
+		this.customerId = customerId;
 		this.accountStatus = accountStatus;
 		this.creditCard = creditCard;
 	}

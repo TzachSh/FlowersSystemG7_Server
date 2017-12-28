@@ -3,16 +3,17 @@ package Orders;
 import java.io.Serializable;
 
 public class Delivery implements Serializable {
+	
 	private int id;
 	private String address;
 	private String phone;
 	private String receiver;
-	private Order Order;
+	private int orderId;
 	
 	public int getId() {
 		return id;
 	}
-	public void setdId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getAddress() {
@@ -33,18 +34,19 @@ public class Delivery implements Serializable {
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
-	public Order getOrder() {
-		return Order;
+	public int getOrderId() {
+		return orderId;
 	}
-	public void setOrder(Order order) {
-		Order = order;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
-	public Delivery(int id, String address, String phone, String receiver, Orders.Order order) {
+	public Delivery(int id, String address, String phone, String receiver, int orderId) {
 		super();
 		this.id = id;
 		this.address = address;
 		this.phone = phone;
 		this.receiver = receiver;
-		Order = order;
+		this.orderId = orderId;
 	}
+	
 }

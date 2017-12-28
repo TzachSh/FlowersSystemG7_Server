@@ -4,21 +4,21 @@ import java.io.Serializable;
 
 public class OrderPayment implements Serializable {
 	private int id;
-	private Order order;
+	private int orderId;
 	private PaymentMethod paymentMethod;
 	private double amount;
 	
 	public int getId() {
 		return id;
 	}
-	public void setOpId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public Order getOrder() {
-		return order;
+	public int getOrderId() {
+		return orderId;
 	}
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
 	public PaymentMethod getPaymentMethod() {
 		return paymentMethod;
@@ -32,10 +32,11 @@ public class OrderPayment implements Serializable {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	public OrderPayment(int id, Order order, PaymentMethod paymentMethod, double amount) {
+	
+	public OrderPayment(int id, int orderId, PaymentMethod paymentMethod, double amount) {
 		super();
 		this.id = id;
-		this.order = order;
+		this.orderId = orderId;
 		this.paymentMethod = paymentMethod;
 		this.amount = amount;
 	}

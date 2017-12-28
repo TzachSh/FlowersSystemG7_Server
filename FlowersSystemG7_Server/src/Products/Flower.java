@@ -1,5 +1,6 @@
 package Products;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -7,7 +8,7 @@ public class Flower implements Serializable {
 	
 	private String name;
 	private double price;
-	private int color;
+	private Color color;
 	private ArrayList<FlowerInProduct> flowerInProduct;
 	
 	public String getName() {
@@ -22,10 +23,10 @@ public class Flower implements Serializable {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public int getColor() {
+	public Color getColor() {
 		return color;
 	}
-	public void setColor(int color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 	public ArrayList<FlowerInProduct> getFlowerInProduct() {
@@ -35,7 +36,7 @@ public class Flower implements Serializable {
 		this.flowerInProduct = flowerInProduct;
 	}
 	
-	public Flower(String name, double price, int color) {
+	public Flower(String name, double price, Color color) {
 
 		this.name = name;
 		this.price = price;

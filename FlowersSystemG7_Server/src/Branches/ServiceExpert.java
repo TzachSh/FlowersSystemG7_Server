@@ -18,9 +18,9 @@ public class ServiceExpert extends Employee implements Serializable {
 		this.surveyConclusionList = surveyConclusionList;
 	}
 
-	public ServiceExpert(int uId, String user, String password, boolean isLogged,Permission permission, int eId, Role role, Branch branch,
+	public ServiceExpert(int uId, String user, String password, boolean isLogged,Permission permission, int eId, Role role, int bId,
 			ArrayList<SurveyConclusion> surveyConclusionList) {
-		super(uId, user, password, isLogged,permission, eId, role, branch);
+		super(uId, user, password, isLogged,permission, eId, role, bId);
 		this.surveyConclusionList = surveyConclusionList;
 	}
 }

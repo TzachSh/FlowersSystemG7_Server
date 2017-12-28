@@ -7,9 +7,6 @@ import Commons.ProductInOrder;
 
 public class CatalogProduct extends Product implements Serializable {
 
-	/**
-	 * 
-	 */
 	private String name;
 	private int saleDiscountPercent;
 	private String imgUrl;
@@ -31,10 +28,10 @@ public class CatalogProduct extends Product implements Serializable {
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
-	public CatalogProduct(int id, ProductType productType, double price, ArrayList<FlowerInProduct> flowerInProductList,
+	public CatalogProduct(int id, int productTypeId, double price, ArrayList<FlowerInProduct> flowerInProductList,
 			ArrayList<ProductInOrder> productInOrderList, String name, int saleDiscountPercent, String imgUrl) {
 		
-		super(id, productType, price, flowerInProductList, productInOrderList);
+		super(id, productTypeId, price, flowerInProductList, productInOrderList);
 		this.name = name;
 		this.saleDiscountPercent = saleDiscountPercent;
 		this.imgUrl = imgUrl;

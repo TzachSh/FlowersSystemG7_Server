@@ -4,21 +4,21 @@ import java.io.Serializable;
 
 public class FlowerInProduct implements Serializable {
 	
-	private Flower flower;
-	private Product product;
+	private int flowerId;
+	private int productId;
 	private int quantity;
 	
-	public Flower getFlower() {
-		return flower;
+	public int getFlowerId() {
+		return flowerId;
 	}
-	public void setFlower(Flower flower) {
-		this.flower = flower;
+	public void setFlowerId(int flowerId) {
+		this.flowerId = flowerId;
 	}
-	public Product getProduct() {
-		return product;
+	public int getProductId() {
+		return productId;
 	}
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProduct(int productId) {
+		this.productId = productId;
 	}
 	public int getQuantity() {
 		return quantity;
@@ -27,10 +27,10 @@ public class FlowerInProduct implements Serializable {
 		this.quantity = quantity;
 	}
 	
-	public FlowerInProduct(Flower flower, Product product, int quantity) {
+	public FlowerInProduct(int flowerId, int productId, int quantity) {
 		super();
-		this.flower = flower;
-		this.product = product;
+		this.flowerId = flowerId;
+		this.productId = productId;
 		this.quantity = quantity;
 	}
 }

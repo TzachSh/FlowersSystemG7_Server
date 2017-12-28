@@ -19,9 +19,9 @@ public class CustomerService extends Employee implements Serializable {
 	}
 
 	
-	public CustomerService(int uId, String user, String password, boolean isLogged,Permission permission, int eId, Role role, Branch branch,
+	public CustomerService(int uId, String user, String password, boolean isLogged,Permission permission, int eId, Role role, int branchId,
 			ArrayList<Complain> complainList) {
-		super(uId, user, password, isLogged,permission, eId, role, branch);
+		super(uId, user, password, isLogged,permission, eId, role, branchId);
 		this.complainList = complainList;
 	}
 	

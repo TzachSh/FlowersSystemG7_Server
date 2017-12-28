@@ -9,66 +9,88 @@ import Commons.Refund;
 
 
 public class Complain implements IRefundAble, Serializable {
+	
 	private int id;
 	private Date creationDate;
 	private String title;
 	private String details;
-	private Customer customer;
-	private Refund refund;
-	private CustomerService customerService;
+	private int customerId;
+	private int refundId;
+	private int customerServiceId;
 	
+	@Override
+	public void setRefund(Refund refund) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public Date getCreationDate() {
 		return creationDate;
 	}
+
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public String getDetails() {
 		return details;
 	}
+
 	public void setDetails(String details) {
 		this.details = details;
 	}
-	public Customer getCustomer() {
-		return customer;
-	}
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-	public Refund getRefund() {
-		return refund;
-	}
-	public void setRefund(Refund refund) {
-		this.refund = refund;
-	}
-	public CustomerService getCustomerService() {
-		return customerService;
-	}
-	public void setCustomerService(CustomerService customerService) {
-		this.customerService = customerService;
-	}
-	public Complain(int id, Date creationDate, String title, String details, Customer customer, Refund refund,
-			CustomerService customerService) {
 
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public int getRefundId() {
+		return refundId;
+	}
+
+	public void setRefundId(int refundId) {
+		this.refundId = refundId;
+	}
+
+	public int getCustomerServiceId() {
+		return customerServiceId;
+	}
+
+	public void setCustomerServiceId(int customerServiceId) {
+		this.customerServiceId = customerServiceId;
+	}
+
+	public Complain(int id, Date creationDate, String title, String details, int customerId, int refundId,
+			int customerServiceId) {
+		super();
 		this.id = id;
 		this.creationDate = creationDate;
 		this.title = title;
 		this.details = details;
-		this.customer = customer;
-		this.refund = refund;
-		this.customerService = customerService;
+		this.customerId = customerId;
+		this.refundId = refundId;
+		this.customerServiceId = customerServiceId;
 	}
+	
 	
 }

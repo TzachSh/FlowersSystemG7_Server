@@ -8,14 +8,14 @@ public class Employee extends User implements Serializable {
 	
 	private int eId;
 	private Role role;
-	private Branch branch;
+	private int branchId;
 	
-	public Branch getBranch() {
-		return branch;
+	public int getBranchId() {
+		return branchId;
 	}
-
-	public void setBranch(Branch branch) {
-		this.branch = branch;
+		
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
 	}
 
 	public Role getRole() {
@@ -34,11 +34,11 @@ public class Employee extends User implements Serializable {
 		this.eId = eId;
 	}
 
-	public Employee(int uId, String user, String password, boolean isLogged,Users.Permission permission,int eId,Role role,Branch branch) {
+	public Employee(int uId, String user, String password, boolean isLogged,Users.Permission permission,int eId,Role role,int branchId) {
 		super(uId, user, password, isLogged,permission);
 		// TODO Auto-generated constructor stub
 		seteId(eId);
 		setRole(role);
-		setBranch(branch);
+		setBranchId(branchId);
 	}
 }

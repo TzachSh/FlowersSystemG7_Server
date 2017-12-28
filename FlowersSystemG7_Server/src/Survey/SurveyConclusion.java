@@ -6,32 +6,30 @@ import Branches.ServiceExpert;
 
 public class SurveyConclusion implements Serializable {
 	private int id;
-	private ServiceExpert serviceExpert;
-	private SurveyBranch surveyBranch;
-	
+	private int serviceExpertId;
+	private int surveyBranchId;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public ServiceExpert getServiceExpert() {
-		return serviceExpert;
+	public int getServiceExpertId() {
+		return serviceExpertId;
 	}
-	public void setServiceExpert(ServiceExpert serviceExpert) {
-		this.serviceExpert = serviceExpert;
+	public void setServiceExpertId(int serviceExpertId) {
+		this.serviceExpertId = serviceExpertId;
 	}
-	public SurveyBranch getSurveyBranch() {
-		return surveyBranch;
+	public int getSurveyBranchId() {
+		return surveyBranchId;
 	}
-	public void setSurveyBranch(SurveyBranch surveyBranch) {
-		this.surveyBranch = surveyBranch;
+	public void setSurveyBranchId(int surveyBranchId) {
+		this.surveyBranchId = surveyBranchId;
 	}
-	public SurveyConclusion(int id, ServiceExpert serviceExpert, SurveyBranch surveyBranch) {
+	public SurveyConclusion(int id, int serviceExpertId, int surveyBranchId) {
 		super();
 		this.id = id;
-		this.serviceExpert = serviceExpert;
-		this.surveyBranch = surveyBranch;
+		this.serviceExpertId = serviceExpertId;
+		this.surveyBranchId = surveyBranchId;
 	}
-
 }

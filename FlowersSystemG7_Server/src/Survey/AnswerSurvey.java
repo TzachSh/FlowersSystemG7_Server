@@ -4,30 +4,31 @@ import java.io.Serializable;
 
 public class AnswerSurvey implements Serializable {
 	private int id;
-	private SurveyQuestion surveyQuestion;
-	private SurveyBranch surveyBranch;
+	private int surveyQuestionId;
+	private int surveyBranchId;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public SurveyQuestion getSurveyQuestion() {
-		return surveyQuestion;
+	public int getSurveyQuestionId() {
+		return surveyQuestionId;
 	}
-	public void setSurveyQuestion(SurveyQuestion surveyQuestion) {
-		this.surveyQuestion = surveyQuestion;
+	public void setSurveyQuestionId(int surveyQuestionId) {
+		this.surveyQuestionId = surveyQuestionId;
 	}
-	public SurveyBranch getSurveyBranch() {
-		return surveyBranch;
+	public int getSurveyBranchId() {
+		return surveyBranchId;
 	}
-	public void setSurveyBranch(SurveyBranch surveyBranch) {
-		this.surveyBranch = surveyBranch;
+	public void setSurveyBranchId(int surveyBranchId) {
+		this.surveyBranchId = surveyBranchId;
 	}
-	public AnswerSurvey(int id, SurveyQuestion surveyQuestion, SurveyBranch surveyBranch) {
-
+	
+	public AnswerSurvey(int id, int surveyQuestionId, int surveyBranchId) {
+		super();
 		this.id = id;
-		this.surveyQuestion = surveyQuestion;
-		this.surveyBranch = surveyBranch;
-	}	
+		this.surveyQuestionId = surveyQuestionId;
+		this.surveyBranchId = surveyBranchId;
+	}
 }

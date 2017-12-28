@@ -1,10 +1,5 @@
 package Server;
 
-<<<<<<< HEAD
-import java.awt.Color;
-import java.io.IOException;
-=======
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,50 +59,6 @@ public class SystemServer extends AbstractServer {
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
-<<<<<<< HEAD
-		
-		
-		// each product has a collection of flowers
-		// so, register the flower collection to each product
-		dbGet.<FlowerInProduct>setCollectionInObject(new ISelectCollection<CatalogProduct, FlowerInProduct>() {
-
-			@Override
-			public String getQuery() 
-			{
-				return "SELECT FP.flower,FP.quantity,F.price,F.color FROM flowerinproduct FP INNER JOIN flower F ON FP.flower=F.flower WHERE FP.pId=?";
-			}
-
-			@Override
-			public void setStatements(PreparedStatement stmt, CatalogProduct obj) throws SQLException
-			{
-				stmt.setInt(1, obj.getId());
-			}
-
-			@Override
-			public FlowerInProduct createObject(ResultSet rs, CatalogProduct mainObj) throws SQLException
-			{
-				Product pro = (Product)mainObj;
-				
-				String name = rs.getString(1);
-				double price = rs.getDouble(3);
-				int color = rs.getInt(4);
-				int qty = rs.getInt(2);
-				
-				Flower flower = new Flower(name, price, color);
-				FlowerInProduct flowerInProduct = new FlowerInProduct(flower, pro, qty);
-				return flowerInProduct;
-			}
-
-			@Override
-			public void addCollectionToObject(CatalogProduct obj, ArrayList<FlowerInProduct> objList)
-			{
-				obj.setFlowerInProductList(objList);
-			}
-		});
-		
-		dbGet.performAction();
-=======
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 	}
 	
 	public void updateCatalogProductHandler(DbQuery db)

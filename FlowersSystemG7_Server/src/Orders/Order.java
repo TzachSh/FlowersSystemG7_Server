@@ -11,9 +11,9 @@ public class Order implements Serializable {
 	private int id;
 	private Date creationDate;
 	private Date requestedDate;
-	private Customer customer;
+	private int customerId;
 	private Status status;
-	private OrderPayment orderPayment;
+	private int orderPaymentId;
 	private ArrayList<ProductInOrder> productInOrderList;
 	private Refund Refund;
 	private Delivery deliery;
@@ -36,11 +36,11 @@ public class Order implements Serializable {
 	public void setRequestedDate(Date requestedDate) {
 		this.requestedDate = requestedDate;
 	}
-	public Customer getCustomer() {
-		return customer;
+	public int getCustomerId() {
+		return customerId;
 	}
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 	public Status getStatus() {
 		return status;
@@ -79,9 +79,9 @@ public class Order implements Serializable {
 		this.id = id;
 		this.creationDate = creationDate;
 		this.requestedDate = requestedDate;
-		this.customer = customer;
+		this.customerId = customerId;
 		this.status = status;
-		this.orderPayment = orderPayment;
+		this.orderPaymentId = orderPaymentId;
 		this.productInOrderList = productInOrderList;
 		Refund = refund;
 		this.deliery = deliery;

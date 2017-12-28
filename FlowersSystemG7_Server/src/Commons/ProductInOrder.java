@@ -7,21 +7,21 @@ import Products.Product;
 
 public class ProductInOrder implements Serializable {
 	
-	private Order order;
-	private Product product;
+	private int orderId;
+	private int productId;
 	private int quantity;
 	
-	public Order getOrder() {
-		return order;
+	public int getOrderId() {
+		return orderId;
 	}
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
-	public Product getProduct() {
-		return product;
+	public int getProductId() {
+		return productId;
 	}
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 	public int getQuantity() {
 		return quantity;
@@ -30,9 +30,9 @@ public class ProductInOrder implements Serializable {
 		this.quantity = quantity;
 	}
 	
-	public ProductInOrder(Order order, Product product, int quantity) {
-		this.order = order;
-		this.product = product;
+	public ProductInOrder(int orderId, int productId, int quantity) {
+		this.orderId = orderId;
+		this.productId = productId;
 		this.quantity = quantity;
 	}
 	

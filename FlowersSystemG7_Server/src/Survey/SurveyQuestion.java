@@ -5,20 +5,20 @@ import java.util.ArrayList;
 
 public class SurveyQuestion implements Serializable {
 	private int id;
-	private Survey survey;
+	private int surveyId;
 	private ArrayList<AnswerSurvey> answerSurveyList;
-	private Question question;
+	private int questionId;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Survey getSurvey() {
-		return survey;
+	public int getSurveyId() {
+		return surveyId;
 	}
-	public void setSurvey(Survey survey) {
-		this.survey = survey;
+	public void setSurveyId(int surveyId) {
+		this.surveyId = surveyId;
 	}
 	public ArrayList<AnswerSurvey> getAnswerSurveyList() {
 		return answerSurveyList;
@@ -26,18 +26,17 @@ public class SurveyQuestion implements Serializable {
 	public void setAnswerSurveyList(ArrayList<AnswerSurvey> answerSurveyList) {
 		this.answerSurveyList = answerSurveyList;
 	}
-	public Question getQuestion() {
-		return question;
+	public int getQuestionId() {
+		return questionId;
 	}
-	public void setQuestion(Question question) {
-		this.question = question;
+	public void setQuestionId(int questionId) {
+		this.questionId = questionId;
 	}
-	public SurveyQuestion(int id, Survey survey, ArrayList<AnswerSurvey> answerSurveyList, Question question) {
-
+	public SurveyQuestion(int id, int surveyId, ArrayList<AnswerSurvey> answerSurveyList, int questionId) {
+		super();
 		this.id = id;
-		this.survey = survey;
+		this.surveyId = surveyId;
 		this.answerSurveyList = answerSurveyList;
-		this.question = question;
+		this.questionId = questionId;
 	}
-	
 }

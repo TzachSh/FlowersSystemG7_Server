@@ -8,7 +8,7 @@ import Branches.CustomerService;
 public class Survey implements Serializable {
 	private int id;
 	private String subject;
-	private CustomerService creator;
+	private int creatorId;
 	private ArrayList<SurveyBranch> surveyBranchList;
 	private ArrayList<SurveyQuestion> surveyQuestionList;
 	public int getId() {
@@ -23,11 +23,11 @@ public class Survey implements Serializable {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public CustomerService getCreator() {
-		return creator;
+	public int getCreatorId() {
+		return creatorId;
 	}
-	public void setCreator(CustomerService creator) {
-		this.creator = creator;
+	public void setCreatorId(int creatorId) {
+		this.creatorId = creatorId;
 	}
 	public ArrayList<SurveyBranch> getSurveyBranchList() {
 		return surveyBranchList;
@@ -41,12 +41,12 @@ public class Survey implements Serializable {
 	public void setSurveyQuestionList(ArrayList<SurveyQuestion> surveyQuestionList) {
 		this.surveyQuestionList = surveyQuestionList;
 	}
-	public Survey(int id, String subject, CustomerService creator, ArrayList<SurveyBranch> surveyBranchList,
+	public Survey(int id, String subject, int creatorId, ArrayList<SurveyBranch> surveyBranchList,
 			ArrayList<SurveyQuestion> surveyQuestionList) {
 	
 		this.id = id;
 		this.subject = subject;
-		this.creator = creator;
+		this.creatorId = creatorId;
 		this.surveyBranchList = surveyBranchList;
 		this.surveyQuestionList = surveyQuestionList;
 	} 
