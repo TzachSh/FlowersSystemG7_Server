@@ -1,26 +1,24 @@
 package Server;
 
+<<<<<<< HEAD
 import java.awt.Color;
 import java.io.IOException;
+=======
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 
 import Logic.DbGetter;
 import Logic.DbQuery;
 import Logic.DbUpdater;
 import Logic.ISelect;
-import Logic.ISelectCollection;
 import Logic.IUpdate;
 
 import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
-import Products.Flower;
-import Products.FlowerInProduct;
-import Products.Product;
 import Products.ProductType;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -38,9 +36,9 @@ public class SystemServer extends AbstractServer {
 
 	public void getCatalogProductsHandler(DbQuery db)
 	{	
-		DbGetter<CatalogProduct> dbGet = new DbGetter<>(db);
+		DbGetter dbGet = new DbGetter(db);
 		
-		dbGet.setMainGetter(new ISelect() {
+		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
 				return "SELECT P.pId, C.productName, C.discount, C.image, T.typeId, T.description, P.price "
@@ -66,6 +64,7 @@ public class SystemServer extends AbstractServer {
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
+<<<<<<< HEAD
 		
 		
 		// each product has a collection of flowers
@@ -107,6 +106,8 @@ public class SystemServer extends AbstractServer {
 		});
 		
 		dbGet.performAction();
+=======
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 	}
 	
 	public void updateCatalogProductHandler(DbQuery db)

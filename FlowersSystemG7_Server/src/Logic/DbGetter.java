@@ -28,7 +28,7 @@ import ocsf.server.ConnectionToClient;
  *
  * @param <T> The main object type
  */
-public class DbGetter<T> {
+public class DbGetter {
 	private ArrayList<Object> queryResult = new ArrayList<>();
 	private DbQuery db;
 	private Packet packet;
@@ -40,7 +40,7 @@ public class DbGetter<T> {
 		this.client = db.getClient();
 	}
 
-	public void setMainGetter(ISelect objSelect) {
+	public void performAction(ISelect objSelect) {
 		try {
 			Connection con = db.connectToDB();
 			String qry = objSelect.getQuery();
@@ -54,22 +54,17 @@ public class DbGetter<T> {
 			}
 
 			con.close();
+			
+			packet.setParameterList(queryResult);
 		} 
 		catch (Exception e) {
 			packet.setExceptionMessage(e.getMessage());
 		}
-	}
-
-	public <E> void setCollectionInObject(ISelectCollection<T, E> objSelect) {
-		if (!packet.getResultState())
-			return;
-
-		try 
+		finally
 		{
-			Connection con = db.connectToDB();
-			ArrayList<E> collectionInObject = new ArrayList<>();
-			for (int i = 0; i < queryResult.size(); i++) 
+			try
 			{
+<<<<<<< HEAD
 				@SuppressWarnings("unchecked")
 				T objConverted = (T) queryResult.get(i);
 
@@ -85,7 +80,11 @@ public class DbGetter<T> {
 				}
 				
 				objSelect.addCollectionToObject(objConverted, collectionInObject);
+=======
+				client.sendToClient(packet);
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 			}
+<<<<<<< HEAD
 
 			con.close();
 		} 
@@ -100,9 +99,17 @@ public class DbGetter<T> {
 		try 
 		{
 			if (packet.getResultState())
+=======
+			catch (IOException e)
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 			{
+<<<<<<< HEAD
 		//		packet.setParameterList(queryResult);
+=======
+				e.printStackTrace();
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 			}
+<<<<<<< HEAD
 			ArrayList<Object> list = new ArrayList<>();
 			list.add(Status.Canceled);
 			list.add(new Flower("asag", 5, 5));
@@ -114,6 +121,8 @@ public class DbGetter<T> {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+=======
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 		}
 	}
 
