@@ -1,10 +1,11 @@
 package Survey;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Branches.CustomerService;
 
-public class Survey {
+public class Survey implements Serializable {
 	private int id;
 	private String subject;
 	private CustomerService creator;

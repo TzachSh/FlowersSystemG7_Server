@@ -1,6 +1,8 @@
 package Customers;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable {
 	private int num;
 	private Customer customer;
 	private AccountStatus accountStatus;

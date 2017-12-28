@@ -1,5 +1,6 @@
 package Customers;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import Branches.CustomerService;
@@ -7,7 +8,7 @@ import Commons.IRefundAble;
 import Commons.Refund;
 
 
-public class Complain implements IRefundAble {
+public class Complain implements IRefundAble, Serializable {
 	private int id;
 	private Date creationDate;
 	private String title;

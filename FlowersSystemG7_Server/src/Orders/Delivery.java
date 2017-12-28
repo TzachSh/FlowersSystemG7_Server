@@ -1,6 +1,8 @@
 package Orders;
 
-public class Delivery {
+import java.io.Serializable;
+
+public class Delivery implements Serializable {
 	private int id;
 	private String address;
 	private String phone;

@@ -1,6 +1,8 @@
 package Orders;
 
-public class OrderPayment {
+import java.io.Serializable;
+
+public class OrderPayment implements Serializable {
 	private int id;
 	private Order order;
 	private PaymentMethod paymentMethod;

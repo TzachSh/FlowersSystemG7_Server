@@ -1,6 +1,8 @@
 package Branches;
 
-public enum Role {
+import java.io.Serializable;
+
+public enum Role implements Serializable {
 	Branch,
 	BranchManager,
 	BranchesManager,

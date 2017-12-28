@@ -1,8 +1,9 @@
 package Products;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Flower {
+public class Flower implements Serializable {
 	
 	private String name;
 	private double price;

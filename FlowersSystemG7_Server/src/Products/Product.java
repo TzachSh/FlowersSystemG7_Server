@@ -1,10 +1,11 @@
 package Products;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Commons.ProductInOrder;
 
-public class Product {
+public class Product implements Serializable {
 	private int id;
 	private ProductType productType;
 	private double price;

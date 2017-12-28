@@ -1,12 +1,13 @@
 package Customers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Orders.Order;
 import Users.Permission;
 import Users.User;
 
-public class Customer extends User{
+public class Customer extends User implements Serializable {
 
 	private int id;
 	private ArrayList<Order> orderList;

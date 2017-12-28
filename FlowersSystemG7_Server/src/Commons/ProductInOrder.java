@@ -1,9 +1,11 @@
 package Commons;
 
+import java.io.Serializable;
+
 import Orders.Order;
 import Products.Product;
 
-public class ProductInOrder {
+public class ProductInOrder implements Serializable {
 	
 	private Order order;
 	private Product product;

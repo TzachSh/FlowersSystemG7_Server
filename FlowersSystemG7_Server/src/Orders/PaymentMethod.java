@@ -1,6 +1,8 @@
 package Orders;
 
-public enum PaymentMethod {
+import java.io.Serializable;
+
+public enum PaymentMethod implements Serializable {
 	Cash,
 	CreditCard
 }

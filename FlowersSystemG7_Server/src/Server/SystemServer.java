@@ -74,13 +74,13 @@ public class SystemServer extends AbstractServer {
 			@Override
 			public String getQuery() 
 			{
-				return "SELECT FP.flower, FP.quantity, F.price, F.color FROM flowerinproduct FP INNER JOIN flower F ON FP.flower = F.flower WHERE FP.pId=1";
+				return "SELECT FP.flower,FP.quantity,F.price,F.color FROM flowerinproduct FP INNER JOIN flower F ON FP.flower=F.flower WHERE FP.pId=?";
 			}
 
 			@Override
 			public void setStatements(PreparedStatement stmt, CatalogProduct obj) throws SQLException
 			{
-				//stmt.setInt(1, obj.getId());
+				stmt.setInt(1, obj.getId());
 			}
 
 			@Override

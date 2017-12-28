@@ -1,6 +1,8 @@
 package Survey;
 
-public class AnswerSurvey {
+import java.io.Serializable;
+
+public class AnswerSurvey implements Serializable {
 	private int id;
 	private SurveyQuestion surveyQuestion;
 	private SurveyBranch surveyBranch;

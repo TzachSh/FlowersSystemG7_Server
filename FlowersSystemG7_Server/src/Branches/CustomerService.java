@@ -1,11 +1,12 @@
 package Branches;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Customers.Complain;
 import Users.Permission;
 
-public class CustomerService extends Employee {
+public class CustomerService extends Employee implements Serializable {
 	
 	private ArrayList<Complain> complainList;
 

@@ -1,8 +1,10 @@
 package Survey;
 
+import java.io.Serializable;
+
 import Branches.ServiceExpert;
 
-public class SurveyConclusion {
+public class SurveyConclusion implements Serializable {
 	private int id;
 	private ServiceExpert serviceExpert;
 	private SurveyBranch surveyBranch;
