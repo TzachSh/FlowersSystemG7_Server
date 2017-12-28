@@ -1,5 +1,6 @@
 package Logic;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,6 +20,18 @@ public class DbQuery {
 		this.packet = packet;
 		this.client = client;
 		
+	}
+	
+	public void sendToClient()
+	{
+		try
+		{
+			client.sendToClient(packet);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public String getPassword() {

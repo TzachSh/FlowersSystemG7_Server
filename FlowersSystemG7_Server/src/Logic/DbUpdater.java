@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import PacketSender.Command;
 import PacketSender.Packet;
 import ocsf.server.ConnectionToClient;
 
@@ -12,11 +13,13 @@ public class DbUpdater<T>
 	private DbQuery db;
 	private Packet packet;
 	private ConnectionToClient client;
-
-	public DbUpdater(DbQuery db) {
+	private Command cmd;
+	
+	public DbUpdater(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
 		this.client = db.getClient();
+		this.cmd = cmd;
 	}
 	
 	/**
@@ -29,7 +32,7 @@ public class DbUpdater<T>
 		try {
 			Connection con = db.connectToDB();
 			@SuppressWarnings("unchecked")
-			T obj = (T)packet.getParameterList().get(0);
+			T obj = (T)packet.getParameterForCommand(cmd).get(0);
 
 			String query = objUpdate.getQuery();
 			PreparedStatement stmt = con.prepareStatement(query);
@@ -42,16 +45,5 @@ public class DbUpdater<T>
 		{
 			packet.setExceptionMessage(e.getMessage());
 		} 
-		finally 
-		{
-			try
-			{
-				client.sendToClient(packet);
-			} 
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
 	}
 }

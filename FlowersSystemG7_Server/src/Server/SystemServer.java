@@ -14,6 +14,7 @@ import Logic.IUpdate;
 import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
+import Products.FlowerInProduct;
 import Products.ProductType;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -22,16 +23,16 @@ public class SystemServer extends AbstractServer {
 
 	private static final int DEFAULT_PORT = 5555;
 	private String user = "root";
-	private String password = "root";
+	private String password = "aA123456";
 
 	public SystemServer(int port) {
 		super(port);
 
 	}
 
-	public void getCatalogProductsHandler(DbQuery db)
+	public void getCatalogProductsHandler(DbQuery db, Command key)
 	{	
-		DbGetter dbGet = new DbGetter(db);
+		DbGetter dbGet = new DbGetter(db, key);
 		
 		dbGet.performAction(new ISelect() {
 			@Override
@@ -48,11 +49,9 @@ public class SystemServer extends AbstractServer {
 				int discount = rs.getInt(3);
 				//String image = rs.getString(4);
 				int typeId = rs.getInt(5);
-				String typeDesc = rs.getString(6);
 				double price = rs.getDouble(7);
 
-				ProductType pType = new ProductType(typeId, typeDesc);
-				CatalogProduct catalogPro = new CatalogProduct(id, pType, price, null, null, productName, discount, "");
+				CatalogProduct catalogPro = new CatalogProduct(id, typeId, price, null, null, productName, discount, "");
 				return (Object)catalogPro;
 			}
 
@@ -61,9 +60,35 @@ public class SystemServer extends AbstractServer {
 		});
 	}
 	
-	public void updateCatalogProductHandler(DbQuery db)
+	public void getFlowersHandler(DbQuery db, Command key)
+	{	
+		DbGetter dbGet = new DbGetter(db, key);
+		
+		dbGet.performAction(new ISelect() {
+			@Override
+			public String getQuery() {
+				return "SELECT FP.fId, FP.pId, FP.quantity " + 
+						"FROM flowerinproduct FP";
+			}
+
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int fId = rs.getInt(1);
+				int productID = rs.getInt(2);
+				int qty = rs.getInt(3);
+
+				FlowerInProduct fp = new FlowerInProduct(fId, productID, qty);
+				return (Object)fp;
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+		});
+	}
+	
+	public void updateCatalogProductHandler(DbQuery db,  Command key)
 	{
-		DbUpdater<CatalogProduct> dbUpdate = new DbUpdater<>(db);
+		DbUpdater<CatalogProduct> dbUpdate = new DbUpdater<>(db, key);
 	
 		dbUpdate.performAction(new IUpdate<CatalogProduct>() {
 
@@ -71,7 +96,7 @@ public class SystemServer extends AbstractServer {
 			public String getQuery() {
 				return "UPDATE product P INNER JOIN ProductType T ON P.pId = T.typeId "
 						+ "INNER JOIN CatalogProduct C ON P.pId = C.pId "
-						+ "SET C.productName = ?, C.discount = ?, C.image = ?, T.description = ?, P.price = ? "
+						+ "SET C.productName = ?, C.discount = ?, C.image = ?, P.typeId = ?, P.price = ? "
 						+ "WHERE P.pId = ?";
 			}
 
@@ -80,7 +105,7 @@ public class SystemServer extends AbstractServer {
 				stmt.setString(1, obj.getName());
 				stmt.setInt(2, obj.getSaleDiscountPercent());
 				stmt.setString(3, obj.getImgUrl());
-				stmt.setString(4, obj.getProductType().getDescription());
+				stmt.setInt(4, obj.getProductTypeId());
 				stmt.setDouble(5, obj.getPrice());
 				stmt.setInt(6, obj.getId());
 			}
@@ -91,15 +116,22 @@ public class SystemServer extends AbstractServer {
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
 		DbQuery db = new DbQuery(user, password, packet, client);
-		Command key = packet.getmsgKey();
+		for (Command key : packet.getCommands())
+		{
+			if (key.equals(Command.getCatalogProducts)) {
+				getCatalogProductsHandler(db, key);
+			}
 
-		if (key.equals(Command.getCatalogProducts)) {
-			getCatalogProductsHandler(db);
+			else if (key.equals(Command.updateCatalogProduct)) {
+				updateCatalogProductHandler(db, key);
+			}
+			
+			else if (key.equals(Command.getFlowers)) {
+				getFlowersHandler(db, key);
+			}
 		}
-
-		else if (key.equals(Command.updateCatalogProduct)) {
-			updateCatalogProductHandler(db);
-		}
+		
+		db.sendToClient();
 	}
 
 	public static void main(String[] args) {

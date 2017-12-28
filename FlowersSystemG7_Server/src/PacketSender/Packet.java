@@ -2,6 +2,7 @@ package PacketSender;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This Class uses for sends requests to the server with parameters as optional
@@ -14,10 +15,8 @@ public class Packet implements Serializable
 	 * private attributes
 	 */
 	private static final long serialVersionUID = 1L;
-	private Command msgKey;
 	private String exceptionMessage;
-	private ArrayList<Object> paramList = new ArrayList<Object>();
-	
+	private HashMap<Command, ArrayList<Object>> cmdParam = new HashMap<Command, ArrayList<Object>>();
 	private boolean resultSuccess = true;
 	
 	/**
@@ -25,9 +24,8 @@ public class Packet implements Serializable
 	 * 
 	 * @param msgKey The key for the specific request
 	 */
-	public Packet(Command msgKey)
+	public Packet()
 	{
-		this.msgKey = msgKey;
 	}
 	
 	/**
@@ -37,17 +35,32 @@ public class Packet implements Serializable
 	 */
 	public boolean hasResultFromServer()
 	{
-		return paramList.size() > 0;
+		return cmdParam.size() > 0;
 	}
 	
 	/**
-	 * Add parameter for sending to server for client uses
+	 * Add command for sending to server for client uses
 	 * 
-	 * @param param the parameter to add
+	 * @param cmd the command to add
 	 */
-	public void addParameter(Object param)
+	public void addCommand(Command cmd)
 	{
-		paramList.add(param);
+		cmdParam.put(cmd, new ArrayList<Object>());
+	}
+	
+	/**
+	 * get all commands registered to the packet
+	 */
+	public ArrayList<Command> getCommands()
+	{
+		ArrayList<Command> commands = new ArrayList<>();
+		
+		for (Command cmd : cmdParam.keySet())
+		{
+			commands.add(cmd);
+		}
+		
+		return commands;
 	}
 	
 	/**
@@ -56,47 +69,37 @@ public class Packet implements Serializable
 	 * 
 	 * @return the result list on type excepted
 	 */
-	/*
 	@SuppressWarnings("unchecked")
-	public <T> ArrayList<T> convertedResultList()
+	public <T> ArrayList<T> convertedResultListForCommand(Command cmd)
 	{
 		ArrayList<T> genericList = new ArrayList<>();
-		ArrayList<Object> objList = getParameterList();
+		ArrayList<Object> objList = getParameterForCommand(cmd);
 		for (Object obj : objList)
 			genericList.add((T)obj);
 		
 		return genericList;
 	}
-	*/
 	
 	/**
-	 * Getter for msgKey attribute for server uses
+	 * Set parameters list for specific command
 	 * 
-	 * @return message key that sent to server
+	 * @param cmd the command to add parameters to it
+	 * @param paramList the parameters to add to the command
 	 */
-	public Command getmsgKey()
+	public void setParametersForCommand(Command cmd, ArrayList<Object> paramList)
 	{
-		return msgKey;
+		cmdParam.put(cmd, paramList);
 	}
 	
 	/**
 	 * Getter for paramList attribute for client uses
 	 * 
+	 * @param cmd the command to get the parameters for
 	 * @return collection of parameters that sent to server
 	 */
-	public ArrayList<Object> getParameterList()
+	public ArrayList<Object> getParameterForCommand(Command cmd)
 	{
-		return new ArrayList<Object>(paramList);
-	}
-	
-	/**
-	 * Setter for paramList attribute for server uses
-	 * 
-	 * @param paramList the result and parameters collection that generated from the server or the client
-	 */
-	public void setParameterList(ArrayList<Object> paramList)
-	{
-		this.paramList = paramList;
+		return cmdParam.get(cmd);
 	}
 	
 	/**
