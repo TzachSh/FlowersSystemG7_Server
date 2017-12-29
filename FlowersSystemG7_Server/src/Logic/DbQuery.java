@@ -8,12 +8,24 @@ import PacketSender.Packet;
 
 import ocsf.server.ConnectionToClient;
 
+/**
+ * This class uses for hands all the details about database connection and the client with its packet
+ *
+ */
 public class DbQuery {
 	private String user;
 	private String password;
 	private Packet packet;
 	private ConnectionToClient client;
 
+	/**
+	 * Constructor that initialize all parameters
+	 * 
+	 * @param user the user name for server database
+	 * @param password the password for server database
+	 * @param packet the packet that received from the client
+	 * @param client the client that send the request
+	 */
 	public DbQuery(String user, String password, Packet packet, ConnectionToClient client) {
 		this.user = user;
 		this.password = password;
@@ -22,6 +34,10 @@ public class DbQuery {
 		
 	}
 	
+	/**
+	 * Send the final packet to the client 
+	 * 
+	 */
 	public void sendToClient()
 	{
 		try
@@ -34,18 +50,34 @@ public class DbQuery {
 		}
 	}
 	
+	/**
+	 * Getter for password to the database
+	 * 
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * Getter for the packet that received from the client
+	 *
+	 */
 	public Packet getPacket() {
 		return packet;
 	}
 
+	/**
+	 * Getter for the client that send the request
+	 * 
+	 */
 	public ConnectionToClient getClient() {
 		return client;
 	}
 
+	/**
+	 * Create the connection to the database based on the user and password
+	 * 
+	 */
 	public Connection connectToDB() {
 		Connection conn = null;
 		try {

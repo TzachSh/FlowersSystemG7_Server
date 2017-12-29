@@ -20,25 +20,6 @@ public class Packet implements Serializable
 	private boolean resultSuccess = true;
 	
 	/**
-	 * Constructor
-	 * 
-	 * @param msgKey The key for the specific request
-	 */
-	public Packet()
-	{
-	}
-	
-	/**
-	 * Check if there is a result for the request from the server
-	 * 
-	 * @return if result has been received
-	 */
-	public boolean hasResultFromServer()
-	{
-		return cmdParam.size() > 0;
-	}
-	
-	/**
 	 * Add command for sending to server for client uses
 	 * 
 	 * @param cmd the command to add

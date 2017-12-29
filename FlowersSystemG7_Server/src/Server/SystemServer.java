@@ -128,6 +128,8 @@ public class SystemServer extends AbstractServer {
 			else if (key.equals(Command.getFlowers)) {
 				getFlowersHandler(db, key);
 			}
+			
+			
 		}
 		
 		db.sendToClient();
