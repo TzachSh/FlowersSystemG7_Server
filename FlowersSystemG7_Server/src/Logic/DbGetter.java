@@ -1,32 +1,23 @@
 package Logic;
 
-import java.io.IOException;
+
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import PacketSender.Command;
 import PacketSender.Packet;
-import ocsf.server.ConnectionToClient;
 
-/**
- * 
- *
- * @param <T> The main object type
- */
 public class DbGetter {
 	private ArrayList<Object> queryResult = new ArrayList<>();
 	private DbQuery db;
 	private Packet packet;
-	private ConnectionToClient client;
 	private Command cmd;
 	
 	public DbGetter(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
-		this.client = db.getClient();
 		this.cmd = cmd;
 	}
 

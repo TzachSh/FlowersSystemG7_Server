@@ -15,7 +15,6 @@ import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
 import Products.FlowerInProduct;
-import Products.ProductType;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 

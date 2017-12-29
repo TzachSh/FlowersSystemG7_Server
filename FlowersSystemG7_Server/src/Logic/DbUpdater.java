@@ -1,24 +1,20 @@
 package Logic;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import PacketSender.Command;
 import PacketSender.Packet;
-import ocsf.server.ConnectionToClient;
 
 public class DbUpdater<T>
 {
 	private DbQuery db;
 	private Packet packet;
-	private ConnectionToClient client;
 	private Command cmd;
 	
 	public DbUpdater(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
-		this.client = db.getClient();
 		this.cmd = cmd;
 	}
 	
