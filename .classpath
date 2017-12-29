@@ -2,5 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="FlowersSystemG7_Server/src"/>
+	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/project/Prototype (1)/PrototypeClient/mysql-connector-java-5.1.19-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -20,9 +20,9 @@ import ocsf.server.ConnectionToClient;
 
 public class SystemServer extends AbstractServer {
 
-	private static final int DEFAULT_PORT = 5555;
+	//private static final int DEFAULT_PORT = 5555;
 	private String user = "root";
-	private String password = "aA123456";
+	private String password = "root";
 
 	public SystemServer(int port) {
 		super(port);
@@ -134,7 +134,7 @@ public class SystemServer extends AbstractServer {
 		
 		db.sendToClient();
 	}
-
+/*
 	public static void main(String[] args) {
 		int port = 0; // Port to listen on
 
@@ -152,6 +152,6 @@ public class SystemServer extends AbstractServer {
 		} catch (Exception ex) {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
-	}
+	}*/
 
 }
