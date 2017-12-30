@@ -20,21 +20,28 @@ public class Packet implements Serializable
 	private boolean resultSuccess = true;
 	
 	/**
-	 * Constructor
+	 * Add command for sending to server for client uses
 	 * 
-	 * @param msgKey The key for the specific request
+	 * @param cmd the command to add
 	 */
+<<<<<<< HEAD
 	public Packet()
+=======
+	public void addCommand(Command cmd)
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 	{
+<<<<<<< HEAD
+=======
+		cmdParam.put(cmd, new ArrayList<Object>());
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 	}
 	
 	/**
-	 * Check if there is a result for the request from the server
-	 * 
-	 * @return if result has been received
+	 * get all commands registered to the packet
 	 */
-	public boolean hasResultFromServer()
+	public ArrayList<Command> getCommands()
 	{
+<<<<<<< HEAD
 		return cmdParam.size() > 0;
 	}
 	
@@ -53,6 +60,8 @@ public class Packet implements Serializable
 	 */
 	public ArrayList<Command> getCommands()
 	{
+=======
+>>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 		ArrayList<Command> commands = new ArrayList<>();
 		
 		for (Command cmd : cmdParam.keySet())
