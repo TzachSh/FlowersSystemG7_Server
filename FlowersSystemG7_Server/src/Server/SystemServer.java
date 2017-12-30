@@ -18,93 +18,78 @@ import Logic.IUpdate;
 import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
-import Products.FlowerInProduct;
-<<<<<<< HEAD
-import Products.ProductType;
-=======
-import javafx.scene.control.TextArea;
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
+import Products.FlowerInProduct;<<<<<<<HEAD
+import Products.ProductType;=======
+import javafx.scene.control.TextArea;>>>>>>>branch'develop'of https://github.com/TzachSh/FlowersSystemG7_Server
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
 public class SystemServer extends AbstractServer {
 
-	//private static final int DEFAULT_PORT = 5555;
+	// private static final int DEFAULT_PORT = 5555;
 	private String user = "root";
-<<<<<<< HEAD
-	private String password = "aA123456";
-=======
 	private String password = "root";
 	private String database;
 	private TextArea txtLog;
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 
-	public SystemServer(int port,TextArea txtLog) {
+	public SystemServer(int port, TextArea txtLog) {
 		super(port);
-		this.txtLog=txtLog;
+		this.txtLog = txtLog;
 	}
 
-<<<<<<< HEAD
-=======
-	public boolean changeListening(String database,String user, String password) throws IOException 
-	{
-		String time=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());//get datetime for log print
-		if(!isListening())//check if listen
+	public boolean changeListening(String database, String user, String password) throws IOException {
+		String time = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());// get datetime for log print
+		if (!isListening())// check if listen
 		{
-			if(database.isEmpty()) {
-				JOptionPane.showMessageDialog(null,"Please Fill DataBase name","Error",JOptionPane.ERROR_MESSAGE);
-				txtLog.setText(time+"---database name missing\n\r"+txtLog.getText());
-				return false;	
-			}
-			if(user.isEmpty())
-			{
-				JOptionPane.showMessageDialog(null,"Please Fill user name","Error",JOptionPane.ERROR_MESSAGE);
-				txtLog.setText(time+"---user name missing\n\r"+txtLog.getText());
+			if (database.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Please Fill DataBase name", "Error", JOptionPane.ERROR_MESSAGE);
+				txtLog.setText(time + "---database name missing\n\r" + txtLog.getText());
 				return false;
 			}
-			this.user=user;
-			this.password=password;
-			this.database=database;
+			if (user.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Please Fill user name", "Error", JOptionPane.ERROR_MESSAGE);
+				txtLog.setText(time + "---user name missing\n\r" + txtLog.getText());
+				return false;
+			}
+			this.user = user;
+			this.password = password;
+			this.database = database;
 			try {
 				DbQuery db = new DbQuery(user, password, database);
 				db.connectToDB();
 				db.connectionClose();
 				listen(); // Start listening for connections
-			}
-			catch (Exception e) {
-				txtLog.setText(time+"---"+e.getMessage()+"\n\r"+txtLog.getText());
+			} catch (Exception e) {
+				txtLog.setText(time + "---" + e.getMessage() + "\n\r" + txtLog.getText());
 				return false;
 			}
-		}
-		else
-		{
-			
+		} else {
+
 			connectionClose();
 		}
 		return true;
 	}
+
 	/**
 	 * closing connection and write to log
-	 * */
-	private void connectionClose()
-	{
-		if(isListening())
+	 */
+	private void connectionClose() {
+		if (isListening())
 			try {
 				stopListening();
 				close();
-				
-//				System.out.println("Connection closed");
+
+				// System.out.println("Connection closed");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				
-	//			e.printStackTrace();
+
+				// e.printStackTrace();
 			}
 	}
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
-	public void getCatalogProductsHandler(DbQuery db, Command key)
-	{	
+
+	public void getCatalogProductsHandler(DbQuery db, Command key) {
 		DbGetter dbGet = new DbGetter(db, key);
-		
+
 		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
@@ -121,24 +106,24 @@ public class SystemServer extends AbstractServer {
 				int typeId = rs.getInt(5);
 				double price = rs.getDouble(7);
 
-				CatalogProduct catalogPro = new CatalogProduct(id, typeId, price, null, null, productName, discount, "");
-				return (Object)catalogPro;
+				CatalogProduct catalogPro = new CatalogProduct(id, typeId, price, null, null, productName, discount,
+						"");
+				return (Object) catalogPro;
 			}
 
 			@Override
-			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+			}
 		});
 	}
-	
-	public void getFlowersHandler(DbQuery db, Command key)
-	{	
+
+	public void getFlowersHandler(DbQuery db, Command key) {
 		DbGetter dbGet = new DbGetter(db, key);
-		
+
 		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
-				return "SELECT FP.fId, FP.pId, FP.quantity " + 
-						"FROM flowerinproduct FP";
+				return "SELECT FP.fId, FP.pId, FP.quantity " + "FROM flowerinproduct FP";
 			}
 
 			@Override
@@ -148,18 +133,18 @@ public class SystemServer extends AbstractServer {
 				int qty = rs.getInt(3);
 
 				FlowerInProduct fp = new FlowerInProduct(fId, productID, qty);
-				return (Object)fp;
+				return (Object) fp;
 			}
 
 			@Override
-			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+			}
 		});
 	}
-	
-	public void updateCatalogProductHandler(DbQuery db,  Command key)
-	{
+
+	public void updateCatalogProductHandler(DbQuery db, Command key) {
 		DbUpdater<CatalogProduct> dbUpdate = new DbUpdater<>(db, key);
-	
+
 		dbUpdate.performAction(new IUpdate<CatalogProduct>() {
 
 			@Override
@@ -181,12 +166,12 @@ public class SystemServer extends AbstractServer {
 			}
 		});
 	}
-	
+
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
-<<<<<<< HEAD
-		DbQuery db = new DbQuery(user, password, packet, client);
+
+		DbQuery db = new DbQuery(user, password, packet, client,database);
 		for (Command key : packet.getCommands())
 		{
 			if (key.equals(Command.getCatalogProducts)) {
@@ -200,7 +185,6 @@ public class SystemServer extends AbstractServer {
 			else if (key.equals(Command.getFlowers)) {
 				getFlowersHandler(db, key);
 			}
-=======
 		String time=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
 		txtLog.setText(time+"---from: "+client+" commands: "+packet.getCommands()+"\n\r"+txtLog.getText());
 		DbQuery db = new DbQuery(user, password, packet, client,database);
@@ -223,12 +207,9 @@ public class SystemServer extends AbstractServer {
 				
 			}
 			db.connectionClose();
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 		}
-<<<<<<< HEAD
 		
 		db.sendToClient();
-=======
 		catch (Exception e) {
 			txtLog.setText(time+"---"+e.getMessage()+"\n\r"+ txtLog.getText());
 			packet.setExceptionMessage(e.getMessage());

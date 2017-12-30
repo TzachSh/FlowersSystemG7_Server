@@ -24,26 +24,8 @@ public class Packet implements Serializable
 	 * 
 	 * @param cmd the command to add
 	 */
-<<<<<<< HEAD
-	public Packet()
-=======
-	public void addCommand(Command cmd)
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
-	{
-<<<<<<< HEAD
-=======
-		cmdParam.put(cmd, new ArrayList<Object>());
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
-	}
-	
-	/**
-	 * get all commands registered to the packet
-	 */
-	public ArrayList<Command> getCommands()
-	{
-<<<<<<< HEAD
-		return cmdParam.size() > 0;
-	}
+
+	public Packet() {};
 	
 	/**
 	 * Add command for sending to server for client uses
@@ -60,8 +42,6 @@ public class Packet implements Serializable
 	 */
 	public ArrayList<Command> getCommands()
 	{
-=======
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 		ArrayList<Command> commands = new ArrayList<>();
 		
 		for (Command cmd : cmdParam.keySet())

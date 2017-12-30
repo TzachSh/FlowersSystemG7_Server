@@ -43,20 +43,7 @@ public class DbQuery {
 		this.database = database;
 	}
 	
-<<<<<<< HEAD
-	public void sendToClient()
-	{
-		try
-		{
-			client.sendToClient(packet);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
 	
-=======
 	/**
 	 * Send the final packet to the client 
 	 * 
@@ -77,7 +64,7 @@ public class DbQuery {
 	 * Getter for password to the database
 	 * 
 	 */
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
+
 	public String getPassword() {
 		return password;
 	}

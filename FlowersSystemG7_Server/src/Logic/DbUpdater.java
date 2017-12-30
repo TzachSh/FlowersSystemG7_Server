@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 
 import PacketSender.Command;
 import PacketSender.Packet;
+import ocsf.server.ConnectionToClient;
 
 /**
  * This Class uses for execute update queries to database with the relevant implement
@@ -15,27 +16,20 @@ public class DbUpdater<T>
 {
 	private DbQuery db;
 	private Packet packet;
-<<<<<<< HEAD
 	private ConnectionToClient client;
 	private Command cmd;
-	
-=======
-	private Command cmd;
-	
+
 	/**
 	 * Constructor that initialize all parameters that need for execute the update query
 	 * 
 	 * @param db This object contains information about database connection and the client with its packet
 	 * @param cmd The relevant command that we want to execute for
 	 */
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
+
 	public DbUpdater(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
-<<<<<<< HEAD
 		this.client = db.getClient();
-=======
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 		this.cmd = cmd;
 	}
 	
@@ -53,12 +47,8 @@ public class DbUpdater<T>
 			// get the relevant object for update in db that passed from the client as a parameter
 			@SuppressWarnings("unchecked")
 			T obj = (T)packet.getParameterForCommand(cmd).get(0);
-<<<<<<< HEAD
-
-=======
 			
 			// get the query from the implemention
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 			String query = objUpdate.getQuery();
 			
 			// set the statements from the implemention

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import PacketSender.Command;
 import PacketSender.Packet;
+import ocsf.server.ConnectionToClient;
 
 /**
  * This Class uses for execute select queries to database with the relevant implement
@@ -18,12 +19,9 @@ public class DbGetter {
 	private ArrayList<Object> queryResult = new ArrayList<>();
 	private DbQuery db;
 	private Packet packet;
-<<<<<<< HEAD
 	private ConnectionToClient client;
 	private Command cmd;
-	
-=======
-	private Command cmd;
+
 	
 	/**
 	 * Constructor that initialize all parameters that need for execute the select query
@@ -31,14 +29,10 @@ public class DbGetter {
 	 * @param db This object contains information about database connection and the client with its packet
 	 * @param cmd The relevant command that we want to execute for
 	 */
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 	public DbGetter(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
-<<<<<<< HEAD
 		this.client = db.getClient();
-=======
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 		this.cmd = cmd;
 	}
 	
@@ -64,15 +58,10 @@ public class DbGetter {
 				// create the object from the implemention
 				Object obj = objSelect.createObject(rs);
 				queryResult.add(obj);
-<<<<<<< HEAD
+
 			}
 
 			con.close();
-			
-=======
-			}			
-			// set the result as the parameter for the relevant command
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
 			packet.setParametersForCommand(cmd, queryResult);
 		} 
 		catch (Exception e) {
