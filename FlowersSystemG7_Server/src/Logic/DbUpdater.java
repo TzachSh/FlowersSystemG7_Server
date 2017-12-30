@@ -38,7 +38,7 @@ public class DbUpdater<T>
 	{
 		try {
 			// create the connection to db
-			Connection con = db.connectToDB();
+			Connection con = db.getConnection();
 			
 			// get the relevant object for update in db that passed from the client as a parameter
 			@SuppressWarnings("unchecked")
@@ -52,8 +52,6 @@ public class DbUpdater<T>
 			objUpdate.setStatements(stmt, obj);
 			
 			stmt.executeUpdate();
-
-			con.close();
 		} 
 		catch (Exception e)
 		{

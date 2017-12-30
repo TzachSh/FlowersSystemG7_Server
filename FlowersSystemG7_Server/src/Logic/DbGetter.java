@@ -40,7 +40,7 @@ public class DbGetter {
 	public void performAction(ISelect objSelect) {
 		try {
 			// create the connection to db
-			Connection con = db.connectToDB();
+			Connection con = db.getConnection();
 			
 			// get the query from the implemention
 			String qry = objSelect.getQuery();
@@ -54,10 +54,7 @@ public class DbGetter {
 				// create the object from the implemention
 				Object obj = objSelect.createObject(rs);
 				queryResult.add(obj);
-			}
-
-			con.close();
-			
+			}			
 			// set the result as the parameter for the relevant command
 			packet.setParametersForCommand(cmd, queryResult);
 		} 
