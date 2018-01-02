@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="773.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Server.ServerUI">
+<AnchorPane prefHeight="773.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Server.SystemServer">
    <children>
       <Pane layoutX="83.0" layoutY="187.0" prefHeight="276.0" prefWidth="605.0">
          <children>
@@ -30,6 +30,6 @@
       </Label>
       <TextArea fx:id="txtLog" layoutX="19.0" layoutY="550.0" prefHeight="195.0" prefWidth="733.0" />
       <Button fx:id="btnSubmit" layoutX="245.0" layoutY="491.0" mnemonicParsing="false" onAction="#onSubmitClicked" text="Start service" />
-      <Button layoutX="378.0" layoutY="491.0" mnemonicParsing="false" onAction="#onClearClicked"  prefWidth="106.0" text="Clear" />
+      <Button layoutX="378.0" layoutY="491.0" mnemonicParsing="false" onAction="#onClearClicked" prefWidth="106.0" text="Clear" />
    </children>
 </AnchorPane>

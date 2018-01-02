@@ -19,76 +19,164 @@ import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
 import Products.FlowerInProduct;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
-public class SystemServer extends AbstractServer {
+public class SystemServer extends AbstractServer{
+
+	public SystemServer(int port) {
+		super(port);
+		// TODO Auto-generated constructor stub
+	}
 
 	//private static final int DEFAULT_PORT = 5555;
 	private String user = "root";
 	private String password = "root";
 	private String database;
+	private static final int DEFAULT_PORT = 5555;
+	@FXML
+	private TextField txtPort;
+	@FXML
+	private Button btnSubmit;
+	@FXML
 	private TextArea txtLog;
-
-	public SystemServer(int port,TextArea txtLog) {
-		super(port);
-		this.txtLog=txtLog;
+	@FXML
+	private TextField txtDb;
+	@FXML
+	private TextField txtUser;
+	@FXML
+	private PasswordField txtPass;
+	@FXML
+	private Button btnClear;
+	int port = 0; // Port to listen on
+	public SystemServer() {
+		super(DEFAULT_PORT);
 	}
-
-	public boolean changeListening(String database,String user, String password) throws IOException 
+	/**
+	 * 
+	 * @param msg log message to see the information
+	 */
+	private void printlogMsg(String msg)
 	{
 		String time=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());//get datetime for log print
-		if(!isListening())//check if listen
+		txtLog.setText(time+"---"+msg+"\n\r"+txtLog.getText());
+	}
+	/**
+	 * if button pressed check
+	 * the function check if server already listen to port 
+	 * if yes then stop to listen
+	 *  otherwise start listen and update button text
+	 * */
+	public void onSubmitClicked(ActionEvent event)
+	{
+		if(!isListening())//check if not listen
+		{
+			try {
+				port = Integer.parseInt(txtPort.getText()); // Get port from command line
+				this.setPort(port);
+			} catch (Throwable t) {//if  port is wrong or listening already
+				printlogMsg("ERROR - Could not listen for clients from this port! Using default port");
+				this.setPort(DEFAULT_PORT);
+				return;
+			}
+		}
+			if(changeListening(txtDb.getText(), txtUser.getText(), txtPass.getText()))//check if switch listening is complete
+			{
+				if(btnSubmit.getText().equals("Start service")) {//if it wasn't listening
+					printlogMsg("Server has started listening on port:"+port);//write to log
+					btnSubmit.setText("Stop service");//update button
+				}
+				else//if it was listen
+				{
+					printlogMsg("Server has finished listening on port:"+port);
+					btnSubmit.setText("Start service");///update button
+				}
+			}
+	}
+	/***
+	 * clear log text area
+	 */
+	public void onClearClicked(ActionEvent event)
+	{
+		txtLog.clear();
+	}
+	public void start(Stage arg0) throws Exception {
+		
+		String title = "Server";
+		String srcFXML = "/Server/App.fxml";
+		String srcCSS = "/Server/application.css";
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource(srcFXML));
+			Parent root = loader.load();
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource(srcCSS).toExternalForm());
+			arg0.setTitle(title);
+			arg0.setScene(scene);
+			arg0.show();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+		arg0.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				// TODO Auto-generated method stub
+				Platform.exit();
+			}
+		});
+	}
+
+	public boolean changeListening(String database,String user, String password) 
+	{
+		if(!isListening())//if start service has been pressed
 		{
 			if(database.isEmpty()) {
 				JOptionPane.showMessageDialog(null,"Please Fill DataBase name","Error",JOptionPane.ERROR_MESSAGE);
-				txtLog.setText(time+"---database name missing\n\r"+txtLog.getText());
+				printlogMsg("database name missing\n\r");
 				return false;	
 			}
 			if(user.isEmpty())
 			{
 				JOptionPane.showMessageDialog(null,"Please Fill user name","Error",JOptionPane.ERROR_MESSAGE);
-				txtLog.setText(time+"---user name missing\n\r"+txtLog.getText());
+				printlogMsg("user name missing");
 				return false;
 			}
-			this.user=user;
-			this.password=password;
-			this.database=database;
 			try {
-				DbQuery db = new DbQuery(user, password, database);
+				DbQuery db = new DbQuery(user, password, database);//check connection to database
 				db.connectToDB();
 				db.connectionClose();
 				listen(); // Start listening for connections
 			}
 			catch (Exception e) {
-				txtLog.setText(time+"---"+e.getMessage()+"\n\r"+txtLog.getText());
+				printlogMsg(e.getMessage());
 				return false;
 			}
 		}
-		else
+		else//if stop service has been pressed
 		{
-			
-			connectionClose();
-		}
-		return true;
-	}
-	/**
-	 * closing connection and write to log
-	 * */
-	private void connectionClose()
-	{
-		if(isListening())
 			try {
 				stopListening();
 				close();
-				
-//				System.out.println("Connection closed");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				
-	//			e.printStackTrace();
+				printlogMsg(e.getMessage());
 			}
+		}
+		return true;
 	}
 	public void getCatalogProductsHandler(DbQuery db, Command key)
 	{	
@@ -174,8 +262,7 @@ public class SystemServer extends AbstractServer {
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
-		String time=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-		txtLog.setText(time+"---from: "+client+" commands: "+packet.getCommands()+"\n\r"+txtLog.getText());
+		printlogMsg("from: "+client+" commands: "+packet.getCommands());
 		DbQuery db = new DbQuery(user, password, packet, client,database);
 		try {
 			db.connectToDB();
@@ -198,31 +285,18 @@ public class SystemServer extends AbstractServer {
 			db.connectionClose();
 		}
 		catch (Exception e) {
-			txtLog.setText(time+"---"+e.getMessage()+"\n\r"+ txtLog.getText());
+			printlogMsg(e.getMessage());
 			packet.setExceptionMessage(e.getMessage());
 		}
 		finally {
-			db.sendToClient();
+			try {
+				db.sendToClient();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				printlogMsg(e.getMessage());
+			}
 		}
 	}
-/*
-	public static void main(String[] args) {
-		int port = 0; // Port to listen on
 
-		try {
-			port = Integer.parseInt(args[0]); // Get port from command line
-		} catch (Throwable t) {
-			port = DEFAULT_PORT; // Set port to 5555
-		}
-
-		SystemServer sc = new SystemServer(port);
-
-		try {
-			sc.listen(); // Start listening for connections
-			System.out.println(String.format("Server has started listening on port: %d", port));
-		} catch (Exception ex) {
-			System.out.println("ERROR - Could not listen for clients!");
-		}
-	}*/
 
 }
