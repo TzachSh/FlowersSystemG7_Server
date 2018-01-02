@@ -2,5 +2,5 @@ package Commons;
 
 public interface IRefundAble {
 
-	void setRefund(Refund refund);
+	void setRefund(int refundId);
 }

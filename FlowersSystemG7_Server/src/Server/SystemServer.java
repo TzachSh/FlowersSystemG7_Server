@@ -9,6 +9,7 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import Customers.Complain;
 import Logic.DbGetter;
 import Logic.DbQuery;
 import Logic.DbUpdater;
@@ -18,18 +19,18 @@ import Logic.IUpdate;
 import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
-import Products.FlowerInProduct;<<<<<<<HEAD
-import Products.ProductType;=======
-import javafx.scene.control.TextArea;>>>>>>>branch'develop'of https://github.com/TzachSh/FlowersSystemG7_Server
+import Products.FlowerInProduct;
+import Products.ProductType;
+import javafx.scene.control.TextArea;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
 public class SystemServer extends AbstractServer {
 
-	// private static final int DEFAULT_PORT = 5555;
+/*	private static final int DEFAULT_PORT = 5555;*/
 	private String user = "root";
 	private String password = "root";
-	private String database;
+	private String database = "test";
 	private TextArea txtLog;
 
 	public SystemServer(int port, TextArea txtLog) {
@@ -85,6 +86,30 @@ public class SystemServer extends AbstractServer {
 
 				// e.printStackTrace();
 			}
+	}
+	
+	public void addComplainHandler(DbQuery db , Command key)
+	{
+		DbUpdater<Complain> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Complain>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDate(1,obj.getCreationDate());
+				stmt.setString(2, obj.getDetails());
+				stmt.setString(3, obj.getTitle());
+				stmt.setInt(4, obj.getCustomerId());
+				stmt.setInt(5, obj.getCustomerServiceId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO complain (creationDate, details, title,cId,eId) " + 
+					   "VALUES (?,?,?,?,?);";
+			}
+		});
 	}
 
 	public void getCatalogProductsHandler(DbQuery db, Command key) {
@@ -142,6 +167,39 @@ public class SystemServer extends AbstractServer {
 		});
 	}
 
+	public void getComplainsHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM complain";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				java.sql.Date creationDate = rs.getDate(1);
+				String details = rs.getString(2);
+				int complainId = rs.getInt(3);
+				String title = rs.getString(4);
+				int customerId = rs.getInt(5);
+				int creatorId = rs.getInt(6);
+
+				Complain complain = new Complain(complainId, creationDate, title, details, customerId,creatorId);
+				return (Object) complain;
+			}
+		});
+	}
+	
 	public void updateCatalogProductHandler(DbQuery db, Command key) {
 		DbUpdater<CatalogProduct> dbUpdate = new DbUpdater<>(db, key);
 
@@ -171,20 +229,6 @@ public class SystemServer extends AbstractServer {
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
 
-		DbQuery db = new DbQuery(user, password, packet, client,database);
-		for (Command key : packet.getCommands())
-		{
-			if (key.equals(Command.getCatalogProducts)) {
-				getCatalogProductsHandler(db, key);
-			}
-
-			else if (key.equals(Command.updateCatalogProduct)) {
-				updateCatalogProductHandler(db, key);
-			}
-			
-			else if (key.equals(Command.getFlowers)) {
-				getFlowersHandler(db, key);
-			}
 		String time=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
 		txtLog.setText(time+"---from: "+client+" commands: "+packet.getCommands()+"\n\r"+txtLog.getText());
 		DbQuery db = new DbQuery(user, password, packet, client,database);
@@ -203,13 +247,17 @@ public class SystemServer extends AbstractServer {
 				else if (key.equals(Command.getFlowers)) {
 					getFlowersHandler(db, key);
 				}
-				
-				
-			}
-			db.connectionClose();
-		}
-		
+				else if (key.equals(Command.addComplain)) {
+					addComplainHandler(db,key);
+				}
+				else if(key.equals(Command.getComplains)) {
+					getComplainsHandler(db, key);
+				}
+					
+			
 		db.sendToClient();
+		}
+	}
 		catch (Exception e) {
 			txtLog.setText(time+"---"+e.getMessage()+"\n\r"+ txtLog.getText());
 			packet.setExceptionMessage(e.getMessage());
@@ -217,10 +265,10 @@ public class SystemServer extends AbstractServer {
 		finally {
 			db.sendToClient();
 		}
->>>>>>> branch 'develop' of https://github.com/TzachSh/FlowersSystemG7_Server
+
 	}
-/*
-	public static void main(String[] args) {
+
+/*	public static void main(String[] args) {
 		int port = 0; // Port to listen on
 
 		try {

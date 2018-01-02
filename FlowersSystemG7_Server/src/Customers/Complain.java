@@ -18,11 +18,7 @@ public class Complain implements IRefundAble, Serializable {
 	private int refundId;
 	private int customerServiceId;
 	
-	@Override
-	public void setRefund(Refund refund) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	public int getId() {
 		return id;
@@ -80,7 +76,17 @@ public class Complain implements IRefundAble, Serializable {
 		this.customerServiceId = customerServiceId;
 	}
 
-	public Complain(int id, Date creationDate, String title, String details, int customerId, int refundId,
+	public Complain(Date creationDate, String title, String details, int customerId,
+			int customerServiceId) {
+		super();
+		this.creationDate = creationDate;
+		this.title = title;
+		this.details = details;
+		this.customerId = customerId;
+		this.customerServiceId = customerServiceId;
+	}
+
+	public Complain(int id, Date creationDate, String title, String details, int customerId,
 			int customerServiceId) {
 		super();
 		this.id = id;
@@ -88,9 +94,13 @@ public class Complain implements IRefundAble, Serializable {
 		this.title = title;
 		this.details = details;
 		this.customerId = customerId;
-		this.refundId = refundId;
 		this.customerServiceId = customerServiceId;
 	}
-	
+
+	@Override
+	public void setRefund(int refundId) {
+		// TODO Auto-generated method stub
+		this.refundId = refundId;
+	}
 	
 }

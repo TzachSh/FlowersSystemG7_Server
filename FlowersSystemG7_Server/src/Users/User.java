@@ -3,7 +3,7 @@ package Users;
 import java.io.Serializable;
 
 public class User implements Serializable {
-	private int uId;
+	private static int uId;
 	private String user;
 	private String password;
 	private boolean isLogged;
@@ -15,7 +15,7 @@ public class User implements Serializable {
 	public void setPermission(Permission permission) {
 		this.permission = permission;
 	}
-	public int getuId() {
+	public static int getuId() {
 		return uId;
 	}
 	public void setuId(int uId) {
