@@ -61,5 +61,9 @@ public class Customer extends User implements Serializable {
 		super(uId);
 		this.membershipId = mId;
 	}
-	
+	public Customer(int id,int uId,int mId ) {
+		super(uId);
+		this.membershipId = mId;
+		this.id=id;
+	}
 }

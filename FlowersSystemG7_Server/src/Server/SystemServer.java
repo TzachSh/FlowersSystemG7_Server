@@ -281,6 +281,33 @@ public class SystemServer extends AbstractServer implements Initializable {
 			
 		);
 	}
+	//getting Customer by User ID
+	public void getCustomersKeyByuIdHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+		@Override
+		public String getQuery() {
+		return "SELECT * "+ "FROM Customer u where uId=?";
+	}
+
+	@Override
+	public Object createObject(ResultSet rs) throws SQLException {
+		int cId = rs.getInt(1);
+		int uId=rs.getInt(2);
+		int mId=rs.getInt(3);
+		Customer cus;
+		cus=new Customer(cId, uId, mId);
+		return (Object)cus;
+	}
+
+	@Override
+	public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
+		User user = (User) packet.getParameterForCommand(Command.getCustomersKeyByuId).get(0);
+		stmt.setString(1, user.getUser());
+		}
+	});
+}
 	
 	//getting user by User Name 
 	public void getUserByUserNameHandler(DbQuery db, Command key)
