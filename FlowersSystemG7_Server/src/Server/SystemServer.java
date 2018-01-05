@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import Customers.Account;
 import Customers.Customer;
 import Customers.Membership;
 import Customers.MembershipType;
@@ -288,7 +289,7 @@ public class SystemServer extends AbstractServer implements Initializable {
 		dbGet.performAction(new ISelect() {
 		@Override
 		public String getQuery() {
-		return "SELECT * "+ "FROM Customer u where uId=?";
+		return "SELECT * FROM customer where uId=?";
 	}
 
 	@Override
@@ -303,8 +304,8 @@ public class SystemServer extends AbstractServer implements Initializable {
 
 	@Override
 	public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
-		User user = (User) packet.getParameterForCommand(Command.getCustomersKeyByuId).get(0);
-		stmt.setString(1, user.getUser());
+		Customer cus = (Customer) packet.getParameterForCommand(Command.getCustomersKeyByuId).get(0);
+		stmt.setInt(1, cus.getuId());
 		}
 	});
 }
@@ -400,9 +401,29 @@ public class SystemServer extends AbstractServer implements Initializable {
 	//adding Accout
 	public void addAccountrHandler(DbQuery db, Command key)
 	{
-		
-	}
-	
+		DbUpdater<Account> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Account>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT into Account (brId,cId,balance,creditCard,status) values(?,?,?,?,?)";
+				
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Account obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getBranchId());
+				stmt.setInt(2, obj.getCustomerId());
+				stmt.setInt(3, obj.getBalance());
+				stmt.setString(4, obj.getCreditCard());
+				stmt.setString(5, obj.getAccountStatus().toString());
+			}
+			
+			
+		});
+		}
 	//getting all MemberShip
 	public void getMemberShipHandler(DbQuery db, Command key)
 	{
@@ -504,6 +525,8 @@ public class SystemServer extends AbstractServer implements Initializable {
 					getUserByUserNameHandler(db, key);
 				else if(key.equals(Command.addAccounts))
 					addAccountrHandler(db, key);
+				else if(key.equals(Command.getCustomersKeyByuId))
+					getCustomersKeyByuIdHandler(db, key);
 			}
 			db.connectionClose();
 		}
