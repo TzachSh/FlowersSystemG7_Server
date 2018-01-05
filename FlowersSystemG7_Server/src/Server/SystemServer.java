@@ -9,6 +9,9 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import Customers.Customer;
+import Customers.Membership;
+import Customers.MembershipType;
 import Logic.DbGetter;
 import Logic.DbQuery;
 import Logic.DbUpdater;
@@ -19,6 +22,8 @@ import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
 import Products.FlowerInProduct;
+import Users.Permission;
+import Users.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -232,6 +237,184 @@ public class SystemServer extends AbstractServer{
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
+	//Elias     @@@
+	
+	//getting all users
+	public void getUsersHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+		@Override
+		public String getQuery()
+		{
+			return "SELECT * " + 
+			"FROM User";
+		}
+
+		@Override
+		public Object createObject(ResultSet rs) throws SQLException 
+		{
+			int uId = rs.getInt(1);
+			String user =rs.getString(2);
+			String password = rs.getString(3);
+			int islogged = rs.getInt(4);
+			String perm=rs.getString(5);
+			Permission permission = null;
+			boolean isloggedbool=(islogged==1);
+			User newuser;
+			if(perm.equals((Permission.Administrator).toString()))
+			permission= Permission.Administrator;
+			else if(perm.equals((Permission.Blocked).toString()))
+			permission= Permission.Blocked;
+			else if(perm.equals((Permission.Limited).toString()))
+			permission= Permission.Limited;
+		
+			newuser=new User(uId, user, password, isloggedbool, permission);
+			return (Object)newuser;
+		}
+	
+		@Override
+		public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+		}
+			
+		);
+	}
+	
+	//getting user by User Name 
+	public void getUserByUserNameHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+		@Override
+		public String getQuery() {
+		return "SELECT * "+ "FROM User u where user=?";
+	}
+
+	@Override
+	public Object createObject(ResultSet rs) throws SQLException {
+		int uId = rs.getInt(1);
+		String user =rs.getString(2);
+		String password = rs.getString(3);
+		int islogged = rs.getInt(4);
+		String perm=rs.getString(5);
+		Permission permission = null;
+		boolean isloggedbool=(islogged==1);
+		User newuser;
+		if(perm.equals((Permission.Administrator).toString()))
+		permission= Permission.Administrator;
+		else if(perm.equals((Permission.Blocked).toString()))
+		permission= Permission.Blocked;
+		else if(perm.equals((Permission.Limited).toString()))
+		permission= Permission.Limited;
+
+		newuser=new User(uId, user, password, isloggedbool, permission);
+	return (Object)newuser;
+	}
+
+	@Override
+	public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
+		User user = (User) packet.getParameterForCommand(Command.getUsersByUserName).get(0);
+		stmt.setString(1, user.getUser());
+		}
+	});
+	}
+	//adding user 
+	public void addUserHandler(DbQuery db, Command key)
+	{
+		DbUpdater<User> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<User>() {
+	
+		@Override
+		public String getQuery() {
+		// TODO Auto-generated method stub
+		return "insert into User(user,password,isLogged,permission) values(?,?,?,?)";
+	
+		}
+	
+		@Override
+		public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
+		// TODO Auto-generated method stub
+		int islog=0;
+		stmt.setString(1, obj.getUser());
+		stmt.setString(2, obj.getPassword());
+		if(obj.isLogged()==true)
+		islog=1;
+		stmt.setInt(3, islog);
+		stmt.setString(4, obj.getPermission().toString());
+		}
+		});
+	}
+	
+	//adding customer 
+	public void addCustomertHandler(DbQuery db, Command key)
+	{
+		DbUpdater<Customer> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Customer>() {
+	
+		@Override
+		public String getQuery() {
+		// TODO Auto-generated method stub
+			return "INSERT into Customer (uId,mId) values(?,?)";
+	
+		}
+	
+		@Override
+		public void setStatements(PreparedStatement stmt, Customer obj) throws SQLException {
+		// TODO Auto-generated method stub
+			stmt.setInt(1, obj.getuId());
+			stmt.setInt(2, obj.getMembershipId()); 
+		}
+	});
+	}
+	
+	
+	//getting all MemberShip
+	public void getMemberShipHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+		@Override
+		public String getQuery() {
+		return "SELECT * " + 
+		"FROM MemberShip";
+	}
+
+	@Override
+	public Object createObject(ResultSet rs) throws SQLException {
+		int mId = rs.getInt(1);
+		String memship =rs.getString(2);
+		Double discount = rs.getDouble(3);
+		MembershipType memtype;
+		Membership newmemship;
+	
+		if(memship.equals((MembershipType.Normal).toString()))
+		memtype= MembershipType.Normal;
+		else if(memship.equals((MembershipType.Monthly).toString()))
+		memtype= MembershipType.Monthly;
+		else
+		memtype= MembershipType.Yearly;
+
+	newmemship=new Membership(mId, memtype, discount);
+	return (Object)newmemship;
+	}
+
+	@Override
+	public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+	});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void updateCatalogProductHandler(DbQuery db,  Command key)
 	{
@@ -279,8 +462,16 @@ public class SystemServer extends AbstractServer{
 				else if (key.equals(Command.getFlowers)) {
 					getFlowersHandler(db, key);
 				}
-				
-				
+				else if(key.equals(Command.getMemberShip))
+					getMemberShipHandler(db, key);
+				else if(key.equals(Command.getUsers))
+					getUsersHandler(db, key);
+				else if(key.equals(Command.addCustomers))
+					addCustomertHandler(db,key);
+				else if(key.equals(Command.addUsers))
+					addUserHandler(db, key);
+				else if(key.equals(Command.getUsersByUserName))
+					getUserByUserNameHandler(db, key);
 			}
 			db.connectionClose();
 		}

@@ -10,5 +10,12 @@ public enum Command implements Serializable
 {
 	getCatalogProducts,
 	updateCatalogProduct,
-	getFlowers
+	getFlowers,
+	addUsers,
+	getUsers,
+	getUsersByUserName,
+	getMemberShip,
+	getMemberShipKey,
+	addCustomers,
+	getCustomersKeyByuId
 }
