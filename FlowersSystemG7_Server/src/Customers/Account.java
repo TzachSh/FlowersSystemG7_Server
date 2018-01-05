@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Account implements Serializable {
 	private int num;
 	private int customerId;
+	private int branchId;
 	private AccountStatus accountStatus;
 	private String creditCard;
 	public int getNum() {
@@ -31,12 +32,19 @@ public class Account implements Serializable {
 	public void setCreditCard(String creditCard) {
 		this.creditCard = creditCard;
 	}
-	public Account(int num, int customerId, AccountStatus accountStatus, String creditCard) {
+	public Account(int num, int customerId, int branchId, AccountStatus accountStatus, String creditCard) {
 		super();
 		this.num = num;
 		this.customerId = customerId;
+		this.branchId = branchId;
 		this.accountStatus = accountStatus;
 		this.creditCard = creditCard;
+	}
+	public int getBranchId() {
+		return branchId;
+	}
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
 	}
 	
 }
