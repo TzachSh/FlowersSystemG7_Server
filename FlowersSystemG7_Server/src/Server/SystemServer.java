@@ -397,6 +397,11 @@ public class SystemServer extends AbstractServer implements Initializable {
 	});
 	}
 	
+	//adding Accout
+	public void addAccountrHandler(DbQuery db, Command key)
+	{
+		
+	}
 	
 	//getting all MemberShip
 	public void getMemberShipHandler(DbQuery db, Command key)
@@ -440,12 +445,7 @@ public class SystemServer extends AbstractServer implements Initializable {
 	
 	
 	
-	
-	
-	
-	
-	
-	
+	//Elias @@@@@@@@@@@@@@@@@@@@
 	public void updateCatalogProductHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<CatalogProduct> dbUpdate = new DbUpdater<>(db, key);
@@ -502,6 +502,8 @@ public class SystemServer extends AbstractServer implements Initializable {
 					addUserHandler(db, key);
 				else if(key.equals(Command.getUsersByUserName))
 					getUserByUserNameHandler(db, key);
+				else if(key.equals(Command.addAccounts))
+					addAccountrHandler(db, key);
 			}
 			db.connectionClose();
 		}
