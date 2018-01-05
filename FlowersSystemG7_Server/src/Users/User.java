@@ -47,4 +47,15 @@ public class User implements Serializable {
 		this.isLogged = isLogged;
 		this.permission = permission;
 	}
+	public User( String user, String password, boolean isLogged , Permission permission) {
+		super();
+		this.user = user;
+		this.password = password;
+		this.isLogged = isLogged;
+		this.permission = permission;
+	}
+	public User( int uId) {
+		super();
+		this.uId = uId;
+	}
 }

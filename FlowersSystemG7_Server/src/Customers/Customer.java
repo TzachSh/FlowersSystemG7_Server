@@ -53,6 +53,13 @@ public class Customer extends User implements Serializable {
 		this.membershipId = membershipId;
 		this.accountNum = accountNum;
 	}
-	
+	public Customer(int uId, String user, String password, boolean isLogged, Permission permission,int membershipId) {
+		super(uId, user, password, isLogged, permission);
+		this.membershipId = membershipId;
+	}
+	public Customer(int uId,int mId ) {
+		super(uId);
+		this.membershipId = mId;
+	}
 	
 }

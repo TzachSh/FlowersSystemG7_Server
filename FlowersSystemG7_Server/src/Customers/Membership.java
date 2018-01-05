@@ -6,7 +6,7 @@ public class Membership implements Serializable {
 	private int num;
 	private MembershipType membershipType;
 	private double discount;
-
+	
 	public double getDiscount() {
 		return discount;
 	}

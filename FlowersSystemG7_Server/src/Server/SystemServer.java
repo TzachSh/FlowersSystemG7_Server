@@ -1,11 +1,13 @@
 package Server;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
@@ -29,6 +31,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -40,7 +43,7 @@ import javafx.stage.WindowEvent;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
-public class SystemServer extends AbstractServer{
+public class SystemServer extends AbstractServer implements Initializable {
 
 	public SystemServer(int port) {
 		super(port);
@@ -49,8 +52,8 @@ public class SystemServer extends AbstractServer{
 
 	//private static final int DEFAULT_PORT = 5555;
 	private String user = "root";
-	private String password = "root";
-	private String database;
+	private String password = "1q2w3e!";
+	private String database = "test";
 	private static final int DEFAULT_PORT = 5555;
 	@FXML
 	private TextField txtPort;
@@ -247,8 +250,7 @@ public class SystemServer extends AbstractServer{
 		@Override
 		public String getQuery()
 		{
-			return "SELECT * " + 
-			"FROM User";
+			return "SELECT * FROM User";
 		}
 
 		@Override
@@ -327,7 +329,7 @@ public class SystemServer extends AbstractServer{
 		@Override
 		public String getQuery() {
 		// TODO Auto-generated method stub
-		return "insert into User(user,password,isLogged,permission) values(?,?,?,?)";
+		return "insert into User(uId,user,password,isLogged,permission) values(?,?,?,?,?)";
 	
 		}
 	
@@ -335,12 +337,13 @@ public class SystemServer extends AbstractServer{
 		public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
 		// TODO Auto-generated method stub
 		int islog=0;
-		stmt.setString(1, obj.getUser());
-		stmt.setString(2, obj.getPassword());
+		stmt.setInt(1, obj.getuId());
+		stmt.setString(2, obj.getUser());
+		stmt.setString(3, obj.getPassword());
 		if(obj.isLogged()==true)
 		islog=1;
-		stmt.setInt(3, islog);
-		stmt.setString(4, obj.getPermission().toString());
+		stmt.setInt(4, islog);
+		stmt.setString(5, obj.getPermission().toString());
 		}
 		});
 	}
@@ -487,6 +490,12 @@ public class SystemServer extends AbstractServer{
 				printlogMsg(e.getMessage());
 			}
 		}
+	}
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		txtDb.setText(database);
+		txtUser.setText(user);
+		txtPass.setText(password);
 	}
 
 
