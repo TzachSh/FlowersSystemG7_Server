@@ -18,6 +18,7 @@ import Logic.IUpdate;
 import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
+import Products.ColorProduct;
 import Products.Flower;
 import Products.FlowerInProduct;
 import javafx.application.Platform;
@@ -314,31 +315,33 @@ public class SystemServer extends AbstractServer{
 
 			@Override
 			public String getQuery() {
-				return "Insert flower(flower,price,colId) values(?,?,(select colId from color where color=?";
+				return "Insert flower(flower,price,colId) values(?,?,?)";
 			}
 
 			@Override
 			public void setStatements(PreparedStatement stmt, Flower obj) throws SQLException {
-				/*stmt.setString(1, obj.getName());
-				stmt.setInt(2, obj.getPrice()());
-				stmt.setString(3, obj.getColor()());*/
+				stmt.setString(1, obj.getName());
+				stmt.setDouble(2, obj.getPrice());
+				stmt.setInt(3, obj.getColor());
 			}
 		});
 		
 	}
 	private void getColors(DbQuery db, Command key) {
-DbGetter dbGet = new DbGetter(db, key);
+	DbGetter dbGet = new DbGetter(db, key);
 		
 		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
-				return "SELECT ColorName from  Color";
+				return "SELECT * from  Color";
 			}
 
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
-				String color = rs.getString(1);
-				return (Object)color;
+				int colId =rs.getInt(1);
+				String color = rs.getString(2);
+				
+				return (Object)new ColorProduct(colId,color);
 			}
 
 			@Override
