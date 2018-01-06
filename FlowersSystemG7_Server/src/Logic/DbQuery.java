@@ -43,28 +43,20 @@ public class DbQuery {
 		this.database = database;
 	}
 	
-	
 	/**
 	 * Send the final packet to the client 
+	 * @throws IOException 
 	 * 
 	 */
-	public void sendToClient()
+	public void sendToClient() throws IOException
 	{
-		try
-		{
-			client.sendToClient(packet);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		client.sendToClient(packet);
 	}
 	
 	/**
 	 * Getter for password to the database
 	 * 
 	 */
-
 	public String getPassword() {
 		return password;
 	}

@@ -2,7 +2,7 @@ package PacketSender;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * This Class uses for sends requests to the server with parameters as optional
@@ -16,16 +16,8 @@ public class Packet implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	private String exceptionMessage;
-	private HashMap<Command, ArrayList<Object>> cmdParam = new HashMap<Command, ArrayList<Object>>();
+	private LinkedHashMap<Command, ArrayList<Object>> cmdParam = new LinkedHashMap<Command, ArrayList<Object>>();
 	private boolean resultSuccess = true;
-	
-	/**
-	 * Add command for sending to server for client uses
-	 * 
-	 * @param cmd the command to add
-	 */
-
-	public Packet() {};
 	
 	/**
 	 * Add command for sending to server for client uses

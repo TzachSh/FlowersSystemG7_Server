@@ -263,28 +263,14 @@ public class SystemServer extends AbstractServer {
 			packet.setExceptionMessage(e.getMessage());
 		}
 		finally {
-			db.sendToClient();
+			try {
+				db.sendToClient();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
-
-/*	public static void main(String[] args) {
-		int port = 0; // Port to listen on
-
-		try {
-			port = Integer.parseInt(args[0]); // Get port from command line
-		} catch (Throwable t) {
-			port = DEFAULT_PORT; // Set port to 5555
-		}
-
-		SystemServer sc = new SystemServer(port);
-
-		try {
-			sc.listen(); // Start listening for connections
-			System.out.println(String.format("Server has started listening on port: %d", port));
-		} catch (Exception ex) {
-			System.out.println("ERROR - Could not listen for clients!");
-		}
-	}*/
 
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import PacketSender.Command;
 import PacketSender.Packet;
-import ocsf.server.ConnectionToClient;
 
 /**
  * This Class uses for execute select queries to database with the relevant implement
@@ -19,9 +18,7 @@ public class DbGetter {
 	private ArrayList<Object> queryResult = new ArrayList<>();
 	private DbQuery db;
 	private Packet packet;
-	private ConnectionToClient client;
 	private Command cmd;
-
 	
 	/**
 	 * Constructor that initialize all parameters that need for execute the select query
@@ -32,7 +29,6 @@ public class DbGetter {
 	public DbGetter(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
-		this.client = db.getClient();
 		this.cmd = cmd;
 	}
 	
@@ -58,15 +54,12 @@ public class DbGetter {
 				// create the object from the implemention
 				Object obj = objSelect.createObject(rs);
 				queryResult.add(obj);
-
-			}
-
-			con.close();
+			}			
+			// set the result as the parameter for the relevant command
 			packet.setParametersForCommand(cmd, queryResult);
 		} 
 		catch (Exception e) {
 			packet.setExceptionMessage(e.getMessage());
 		}
 	}
-
 }

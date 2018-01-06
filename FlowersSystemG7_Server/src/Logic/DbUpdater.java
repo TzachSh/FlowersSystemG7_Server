@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 
 import PacketSender.Command;
 import PacketSender.Packet;
-import ocsf.server.ConnectionToClient;
 
 /**
  * This Class uses for execute update queries to database with the relevant implement
@@ -16,20 +15,17 @@ public class DbUpdater<T>
 {
 	private DbQuery db;
 	private Packet packet;
-	private ConnectionToClient client;
 	private Command cmd;
-
+	
 	/**
 	 * Constructor that initialize all parameters that need for execute the update query
 	 * 
 	 * @param db This object contains information about database connection and the client with its packet
 	 * @param cmd The relevant command that we want to execute for
 	 */
-
 	public DbUpdater(DbQuery db, Command cmd) {
 		this.db = db;
 		this.packet = db.getPacket();
-		this.client = db.getClient();
 		this.cmd = cmd;
 	}
 	
