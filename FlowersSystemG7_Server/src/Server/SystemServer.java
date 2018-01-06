@@ -9,7 +9,11 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import Commons.Refund;
+import Customers.Account;
+import Customers.AccountStatus;
 import Customers.Complain;
+import Customers.Reply;
 import Logic.DbGetter;
 import Logic.DbQuery;
 import Logic.DbUpdater;
@@ -187,9 +191,9 @@ public class SystemServer extends AbstractServer {
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				java.sql.Date creationDate = rs.getDate(1);
-				String details = rs.getString(2);
-				int complainId = rs.getInt(3);
+				int complainId = rs.getInt(1);
+				java.sql.Date creationDate = rs.getDate(2);
+				String details = rs.getString(3);
 				String title = rs.getString(4);
 				int customerId = rs.getInt(5);
 				int creatorId = rs.getInt(6);
@@ -239,7 +243,6 @@ public class SystemServer extends AbstractServer {
 				if (key.equals(Command.getCatalogProducts)) {
 					getCatalogProductsHandler(db, key);
 				}
-	
 				else if (key.equals(Command.updateCatalogProduct)) {
 					updateCatalogProductHandler(db, key);
 				}
@@ -253,10 +256,17 @@ public class SystemServer extends AbstractServer {
 				else if(key.equals(Command.getComplains)) {
 					getComplainsHandler(db, key);
 				}
-					
-			
-		db.sendToClient();
+				else if(key.equals(Command.addReply)) {
+					addReplyHandler(db,key);
+				}
+				else if(key.equals(Command.addComplainRefund)) {
+					addComplainRefundHandler(db,key);
+				}	
+				else if(key.equals(Command.refundAccount)) {
+					updateAccountsBalanceHandler(db, key);
+				}
 		}
+			db.connectionClose();
 	}
 		catch (Exception e) {
 			txtLog.setText(time+"---"+e.getMessage()+"\n\r"+ txtLog.getText());
@@ -272,5 +282,76 @@ public class SystemServer extends AbstractServer {
 		}
 
 	}
+
+	private void addComplainRefundHandler(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		
+		DbUpdater<Refund> dbUpdate = new DbUpdater<>(db, key);
+		
+		dbUpdate.performAction(new IUpdate<Refund>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Refund obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDate(1,obj.getCreationDate());
+				stmt.setDouble(2, obj.getAmount());
+				stmt.setInt(3, obj.getRefundAbleId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "UPDATE account " 
+				+ "SET C.productName = ?, C.discount = ?, C.image = ?, P.typeId = ?, P.price = ? "
+				+ "WHERE P.pId = ?";
+			}
+		});
+	}
+
+	private void addReplyHandler(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		DbUpdater<Reply> dbUpdate = new DbUpdater<>(db, key);
+		
+		dbUpdate.performAction(new IUpdate<Reply>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Reply obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1,obj.getComplainId());
+				stmt.setString(2, obj.getReplyment());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO reply (comId, replyment) " + 
+				   "VALUES (?,?);";
+			}
+		});
+	}
+	
+	public void updateAccountsBalanceHandler(DbQuery db , Command key)
+	{
+		DbUpdater<Refund> dbUpdate = new DbUpdater<>(db, key);
+		
+		dbUpdate.performAction(new IUpdate<Refund>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Refund obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDouble(1, obj.getAmount());
+				stmt.setInt(2, obj.getRefundAbleId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "UPDATE account A INNER JOIN complain C ON A.cId = C.cId " +
+					   "SET A.balance = A.balance + ? " +
+					   "WHERE C.cId = ?";
+			}
+		});
+	}
+
 
 }

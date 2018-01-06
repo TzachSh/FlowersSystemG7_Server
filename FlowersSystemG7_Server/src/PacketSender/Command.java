@@ -17,9 +17,12 @@ public enum Command implements Serializable
 	addCustomers,
 	getCustomersKeyByuId,
 	addAccounts,
+	refundAccount,
 	getCatalogProducts,
 	updateCatalogProduct,
 	getFlowers,
 	addComplain,
-	getComplains
+	getComplains,
+	addReply,
+	addComplainRefund
 }

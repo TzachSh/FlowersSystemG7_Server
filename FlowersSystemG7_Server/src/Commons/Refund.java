@@ -11,8 +11,7 @@ public class Refund implements Serializable {
 	private int id;
 	private Date creationDate;
 	private double amount;
-	private IRefundAble refundAble;
-	private Status status;
+	private int refundAbleId;
 	
 	public int getId() {
 		return id;
@@ -32,25 +31,27 @@ public class Refund implements Serializable {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	public IRefundAble getRefundAble() {
-		return refundAble;
+	public int getRefundAbleId() {
+		return refundAbleId;
 	}
-	public void setRefundAble(IRefundAble refundAble) {
-		this.refundAble = refundAble;
+	public void setRefundAbleId(int refundAbleId) {
+		this.refundAbleId = refundAbleId;
 	}
-	public Status getStatus() {
-		return status;
-	}
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-	public Refund(int id, Date creationDate, double amount, IRefundAble refundAble, Status status) {
 
+	
+	public Refund(int id, Date creationDate, double amount, int refundAbleId) {
+		super();
 		this.id = id;
 		this.creationDate = creationDate;
 		this.amount = amount;
-		this.refundAble = refundAble;
-		this.status = status;
+		this.refundAbleId = refundAbleId;
+	}
+	
+	public Refund(Date creationDate, double amount, int refundAbleId) {
+		super();
+		this.creationDate = creationDate;
+		this.amount = amount;
+		this.refundAbleId = refundAbleId;
 	}
 	
 }

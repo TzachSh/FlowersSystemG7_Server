@@ -6,7 +6,7 @@ public class Reply implements Serializable{
 
 	private int id;
 	private int complainId;
-	private int replyment;
+	private String replyment;
 	public int getId() {
 		return id;
 	}
@@ -19,18 +19,24 @@ public class Reply implements Serializable{
 	public void setComplainId(int complainId) {
 		this.complainId = complainId;
 	}
-	public int getReplyment() {
+	public String getReplyment() {
 		return replyment;
 	}
-	public void setReplyment(int replyment) {
+	public void setReplyment(String replyment) {
 		this.replyment = replyment;
 	}
 	
-	public Reply(int id, int complainId, int replyment) {
+	public Reply(int id, int complainId, String replyment) {
 		super();
 		this.id = id;
 		this.complainId = complainId;
 		this.replyment = replyment;
 	}
-	
+
+	public Reply(int complainId, String replyment) {
+		super();
+		this.complainId = complainId;
+		this.replyment = replyment;
+	}
+
 }

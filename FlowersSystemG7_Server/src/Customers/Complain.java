@@ -18,8 +18,6 @@ public class Complain implements IRefundAble, Serializable {
 	private int refundId;
 	private int customerServiceId;
 	
-
-
 	public int getId() {
 		return id;
 	}
@@ -64,10 +62,6 @@ public class Complain implements IRefundAble, Serializable {
 		return refundId;
 	}
 
-	public void setRefundId(int refundId) {
-		this.refundId = refundId;
-	}
-
 	public int getCustomerServiceId() {
 		return customerServiceId;
 	}
@@ -95,12 +89,6 @@ public class Complain implements IRefundAble, Serializable {
 		this.details = details;
 		this.customerId = customerId;
 		this.customerServiceId = customerServiceId;
-	}
-
-	@Override
-	public void setRefund(int refundId) {
-		// TODO Auto-generated method stub
-		this.refundId = refundId;
 	}
 	
 }
