@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 
 import Customers.Account;
+import Customers.AccountStatus;
 import Customers.Customer;
 import Customers.Membership;
 import Customers.MembershipType;
@@ -310,6 +311,55 @@ public class SystemServer extends AbstractServer implements Initializable {
 	});
 }
 	
+	//getting user by uId
+	public void getUserByuIdHandler(DbQuery db, Command key)
+	{
+		
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				User user = (User) packet.getParameterForCommand(Command.getUserByuId).get(0);
+				stmt.setInt(1, user.getuId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * "+ "FROM User u where uId=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				int uId = rs.getInt(1);
+				String user =rs.getString(2);
+				String password = rs.getString(3);
+				int islogged = rs.getInt(4);
+				String perm=rs.getString(5);
+				Permission permission = null;
+				boolean isloggedbool=(islogged==1);
+				User newuser;
+				if(perm.equals((Permission.Administrator).toString()))
+				permission= Permission.Administrator;
+				else if(perm.equals((Permission.Blocked).toString()))
+				permission= Permission.Blocked;
+				else if(perm.equals((Permission.Limited).toString()))
+				permission= Permission.Limited;
+
+				newuser=new User(uId, user, password, isloggedbool, permission);
+			return (Object)newuser;
+			}
+		});
+		
+	}
+	//updating Account
+	public void updateAccountbycID(DbQuery db, Command key)
+	{
+		DbUpdater<Account> dbUpdate = new DbUpdater<>(db, key);
+	}
 	//getting user by User Name 
 	public void getUserByUserNameHandler(DbQuery db, Command key)
 	{
@@ -373,6 +423,52 @@ public class SystemServer extends AbstractServer implements Initializable {
 		stmt.setInt(4, islog);
 		stmt.setString(5, obj.getPermission().toString());
 		}
+		});
+	}
+	
+	
+	public void getAccountbycIDHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				Account acc = (Account) packet.getParameterForCommand(Command.getAccountbycID).get(0);
+				stmt.setInt(1, acc.getCustomerId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "select * from account where cId=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				int acNum = rs.getInt(1);
+				int brId =rs.getInt(2);
+				int cId = rs.getInt(3);
+				int Balance=rs.getInt(4);
+				String Creditcard=rs.getString(5);
+				String Statusstring=rs.getString(6);
+				AccountStatus status = AccountStatus.Active;
+				
+				Account newacc;
+				if(Statusstring.equals((AccountStatus.Active).toString()))
+					status= AccountStatus.Active;
+				else if(Statusstring.equals((AccountStatus.Blocked).toString()))
+					status= AccountStatus.Blocked;
+				else if(Statusstring.equals((AccountStatus.Closed).toString()))
+					status= AccountStatus.Closed;
+				
+
+				newacc=new Account(acNum, cId, brId, Balance, status, Creditcard);
+			return (Object)newacc;
+				
+			}
 		});
 	}
 	
@@ -527,6 +623,10 @@ public class SystemServer extends AbstractServer implements Initializable {
 					addAccountrHandler(db, key);
 				else if(key.equals(Command.getCustomersKeyByuId))
 					getCustomersKeyByuIdHandler(db, key);
+				else if(key.equals(Command.getUserByuId))
+					getUserByuIdHandler(db, key);
+				else if(key.equals(Command.getAccountbycID))
+					getAccountbycIDHandler(db, key);
 			}
 			db.connectionClose();
 		}
