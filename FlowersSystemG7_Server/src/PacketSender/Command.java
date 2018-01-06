@@ -26,5 +26,7 @@ public enum Command implements Serializable
 	getUserByuId,
 	updateAccounts,
 	updateCustomer,
-	updateUser
+	updateUser,
+	getColors,
+	addFlower
 }
