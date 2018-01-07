@@ -428,7 +428,7 @@ public class SystemServer extends AbstractServer{
 	}
 	
 	
-	public void getAccountbycIDHandler(DbQuery db, Command key)
+	public void getAccountBycIdHandler(DbQuery db, Command key)
 	{
 		DbGetter dbGet = new DbGetter(db, key);
 		dbGet.performAction(new ISelect() {
@@ -436,7 +436,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
-				Account acc = (Account) packet.getParameterForCommand(Command.getAccountbycID).get(0);
+				Account acc = (Account) packet.getParameterForCommand(Command.getAccountBycId).get(0);
 				stmt.setInt(1, acc.getCustomerId());
 			}
 			
@@ -686,8 +686,8 @@ public class SystemServer extends AbstractServer{
 					getCustomersKeyByuIdHandler(db, key);
 				else if(key.equals(Command.getUserByuId))
 					getUserByuIdHandler(db, key);
-				else if(key.equals(Command.getAccountbycID))
-					getAccountbycIDHandler(db, key);
+				else if(key.equals(Command.getAccountBycId))
+					getAccountBycIdHandler(db, key);
 				else if(key.equals(Command.updateUserByuId))
 					updateUserByuIdHandler(db, key);
 				else if(key.equals(Command.updateCustomerByuId))

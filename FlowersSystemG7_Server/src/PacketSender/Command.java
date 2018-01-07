@@ -22,14 +22,14 @@ public enum Command implements Serializable
 	addAccounts,
 	getAccounts,
 	getAccountStatus,
-	getAccountbycID,
+	getAccountBycId,
 	getUserByuId,
 	updateUserByuId,
 	updateCustomerByuId,
-	updateAccountsBycId,
+	updateAccountsBycId	,
 	updateAccounts,
 	updateCustomer,
 	updateUser,
 	getColors,
 	addFlower
-}
+	}
