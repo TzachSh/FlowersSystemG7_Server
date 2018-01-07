@@ -554,9 +554,69 @@ public class SystemServer extends AbstractServer implements Initializable {
 	public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 	});
 	}
-	
-	
-	
+	//update user after updating by uID
+	public void updateUserByuIdHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<User> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<User>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "update user set user=?,password=? where uId=?";
+			
+			}
+			@Override
+			public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setString(1,obj.getUser());
+				stmt.setString(2,obj.getPassword());
+				stmt.setInt(3,obj.getuId());
+			}
+			
+		});
+	}
+	//updating Customer after updating by cId
+	public void updateCustomerByuIdHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<Customer> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Customer>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "update customer set mId=? where uId=?";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Customer obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1,obj.getMembershipId());
+				stmt.setInt(2,obj.getuId());
+			}
+		});
+	}
+	//updating account after updating by cId
+	public void updateAccountsBycIdHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<Account> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Account>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "update Account set creditCard=?,status=? where cId=?";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Account obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setString(1,obj.getCreditCard());
+				stmt.setString(2,obj.getAccountStatus().toString());
+				stmt.setInt(3,obj.getCustomerId());
+			}
+		});
+	}
 	
 	
 	
@@ -627,6 +687,12 @@ public class SystemServer extends AbstractServer implements Initializable {
 					getUserByuIdHandler(db, key);
 				else if(key.equals(Command.getAccountbycID))
 					getAccountbycIDHandler(db, key);
+				else if(key.equals(Command.updateUserByuId))
+					updateUserByuIdHandler(db, key);
+				else if(key.equals(Command.updateCustomerByuId))
+					updateCustomerByuIdHandler(db, key);
+				else if(key.equals(Command.updateAccountsBycId))
+					updateAccountsBycIdHandler(db,key);
 			}
 			db.connectionClose();
 		}

@@ -24,7 +24,7 @@ public enum Command implements Serializable
 	getAccountStatus,
 	getAccountbycID,
 	getUserByuId,
-	updateAccounts,
-	updateCustomer,
-	updateUser
+	updateUserByuId,
+	updateCustomerByuId,
+	updateAccountsBycId	
 }
