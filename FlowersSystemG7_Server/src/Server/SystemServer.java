@@ -197,7 +197,7 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
-				return "SELECT P.pId, C.productName, C.discount, C.image, T.typeId, T.description, P.price "
+				return "SELECT P.pId, C.productName, C.discount, C.image, T.typeId, T.description, P.price, C.catPid "
 						+ "FROM product P INNER JOIN ProductType T ON P.pId = T.typeId "
 						+ "INNER JOIN CatalogProduct C ON P.pId = C.pId";
 			}
@@ -209,8 +209,9 @@ public class SystemServer extends AbstractServer{
 				int discount = rs.getInt(3);
 				int typeId = rs.getInt(5);
 				double price = rs.getDouble(7);
+				int catPid= rs.getInt(7);
 
-				CatalogProduct catalogPro = new CatalogProduct(id, typeId, price, null, null, productName, discount, "");
+				CatalogProduct catalogPro = new CatalogProduct(id, typeId, price, null, null, productName, discount, "",catPid);
 				return (Object)catalogPro;
 			}
 

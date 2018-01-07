@@ -29,8 +29,8 @@ public enum Command implements Serializable
 	updateAccountsBycId	,
 	updateAccounts,
 	updateCustomer,
-	addFlower,
 	updateUser,
 	getColors,
+	addFlower,
 	getDiscountsByBranch
-}
+	}
