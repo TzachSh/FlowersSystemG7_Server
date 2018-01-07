@@ -1,13 +1,11 @@
 package Server;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
@@ -25,6 +23,8 @@ import Logic.IUpdate;
 import PacketSender.Command;
 import PacketSender.Packet;
 import Products.CatalogProduct;
+import Products.ColorProduct;
+import Products.Flower;
 import Products.FlowerInProduct;
 import Users.Permission;
 import Users.User;
@@ -33,7 +33,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -45,7 +44,7 @@ import javafx.stage.WindowEvent;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
-public class SystemServer extends AbstractServer implements Initializable {
+public class SystemServer extends AbstractServer{
 
 	public SystemServer(int port) {
 		super(port);
@@ -54,8 +53,8 @@ public class SystemServer extends AbstractServer implements Initializable {
 
 	//private static final int DEFAULT_PORT = 5555;
 	private String user = "root";
-	private String password = "1q2w3e!";
-	private String database = "test";
+	private String password = "root";
+	private String database;
 	private static final int DEFAULT_PORT = 5555;
 	@FXML
 	private TextField txtPort;
@@ -106,6 +105,9 @@ public class SystemServer extends AbstractServer implements Initializable {
 			if(changeListening(txtDb.getText(), txtUser.getText(), txtPass.getText()))//check if switch listening is complete
 			{
 				if(btnSubmit.getText().equals("Start service")) {//if it wasn't listening
+					database=txtDb.getText();
+					user = txtUser.getText();
+					password=txtPass.getText();
 					printlogMsg("Server has started listening on port:"+port);//write to log
 					btnSubmit.setText("Stop service");//update button
 				}
@@ -242,7 +244,6 @@ public class SystemServer extends AbstractServer implements Initializable {
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
-	//Elias     @@@
 	
 	//getting all users
 	public void getUsersHandler(DbQuery db, Command key)
@@ -693,6 +694,14 @@ public class SystemServer extends AbstractServer implements Initializable {
 					updateCustomerByuIdHandler(db, key);
 				else if(key.equals(Command.updateAccountsBycId))
 					updateAccountsBycIdHandler(db,key);
+				else if(key.equals(Command.getColors)) {
+					getColors(db,key);
+				}
+				else if(key.equals(Command.addFlower))
+				{
+					createFlower(db,key);
+				}
+				
 			}
 			db.connectionClose();
 		}
@@ -709,11 +718,46 @@ public class SystemServer extends AbstractServer implements Initializable {
 			}
 		}
 	}
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		txtDb.setText(database);
-		txtUser.setText(user);
-		txtPass.setText(password);
+	private void createFlower(DbQuery db, Command key) {
+		DbUpdater<Flower> dbUpdate = new DbUpdater<>(db, key);
+		
+		dbUpdate.performAction(new IUpdate<Flower>() {
+
+			@Override
+			public String getQuery() {
+				return "Insert flower(flower,price,colId) values(?,?,?)";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Flower obj) throws SQLException {
+				stmt.setString(1, obj.getName());
+				stmt.setDouble(2, obj.getPrice());
+				stmt.setInt(3, obj.getColor());
+			}
+		});
+		
+	}
+	private void getColors(DbQuery db, Command key) {
+	DbGetter dbGet = new DbGetter(db, key);
+		
+		dbGet.performAction(new ISelect() {
+			@Override
+			public String getQuery() {
+				return "SELECT * from  Color";
+			}
+
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int colId =rs.getInt(1);
+				String color = rs.getString(2);
+				
+				return (Object)new ColorProduct(colId,color);
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+		});
+		
 	}
 
 
