@@ -64,10 +64,10 @@ public class CatalogProduct extends Product implements Serializable {
 			return false;
 		return true;
 	}
-	public int getCatPId() {
+	public int getCatalogProductId() {
 		return catPId;
 	}
-	public void setCatPId(int catPId) {
+	public void setCatalogProductId(int catPId) {
 		this.catPId = catPId;
 	}
 }

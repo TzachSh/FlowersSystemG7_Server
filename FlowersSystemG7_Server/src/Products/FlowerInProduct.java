@@ -28,9 +28,12 @@ public class FlowerInProduct implements Serializable {
 	}
 	
 	public FlowerInProduct(int flowerId, int productId, int quantity) {
-		super();
 		this.flowerId = flowerId;
 		this.productId = productId;
 		this.quantity = quantity;
+	}
+	
+	public FlowerInProduct(int flowerId, int quantity) {
+		this(flowerId, 0, quantity);
 	}
 }

@@ -2,7 +2,12 @@ package Products;
 
 import java.io.Serializable;
 
-public class ProductType implements Serializable {
+/**
+ * This Class uses for hands the Product Type
+ *
+ */
+public class ProductType implements Serializable
+{
 	private int id;
 	private String description;
 	
@@ -24,10 +29,10 @@ public class ProductType implements Serializable {
 		this.id = id;
 		this.description = description;
 	}
-	
-	public ProductType(ProductType proType)
-	{
-		this.id = proType.id;
-		this.description = proType.description;
+	@Override
+	public String toString() {
+		return description;
 	}
+	
+	
 }
