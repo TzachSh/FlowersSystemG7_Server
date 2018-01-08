@@ -84,7 +84,7 @@ public class DbQuery {
 	public void connectToDB() throws Exception{
 		conn = null;
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/"+database, user, password);
+		conn = DriverManager.getConnection("jdbc:mysql://localhost/" +database + "?allowMultiQueries=true", user, password);
 
 	}
 	public void connectionClose() throws SQLException 
