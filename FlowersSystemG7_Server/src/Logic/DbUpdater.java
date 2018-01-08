@@ -38,20 +38,29 @@ public class DbUpdater<T>
 	{
 		try {
 			// create the connection to db
+			db.connectToDB();
 			Connection con = db.getConnection();
 			
-			// get the relevant object for update in db that passed from the client as a parameter
-			@SuppressWarnings("unchecked")
-			T obj = (T)packet.getParameterForCommand(cmd).get(0);
+			// pass all over the object that we want to update
+		    for (Object obj : packet.getParameterForCommand(cmd))
+		    {
+		    	try
+		    	{
+		    		// get the relevant object for update in db that passed from the client as a parameter
+		    		@SuppressWarnings("unchecked")
+		    		T objConverted = (T)obj;
 			
-			// get the query from the implemention
-			String query = objUpdate.getQuery();
+		    		// get the query from the implemention
+		    		String query = objUpdate.getQuery();
 			
-			// set the statements from the implemention
-			PreparedStatement stmt = con.prepareStatement(query);
-			objUpdate.setStatements(stmt, obj);
+		    		// set the statements from the implemention
+		    		PreparedStatement stmt = con.prepareStatement(query);
+		    		objUpdate.setStatements(stmt, objConverted);
 			
-			stmt.executeUpdate();
+		    		stmt.executeUpdate();
+		    	}
+		    	catch (ClassCastException e) { }
+		    }
 		} 
 		catch (Exception e)
 		{
