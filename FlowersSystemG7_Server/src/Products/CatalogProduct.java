@@ -7,21 +7,14 @@ import Commons.ProductInOrder;
 
 public class CatalogProduct extends Product implements Serializable {
 
-	private String name;
-	private int saleDiscountPercent;
-	private String imgUrl;
 	private int catPId;
+	private String name;
+	private String imgUrl;
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public int getSaleDiscountPercent() {
-		return saleDiscountPercent;
-	}
-	public void setSaleDiscountPercent(int saleDiscountPercent) {
-		this.saleDiscountPercent = saleDiscountPercent;
 	}
 	public String getImgUrl() {
 		return imgUrl;
@@ -29,17 +22,52 @@ public class CatalogProduct extends Product implements Serializable {
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
-	public CatalogProduct(int id, int productTypeId, double price, ArrayList<FlowerInProduct> flowerInProductList,
-			ArrayList<ProductInOrder> productInOrderList, String name, int saleDiscountPercent, String imgUrl, int catPId) {
+	public CatalogProduct(int id, int catPid, int productTypeId, double price, ArrayList<FlowerInProduct> flowerInProductList,
+			ArrayList<ProductInOrder> productInOrderList, String name, String imgUrl) {
 		
 		super(id, productTypeId, price, flowerInProductList, productInOrderList);
+		this.catPId = catPid;
 		this.name = name;
-		this.saleDiscountPercent = saleDiscountPercent;
 		this.imgUrl = imgUrl;
-		this.catPId=catPId;
+	}
+
+	public CatalogProduct()
+	{
+		this.imgUrl = "";
+		this.name = "";
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CatalogProduct other = (CatalogProduct) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 	public int getCatPId() {
 		return catPId;
 	}
-
+	public void setCatPId(int catPId) {
+		this.catPId = catPId;
+	}
 }
