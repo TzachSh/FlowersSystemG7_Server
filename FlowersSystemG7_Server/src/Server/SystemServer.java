@@ -22,6 +22,7 @@ import Logic.IUpdate;
 
 import PacketSender.Command;
 import PacketSender.Packet;
+import Products.CatalogBranch;
 import Products.CatalogProduct;
 import Products.ColorProduct;
 import Products.Flower;
@@ -695,13 +696,12 @@ public class SystemServer extends AbstractServer{
 					updateCustomerByuIdHandler(db, key);
 				else if(key.equals(Command.updateAccountsBycId))
 					updateAccountsBycIdHandler(db,key);
-				else if(key.equals(Command.getColors)) {
+				else if(key.equals(Command.getColors))
 					getColors(db,key);
-				}
 				else if(key.equals(Command.addFlower))
-				{
 					createFlower(db,key);
-				}
+				else if(key.equals(Command.getDiscountsByBranch))
+					getDiscounts(db,key);
 				
 			}
 			db.connectionClose();
@@ -761,5 +761,27 @@ public class SystemServer extends AbstractServer{
 		
 	}
 
+	private void getDiscounts(DbQuery db,Command key) {
+		DbGetter dbGet = new DbGetter(db, key);
+		
+		dbGet.performAction(new ISelect() {
+			@Override
+			public String getQuery() {
+				return "SELECT catPId,discount,brId from  CatalogInBranch where brId=?";
+			}
 
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int catPId =rs.getInt(1);
+				double discount = rs.getDouble(2);
+				int branch=rs.getInt(3);
+				return (Object)new CatalogBranch(catPId,branch, discount);
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
+				stmt.setInt(1, (int) packet.getParameterForCommand(Command.getDiscountsByBranch).get(0));
+			}
+		});
+	}
 }

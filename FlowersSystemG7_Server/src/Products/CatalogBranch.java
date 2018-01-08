@@ -3,6 +3,10 @@ package Products;
 import java.io.Serializable;
 
 public class CatalogBranch implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int catPId;
 	private int branchId;
 	private double discount;
