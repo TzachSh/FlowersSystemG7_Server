@@ -2,9 +2,6 @@ package Commons;
 
 import java.io.Serializable;
 
-import Orders.Order;
-import Products.Product;
-
 public class ProductInOrder implements Serializable {
 	
 	private int orderId;
@@ -35,4 +32,5 @@ public class ProductInOrder implements Serializable {
 		this.productId = productId;
 		this.quantity = quantity;
 	}
+	
 }
