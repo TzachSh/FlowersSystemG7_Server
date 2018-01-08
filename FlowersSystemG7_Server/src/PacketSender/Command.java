@@ -43,5 +43,6 @@ public enum Command implements Serializable
 	updateUser,
 	getColors,
 	addFlower,
-	getDiscountsByBranch
+	getDiscountsByBranch,
+	getAccountBycId
 }
