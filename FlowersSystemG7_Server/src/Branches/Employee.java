@@ -2,7 +2,7 @@ package Branches;
 
 import java.io.Serializable;
 
-import Users.*;
+import Users.User;
 
 public class Employee extends User implements Serializable {
 	

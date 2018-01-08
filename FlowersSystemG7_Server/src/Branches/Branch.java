@@ -31,8 +31,15 @@ public class Branch implements Serializable {
 		this.id = id;
 	}
 
-	public Branch(int id , ArrayList<Employee> employeeList) {
+	public Branch(int id , String name) {
 		this.id = id;
-		this.employeeList = employeeList;
+		this.name = name;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	
 }
