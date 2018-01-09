@@ -44,5 +44,10 @@ public enum Command implements Serializable
 	getColors,
 	addFlower,
 	getDiscountsByBranch,
-	getAccountBycId
+	getAccountBycId,
+	addReply,
+	updateComplain,
+	addComplainRefund,
+	getComplains,
+	addComplain
 }

@@ -17,13 +17,8 @@ public class Complain implements IRefundAble, Serializable {
 	private int customerId;
 	private int refundId;
 	private int customerServiceId;
+	private boolean isActive;
 	
-	@Override
-	public void setRefund(Refund refund) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -68,10 +63,6 @@ public class Complain implements IRefundAble, Serializable {
 		return refundId;
 	}
 
-	public void setRefundId(int refundId) {
-		this.refundId = refundId;
-	}
-
 	public int getCustomerServiceId() {
 		return customerServiceId;
 	}
@@ -80,17 +71,34 @@ public class Complain implements IRefundAble, Serializable {
 		this.customerServiceId = customerServiceId;
 	}
 
-	public Complain(int id, Date creationDate, String title, String details, int customerId, int refundId,
-			int customerServiceId) {
+	public Complain(Date creationDate, String title, String details, int customerId,
+			int customerServiceId,boolean isActive) {
+		super();
+		this.creationDate = creationDate;
+		this.title = title;
+		this.details = details;
+		this.customerId = customerId;
+		this.customerServiceId = customerServiceId;
+		this.isActive = isActive;
+	}
+
+	public Complain(int id, Date creationDate, String title, String details, int customerId,
+			int customerServiceId,boolean isActive) {
 		super();
 		this.id = id;
 		this.creationDate = creationDate;
 		this.title = title;
 		this.details = details;
 		this.customerId = customerId;
-		this.refundId = refundId;
 		this.customerServiceId = customerServiceId;
+		this.isActive = isActive;
 	}
-	
-	
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 }

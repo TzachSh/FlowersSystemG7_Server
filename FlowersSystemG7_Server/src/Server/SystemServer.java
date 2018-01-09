@@ -13,11 +13,14 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 import Branches.Branch;
+import Commons.Refund;
 import Customers.Account;
 import Customers.AccountStatus;
+import Customers.Complain;
 import Customers.Customer;
 import Customers.Membership;
 import Customers.MembershipType;
+import Customers.Reply;
 import Logic.DbGetter;
 import Logic.DbQuery;
 import Logic.DbUpdater;
@@ -766,11 +769,7 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
-	//updating Account
-	public void updateAccountbycID(DbQuery db, Command key)
-	{
-		DbUpdater<Account> dbUpdate = new DbUpdater<>(db, key);
-	}
+
 	//getting user by User Name 
 	public void getUserByUserNameHandler(DbQuery db, Command key)
 	{
@@ -846,8 +845,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
-				Account acc = (Account) packet.getParameterForCommand(Command.getAccountbycID).get(0);
-				stmt.setInt(1, acc.getCustomerId());
+				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountBycId).get(0);
+				stmt.setInt(1, customerCid);
 			}
 			
 			@Override
@@ -862,27 +861,25 @@ public class SystemServer extends AbstractServer{
 				int acNum = rs.getInt(1);
 				int brId =rs.getInt(2);
 				int cId = rs.getInt(3);
-				int Balance=rs.getInt(4);
-				String Creditcard=rs.getString(5);
-				String Statusstring=rs.getString(6);
+				int balance=rs.getInt(4);
+				String creditCard=rs.getString(5);
+				String statusString=rs.getString(6);
 				AccountStatus status = AccountStatus.Active;
 				
 				Account newacc;
-				if(Statusstring.equals((AccountStatus.Active).toString()))
+				if(statusString.equals((AccountStatus.Active).toString()))
 					status= AccountStatus.Active;
-				else if(Statusstring.equals((AccountStatus.Blocked).toString()))
+				else if(statusString.equals((AccountStatus.Blocked).toString()))
 					status= AccountStatus.Blocked;
-				else if(Statusstring.equals((AccountStatus.Closed).toString()))
+				else if(statusString.equals((AccountStatus.Closed).toString()))
 					status= AccountStatus.Closed;
 				
-
-				newacc=new Account(acNum, cId, brId, Balance, status, Creditcard);
-			return (Object)newacc;
+				newacc=new Account(acNum, brId, cId, balance, status, creditCard);
+				return (Object)newacc;
 				
 			}
 		});
-	}
-	
+	}	
 	//adding customer 
 	public void addCustomertHandler(DbQuery db, Command key)
 	{
@@ -923,7 +920,7 @@ public class SystemServer extends AbstractServer{
 				// TODO Auto-generated method stub
 				stmt.setInt(1, obj.getBranchId());
 				stmt.setInt(2, obj.getCustomerId());
-				stmt.setInt(3, obj.getBalance());
+				stmt.setDouble(3, obj.getBalance());
 				stmt.setString(4, obj.getCreditCard());
 				stmt.setString(5, obj.getAccountStatus().toString());
 			}
@@ -1016,19 +1013,151 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "update Account set creditCard=?,status=? where cId=?";
+				return "update Account set creditCard=?, balance=?, status=? where cId=? AND brId=?";
 			}
 
 			@Override
 			public void setStatements(PreparedStatement stmt, Account obj) throws SQLException {
 				// TODO Auto-generated method stub
 				stmt.setString(1,obj.getCreditCard());
-				stmt.setString(2,obj.getAccountStatus().toString());
-				stmt.setInt(3,obj.getCustomerId());
+				stmt.setDouble(2, obj.getBalance());
+				stmt.setString(3,obj.getAccountStatus().toString());
+				stmt.setInt(4,obj.getCustomerId());
+				stmt.setInt(5, obj.getBranchId());
 			}
 		});
 	}
 	
+	public void updateComplainHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<Complain> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Complain>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "UPDATE complain SET creationDate=?, details=?, title=?, cId=?, eId=?,isActive=? " +
+					   "WHERE comId=?";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDate(1, obj.getCreationDate());
+				stmt.setString(2, obj.getDetails());
+				stmt.setString(3, obj.getTitle());
+				stmt.setInt(4, obj.getCustomerId());
+				stmt.setInt(5, obj.getCustomerServiceId());
+				stmt.setBoolean(6, obj.isActive());
+				stmt.setInt(7, obj.getId());
+			}
+		});
+	}
+	
+	private void addReplyHandler(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		DbUpdater<Reply> dbUpdate = new DbUpdater<>(db, key);
+		
+		dbUpdate.performAction(new IUpdate<Reply>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Reply obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1,obj.getComplainId());
+				stmt.setString(2, obj.getReplyment());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO reply (comId, replyment) " + 
+				   "VALUES (?,?);";
+			}
+		});
+	}
+	
+	public void addComplainHandler(DbQuery db , Command key)
+	{
+		DbUpdater<Complain> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Complain>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDate(1,obj.getCreationDate());
+				stmt.setString(2, obj.getDetails());
+				stmt.setString(3, obj.getTitle());
+				stmt.setInt(4, obj.getCustomerId());
+				stmt.setInt(5, obj.getCustomerServiceId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO complain (creationDate, details, title,cId,eId) " + 
+					   "VALUES (?,?,?,?,?);";
+			}
+		});
+	}
+
+	
+	private void addComplainRefundHandler(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		
+		DbUpdater<Refund> dbUpdate = new DbUpdater<>(db, key);
+		
+		dbUpdate.performAction(new IUpdate<Refund>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Refund obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDate(1,obj.getCreationDate());
+				stmt.setDouble(2, obj.getAmount());
+				stmt.setInt(3, obj.getRefundAbleId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO refund (createDate, amount, comId) " + 
+						"VALUES (?, ?, ?)";
+			}
+		});
+	}
+	
+	public void getComplainsHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM complain";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				int complainId = rs.getInt(1);
+				java.sql.Date creationDate = rs.getDate(2);
+				String details = rs.getString(3);
+				String title = rs.getString(4);
+				int customerId = rs.getInt(5);
+				int creatorId = rs.getInt(6);
+				boolean isActive = rs.getBoolean(7);
+
+				Complain complain = new Complain(complainId, creationDate, title, details, customerId,creatorId,isActive);
+				return (Object) complain;
+			}
+		});
+	}
 	// *****
 
 	@Override
@@ -1081,16 +1210,12 @@ public class SystemServer extends AbstractServer{
 					createFlower(db,key);
 				else if(key.equals(Command.getDiscountsByBranch))
 					getDiscounts(db,key);
-				
-			
 				else if (key.equals(Command.updateProduct)) {
 					updateProductHandler(db, key);
 				}
-			
 				else if (key.equals(Command.deleteFlowersInProduct)) {
 					deleteFlowersInProductHandler(db, key);
 				}
-				
 				else if (key.equals(Command.getFlowersInProducts)) {
 					getFlowersInProductHandler(db, key);
 				}
@@ -1098,31 +1223,39 @@ public class SystemServer extends AbstractServer{
 				else if (key.equals(Command.getProductTypes)) {
 					getProductTypesHandler(db, key);
 				}
-				
 				else if (key.equals(Command.insertCatalogProduct)) {
 					insertCatalogProductHandler(db, key);
 				}
-				
 				else if (key.equals(Command.updateFlowersInProduct)){
 					updateFlowersInProductHandler(db, key);
 				}
-				
 				else if (key.equals(Command.updateCatalogImage)){
 					updateImageInProductHandler(db, key);
 				}
-				
 				else if (key.equals(Command.getCatalogImage)) {
 					getCatalogImageHandler(db, key);
 				}
-				
 				else if (key.equals(Command.getBranches)) {
 					getBranchesHandler(db, key);
 				}
-				
 				else if (key.equals(Command.getBranchSales)) {
 					getBranchSalesHandler(db, key);
 				}
-				
+				else if(key.equals(Command.updateComplain)) {
+					updateComplainHandler(db,key);
+				}
+				else if (key.equals(Command.addComplain)) {
+					addComplainHandler(db,key);
+				}
+				else if(key.equals(Command.getComplains)) {
+					getComplainsHandler(db, key);
+				}
+				else if(key.equals(Command.addReply)) {
+					addReplyHandler(db,key);
+				}
+				else if(key.equals(Command.addComplainRefund)) {
+					addComplainRefundHandler(db,key);
+				}	
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))
@@ -1139,8 +1272,6 @@ public class SystemServer extends AbstractServer{
 					getCustomersKeyByuIdHandler(db, key);
 				else if(key.equals(Command.getUserByuId))
 					getUserByuIdHandler(db, key);
-				else if(key.equals(Command.getAccountbycID))
-					getAccountBycIdHandler(db, key);
 				else if(key.equals(Command.updateUserByuId))
 					updateUserByuIdHandler(db, key);
 				else if(key.equals(Command.updateCustomerByuId))
