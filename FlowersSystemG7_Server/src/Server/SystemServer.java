@@ -719,8 +719,8 @@ public class SystemServer extends AbstractServer{
 
 	@Override
 	public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
-		Customer cus = (Customer) packet.getParameterForCommand(Command.getCustomersKeyByuId).get(0);
-		stmt.setInt(1, cus.getuId());
+		Integer cus = (Integer) packet.getParameterForCommand(Command.getCustomersKeyByuId).get(0);
+		stmt.setInt(1, cus);
 		}
 	});
 }
@@ -735,8 +735,9 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
-				User user = (User) packet.getParameterForCommand(Command.getUserByuId).get(0);
-				stmt.setInt(1, user.getuId());
+				//User user = (User) packet.getParameterForCommand(Command.getUserByuId).get(0);
+				//stmt.setInt(1, user.getuId());
+				stmt.setInt(1, (Integer)packet.getParameterForCommand(Command.getUserByuId).get(0));
 			}
 			
 			@Override
@@ -1013,7 +1014,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "update Account set creditCard=?, balance=?, status=? where cId=? AND brId=?";
+				return "update Account set creditCard=?, balance=?, status=? where brId=? and cId=?";
 			}
 
 			@Override
