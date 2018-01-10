@@ -1028,18 +1028,28 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/**
+	 * Handle complain updating by querying a matching "Update Statement",
+	 * @param db -Stores database information 
+	 * @param key - Command operation which is performed
+	 */
 	public void updateComplainHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<Complain> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Complain>() {
 
+			/**
+			 * Initialize complain updating query
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "UPDATE complain SET creationDate=?, details=?, title=?, cId=?, eId=?,isActive=? " +
 					   "WHERE comId=?";
 			}
-
+			/**
+			 * Initialize the relevant fields of the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1054,33 +1064,49 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/**
+	 * Handle adding a new reply
+	 * @param db -Stores database information 
+	 * @param key - Command operation which is performed
+	 */
 	private void addReplyHandler(DbQuery db, Command key) {
 		// TODO Auto-generated method stub
 		DbUpdater<Reply> dbUpdate = new DbUpdater<>(db, key);
 		
 		dbUpdate.performAction(new IUpdate<Reply>() {
-			
+			/**
+			 * Register the fields which is used for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Reply obj) throws SQLException {
 				// TODO Auto-generated method stub
 				stmt.setInt(1,obj.getComplainId());
 				stmt.setString(2, obj.getReplyment());
 			}
-			
+			/**
+			 * Register an Insert query
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO reply (comId, replyment) " + 
-				   "VALUES (?,?);";
+				   	   "VALUES (?,?);";
 			}
 		});
 	}
 	
+	/**
+	 * Handle a new complain add
+	 * @param db
+	 * @param key
+	 */
 	public void addComplainHandler(DbQuery db , Command key)
 	{
 		DbUpdater<Complain> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Complain>() {
-			
+			/**
+			 * Register the fields for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1089,23 +1115,32 @@ public class SystemServer extends AbstractServer{
 				stmt.setString(3, obj.getTitle());
 				stmt.setInt(4, obj.getCustomerId());
 				stmt.setInt(5, obj.getCustomerServiceId());
+				stmt.setBoolean(6, obj.isActive());
 			}
-			
+			/**
+			 * Register an Insert query
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO complain (creationDate, details, title,cId,eId) " + 
-					   "VALUES (?,?,?,?,?);";
+				return "INSERT INTO complain (creationDate, details, title,cId,eId,isActive) " + 
+					   "VALUES (?,?,?,?,?,?);";
 			}
 		});
 	}
 
-	
+	/**
+	 * 
+	 * @param db -Stores database information 
+	 * @param key - Command operation which is performed
+	 */
 	private void addComplainRefundHandler(DbQuery db, Command key) {
 		// TODO Auto-generated method stub
 		
 		DbUpdater<Refund> dbUpdate = new DbUpdater<>(db, key);
-		
+		/**
+		 * Register fields for the query
+		 */
 		dbUpdate.performAction(new IUpdate<Refund>() {
 			
 			@Override
@@ -1115,7 +1150,9 @@ public class SystemServer extends AbstractServer{
 				stmt.setDouble(2, obj.getAmount());
 				stmt.setInt(3, obj.getRefundAbleId());
 			}
-			
+			/**
+			 * Register an Insert query
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1125,17 +1162,26 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/**
+	 * 
+	 * @param db -Stores database information 
+	 * @param key - Command operation which is performed
+	 */
 	public void getComplainsHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			
+			/**
+			 *	No fields to register for this query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
 				
 			}
-			
+			/**
+			 * Perform a Select query to get all the complains
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
