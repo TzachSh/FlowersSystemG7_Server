@@ -845,7 +845,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
-				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountBycId).get(0);
+				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountbycID).get(0);
 				stmt.setInt(1, customerCid);
 			}
 			
@@ -1196,7 +1196,7 @@ public class SystemServer extends AbstractServer{
 					getCustomersKeyByuIdHandler(db, key);
 				else if(key.equals(Command.getUserByuId))
 					getUserByuIdHandler(db, key);
-				else if(key.equals(Command.getAccountBycId))
+				else if(key.equals(Command.getAccountbycID))
 					getAccountBycIdHandler(db, key);
 				else if(key.equals(Command.updateUserByuId))
 					updateUserByuIdHandler(db, key);
@@ -1278,7 +1278,8 @@ public class SystemServer extends AbstractServer{
 					updateCustomerByuIdHandler(db, key);
 				else if(key.equals(Command.updateAccountsBycId))
 					updateAccountsBycIdHandler(db,key);
-				
+				else if(key.equals(Command.getAccountbycID))
+					getAccountBycIdHandler(db, key);
 			}
 
 			db.connectionClose();
