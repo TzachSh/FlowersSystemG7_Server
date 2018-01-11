@@ -48,5 +48,6 @@ public enum Command implements Serializable
 	addComplain,
 	addComplainRefund,
 	updateComplain,
-	addReply
+	addReply,
+	setProductAsDeleted
 	}
