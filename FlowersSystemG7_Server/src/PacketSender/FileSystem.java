@@ -15,7 +15,6 @@ public class FileSystem implements Serializable {
 
 	private final static String dir = "Uploads";
 	
-	private String serverPath = "";
 	private String localPath = "";
 	private String extenstion = "";
 	private int productId = -1;
@@ -51,11 +50,17 @@ public class FileSystem implements Serializable {
 		if (productId == -1)
 			return;
 		
+		String serverPath = getServerPath();
 		// save image to default local
 		try (FileOutputStream fos = new FileOutputStream(serverPath)) {
 			   fos.write(getMybytearray());
 			   fos.close();
 			}
+	}
+	
+	public String getServerPath()
+	{
+		return String.format("%s/p%d.%s", dir, productId, extenstion);
 	}
 	
 	public void loadImageFromLocal(String localPath)
@@ -100,7 +105,6 @@ public class FileSystem implements Serializable {
 				bis.close();
 				
 				this.localPath = localPath;
-				this.serverPath = String.format("%s/p%d.%s", dir, productId, extenstion);
 			}
 			catch (IOException e) { }
 		}
@@ -122,10 +126,6 @@ public class FileSystem implements Serializable {
 
 	public void setLocalFilePath(String localPath) {
 		this.localPath = localPath;
-	}
-	
-	public String getServerFilePath() {
-		return serverPath;
 	}
 	
 	public int getProductId() {
