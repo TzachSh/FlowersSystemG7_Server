@@ -202,7 +202,11 @@ public class SystemServer extends AbstractServer{
 		}
 		return true;
 	}
-	public void getCatalogProductsHandler(DbQuery db, Command key)
+	
+	/**
+	 * Get all active catalog products
+	 */
+	public void getActiveCatalogProductsHandler(DbQuery db, Command key)
 	{	
 		DbGetter dbGet = new DbGetter(db, key);
 		
@@ -212,6 +216,40 @@ public class SystemServer extends AbstractServer{
 				return "SELECT P.pId, C.productName, P.typeId, P.price, C.catPId "
 						+ "FROM product P INNER JOIN CatalogProduct C ON P.pId = C.pId "
 						+ "WHERE P.isActive=1";
+			}
+
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int id = rs.getInt(1);
+				String productName = rs.getString(2);
+			
+				int typeId = rs.getInt(3);
+				double price = rs.getDouble(4);
+				
+				int catPid = rs.getInt(5);
+				
+				CatalogProduct catalogPro = new CatalogProduct(id, catPid, typeId, price, null, null, productName, "");
+
+				return (Object)catalogPro;
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+		});
+	}
+	
+	/**
+	 * Get all catalog products ; active and not active
+	 */
+	public void getAllCatalogProductsHandler(DbQuery db, Command key)
+	{	
+		DbGetter dbGet = new DbGetter(db, key);
+		
+		dbGet.performAction(new ISelect() {
+			@Override
+			public String getQuery() {
+				return "SELECT P.pId, C.productName, P.typeId, P.price, C.catPId "
+						+ "FROM product P INNER JOIN CatalogProduct C ON P.pId = C.pId";
 			}
 
 			@Override
@@ -373,6 +411,24 @@ public class SystemServer extends AbstractServer{
 
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+		});
+	}
+	
+	public void setProductAsDeletedHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<Product> dbUpdate = new DbUpdater<>(db, key);
+	
+		dbUpdate.performAction(new IUpdate<Product>() {
+
+			@Override
+			public String getQuery() {
+				return "UPDATE product SET isActive=0 WHERE pId = ?";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Product obj) throws SQLException {
+				stmt.setInt(1, obj.getId());
+			}
 		});
 	}
 	
@@ -1241,7 +1297,7 @@ public class SystemServer extends AbstractServer{
 			for (Command key : packet.getCommands())
 			{
 				if (key.equals(Command.getCatalogProducts)) {
-					getCatalogProductsHandler(db, key);
+					getActiveCatalogProductsHandler(db, key);
 				}
 	
 				else if (key.equals(Command.updateCatalogProduct)) {
@@ -1353,6 +1409,10 @@ public class SystemServer extends AbstractServer{
 					updateAccountsBycIdHandler(db,key);
 				else if(key.equals(Command.getAccountbycID))
 					getAccountBycIdHandler(db, key);
+				else if(key.equals(Command.setProductAsDeleted))
+					setProductAsDeletedHandler(db, key);
+				else if(key.equals(Command.getAllCatalogProducts))
+					getAllCatalogProductsHandler(db, key);
 			}
 
 			db.connectionClose();
