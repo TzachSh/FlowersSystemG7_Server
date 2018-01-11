@@ -51,5 +51,7 @@ public enum Command implements Serializable
 	addReply,
 	setProductAsDeleted,
 	getAllCatalogProducts,
-	addSurvey
+	addSurvey, 
+	addQuestions,
+	attachQuestionsToServey,
 	}
