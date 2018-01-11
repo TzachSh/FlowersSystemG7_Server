@@ -25,5 +25,10 @@ public class Question implements Serializable {
 		this.quesiton = quesiton;
 	}
 	
+	public Question(String quesiton) {
+
+		this.quesiton = quesiton;
+	}
+	
 	
 }
