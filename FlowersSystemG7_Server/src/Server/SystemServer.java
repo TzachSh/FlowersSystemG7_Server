@@ -36,6 +36,7 @@ import Products.Flower;
 import Products.FlowerInProduct;
 import Products.Product;
 import Products.ProductType;
+import Survey.Survey;
 import Users.Permission;
 import Users.User;
 import javafx.application.Platform;
@@ -1204,6 +1205,27 @@ public class SystemServer extends AbstractServer{
 
 				Complain complain = new Complain(complainId, creationDate, title, details, customerId,creatorId,isActive);
 				return (Object) complain;
+			}
+		});
+	}
+	
+	private void addSurveyHandler(DbQuery db , Command key)
+	{
+		DbUpdater<Survey> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Survey>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO survey (subject, creatorId) " + 
+				"VALUES (?, ?)";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setString(1, obj.getSubject());
+				stmt.setInt(2, obj.getCreatorId());
 			}
 		});
 	}
