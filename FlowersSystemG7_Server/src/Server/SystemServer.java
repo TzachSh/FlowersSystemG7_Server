@@ -555,7 +555,7 @@ public class SystemServer extends AbstractServer{
 
 			@Override
 			public void setStatements(PreparedStatement stmt, FileSystem obj) throws SQLException {
-				stmt.setString(1, obj.getServerFilePath());
+				stmt.setString(1, obj.getServerPath());
 				stmt.setInt(2, obj.getProductId());
 				
 				try
