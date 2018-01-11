@@ -930,7 +930,7 @@ public class SystemServer extends AbstractServer{
 			
 			
 		});
-		}
+	}
 	//getting all MemberShip
 	public void getMemberShipHandler(DbQuery db, Command key)
 	{
