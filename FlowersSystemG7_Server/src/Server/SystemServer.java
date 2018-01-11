@@ -1327,6 +1327,8 @@ public class SystemServer extends AbstractServer{
 				else if(key.equals(Command.addComplainRefund)) {
 					addComplainRefundHandler(db,key);
 				}	
+				else if(key.equals(Command.addSurvey))
+					addSurveyHandler(db, key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))
