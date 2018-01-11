@@ -209,7 +209,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				return "SELECT P.pId, C.productName, P.typeId, P.price, C.catPId "
-						+ "FROM product P INNER JOIN CatalogProduct C ON P.pId = C.pId";
+						+ "FROM product P INNER JOIN CatalogProduct C ON P.pId = C.pId "
+						+ "WHERE P.isActive=1";
 			}
 
 			@Override
@@ -384,7 +385,7 @@ public class SystemServer extends AbstractServer{
 				return "SELECT P.pId, C.productName, T.typeId, T.description, P.price, C.catPId "
 						+ "FROM product P INNER JOIN ProductType T ON P.pId = T.typeId "
 						+ "INNER JOIN CatalogProduct C ON P.pId = C.pId"
-						+ "WHERE C.productName = ?";
+						+ "WHERE C.productName = ? AND P.isActive=1";
 			}
 
 			@Override
@@ -418,7 +419,8 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
-				return "SELECT image FROM catalogproduct;";
+				return "SELECT C.image FROM catalogproduct C INNER JOIN product P "
+						+ "ON C.pId=P.pId WHERE P.isActive=1;";
 			}
 
 			@Override
