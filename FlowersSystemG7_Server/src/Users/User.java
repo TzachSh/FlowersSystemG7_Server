@@ -16,7 +16,6 @@ public class User implements Serializable {
 		this.permission = permission;
 	}
 
-
 	public  int getuId() {
 		return uId;
 	}
@@ -55,6 +54,11 @@ public class User implements Serializable {
 		this.password = password;
 		this.isLogged = isLogged;
 		this.permission = permission;
+	}
+	public User(String user, String password) {
+		super();
+		this.user = user;
+		this.password = password;
 	}
 	public User(int uId) {
 		super();

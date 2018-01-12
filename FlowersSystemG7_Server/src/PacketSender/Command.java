@@ -58,5 +58,7 @@ public enum Command implements Serializable
 	deleteSaleCatalogInBranch,
 	getSurvey,
 	getBranchBybrId,
-	updateSurvey
+	updateSurvey,
+	getUserByNameAndPass,
+	getEmployeeByUid
 	}
