@@ -1355,8 +1355,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO survey (subject, creatorId) " + 
-				"VALUES (?, ?)";
+				return "INSERT INTO survey (subject, creatorId,isActive) " + 
+				"VALUES (?, ?,?)";
 			}
 
 			@Override
@@ -1364,6 +1364,7 @@ public class SystemServer extends AbstractServer{
 				// TODO Auto-generated method stub
 				stmt.setString(1, obj.getSubject());
 				stmt.setInt(2, obj.getCreatorId());
+				stmt.setBoolean(3, obj.isActive());
 			}
 		});
 	}
