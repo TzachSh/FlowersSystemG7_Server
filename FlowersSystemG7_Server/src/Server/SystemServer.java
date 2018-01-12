@@ -1301,8 +1301,9 @@ public class SystemServer extends AbstractServer{
 				int customerId = rs.getInt(5);
 				int creatorId = rs.getInt(6);
 				boolean isActive = rs.getBoolean(7);
+				int branchId = rs.getInt(8);
 
-				Complain complain = new Complain(complainId, creationDate, title, details, customerId,creatorId,isActive);
+				Complain complain = new Complain(complainId, creationDate, title, details, customerId,creatorId,isActive,branchId);
 				return (Object) complain;
 			}
 		});
@@ -1337,15 +1338,16 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO surveyquestion (surId, qId) " + 
-				"VALUES (?, ?)";
+				return "INSERT INTO surveyquestion (surId,qId) " + 
+						"SELECT surId,qId FROM(" + 
+						"		(SELECT * FROM survey S ORDER BY S.surId DESC LIMIT 1) as LastSurveyID ," + 
+						"		(SELECT * FROM question Q ORDER BY Q.qId DESC LIMIT 6) as LastQuestions" + 
+						");";
 			}
 
 			@Override
 			public void setStatements(PreparedStatement stmt, SurveyQuestion obj) throws SQLException {
 				// TODO Auto-generated method stub
-				stmt.setInt(1, obj.getSurveyId());
-				stmt.setInt(2, obj.getQuestionId());
 			}
 		});
 	}
