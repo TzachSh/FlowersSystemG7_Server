@@ -1398,6 +1398,30 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	
+	private void updateSurveyHandler(DbQuery db, Command key) {
+		DbUpdater<Survey> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<Survey>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "UPDATE survey " +
+					   "SET subject = ?, creatorId = ?, isActive = ? " +
+				 	   "WHERE surId=?";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setString(1, obj.getSubject());
+				stmt.setInt(2, obj.getCreatorId());
+				stmt.setBoolean(3, obj.isActive());
+				stmt.setInt(4, obj.getId());
+			}
+		});
+		
+	}
 
 	// *****
 
@@ -1537,6 +1561,8 @@ public class SystemServer extends AbstractServer{
 					addSaleCatalogInBranchHandler(db, key);
 				else if(key.equals(Command.deleteSaleCatalogInBranch))
 					deleteSaleCatalogInBranchHandler(db, key);
+				else if(key.equals(Command.updateSurvey))
+					updateSurveyHandler(db,key);
 			}
 
 			db.connectionClose();
