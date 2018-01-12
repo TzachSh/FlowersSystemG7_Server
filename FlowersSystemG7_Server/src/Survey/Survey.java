@@ -57,7 +57,6 @@ public class Survey implements Serializable {
 	} 
 	
 	public Survey(String subject, int creatorId,boolean isActive) {
-		
 		this.subject = subject;
 		this.creatorId = creatorId;
 	} 
