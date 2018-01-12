@@ -649,6 +649,47 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/** Add Sale To Catalog In Branch  */
+	public void addSaleCatalogInBranchHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<CatalogInBranch> dbUpdate = new DbUpdater<>(db, key);
+	
+		dbUpdate.performAction(new IUpdate<CatalogInBranch>() {
+
+			@Override
+			public String getQuery() {
+				return "INSERT INTO cataloginbranch (brId, catPId, discount) VALUES (?, ?, ?);";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, CatalogInBranch obj) throws SQLException {
+				stmt.setInt(1, obj.getBranchId());
+				stmt.setInt(2, obj.getCatalogProductId());
+				stmt.setInt(3, obj.getDiscount());
+			}
+		});
+	}
+	
+	/** Delete Sale for Catalog In Branch  */
+	public void deleteSaleCatalogInBranchHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<CatalogInBranch> dbUpdate = new DbUpdater<>(db, key);
+	
+		dbUpdate.performAction(new IUpdate<CatalogInBranch>() {
+
+			@Override
+			public String getQuery() {
+				return "DELETE FROM cataloginbranch WHERE brId=? AND catPId=?;";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, CatalogInBranch obj) throws SQLException {
+				stmt.setInt(1, obj.getBranchId());
+				stmt.setInt(2, obj.getCatalogProductId());
+			}
+		});
+	}
+	
 	
 	/**
 	 * Insert a catalog product
@@ -1413,6 +1454,10 @@ public class SystemServer extends AbstractServer{
 					setProductAsDeletedHandler(db, key);
 				else if(key.equals(Command.getAllCatalogProducts))
 					getAllCatalogProductsHandler(db, key);
+				else if (key.equals(Command.addSaleCatalogInBranch))
+					addSaleCatalogInBranchHandler(db, key);
+				else if(key.equals(Command.deleteSaleCatalogInBranch))
+					deleteSaleCatalogInBranchHandler(db, key);
 			}
 
 			db.connectionClose();
