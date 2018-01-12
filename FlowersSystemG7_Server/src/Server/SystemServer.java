@@ -1031,6 +1031,43 @@ public class SystemServer extends AbstractServer{
 			
 		});
 	}
+	
+	/**
+	 * Getting the branch name by brID
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
+	public void getBranchBybrIdHandler(DbQuery db,  Command key)
+	{
+
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				Integer branchid = (Integer) packet.getParameterForCommand(Command.getBranchBybrId).get(0);
+				stmt.setInt(1,branchid );
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "select b.brName from branch b where b.brId=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				String brname=rs.getString(1);
+				
+				
+				return (Object)brname;
+			}
+		});
+	}
+	
+	
 	//getting all MemberShip
 	public void getMemberShipHandler(DbQuery db, Command key)
 	{
@@ -1041,7 +1078,7 @@ public class SystemServer extends AbstractServer{
 		return "SELECT * " + 
 		"FROM MemberShip";
 	}
-
+		
 	@Override
 	public Object createObject(ResultSet rs) throws SQLException {
 		int mId = rs.getInt(1);
@@ -1537,6 +1574,8 @@ public class SystemServer extends AbstractServer{
 					addSaleCatalogInBranchHandler(db, key);
 				else if(key.equals(Command.deleteSaleCatalogInBranch))
 					deleteSaleCatalogInBranchHandler(db, key);
+				else if(key.equals(Command.getBranchBybrId))
+					getBranchBybrIdHandler(db, key);
 			}
 
 			db.connectionClose();
