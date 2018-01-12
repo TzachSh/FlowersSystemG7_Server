@@ -15,6 +15,8 @@ public class User implements Serializable {
 	public void setPermission(Permission permission) {
 		this.permission = permission;
 	}
+
+
 	public  int getuId() {
 		return uId;
 	}
@@ -47,14 +49,14 @@ public class User implements Serializable {
 		this.isLogged = isLogged;
 		this.permission = permission;
 	}
-	public User( String user, String password, boolean isLogged , Permission permission) {
+	public User(String user, String password, boolean isLogged , Permission permission) {
 		super();
 		this.user = user;
 		this.password = password;
 		this.isLogged = isLogged;
 		this.permission = permission;
 	}
-	public User( int uId) {
+	public User(int uId) {
 		super();
 		this.uId = uId;
 	}
