@@ -1331,7 +1331,7 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
-	private void getSurvey(DbQuery db , Command key)
+	private void getSurveyHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
@@ -1503,6 +1503,8 @@ public class SystemServer extends AbstractServer{
 					addQuestionHandler(db,key);
 				else if(key.equals(Command.addQuestionsToServey))
 					addQuestionsToSurveyHandler(db,key);
+				else if(key.equals(Command.getSurvey))
+					getSurveyHandler(db, key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))
