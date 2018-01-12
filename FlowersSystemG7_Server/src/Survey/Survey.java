@@ -49,14 +49,14 @@ public class Survey implements Serializable {
 	public void setSurveyQuestionList(ArrayList<SurveyQuestion> surveyQuestionList) {
 		this.surveyQuestionList = surveyQuestionList;
 	}
-	public Survey(int id, String subject, int creatorId) {
+	public Survey(int id, String subject, int creatorId,boolean isActive) {
 	
 		this.id = id;
 		this.subject = subject;
 		this.creatorId = creatorId;
 	} 
 	
-	public Survey(String subject, int creatorId) {
+	public Survey(String subject, int creatorId,boolean isActive) {
 		
 		this.subject = subject;
 		this.creatorId = creatorId;
