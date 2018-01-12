@@ -1219,6 +1219,7 @@ public class SystemServer extends AbstractServer{
 				stmt.setInt(4, obj.getCustomerId());
 				stmt.setInt(5, obj.getCustomerServiceId());
 				stmt.setBoolean(6, obj.isActive());
+				stmt.setInt(7, obj.getBranchId());
 			}
 			/**
 			 * Register an Insert query
@@ -1226,8 +1227,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO complain (creationDate, details, title,cId,eId,isActive) " + 
-					   "VALUES (?,?,?,?,?,?);";
+				return "INSERT INTO complain (creationDate, details, title,cId,eId,isActive,brId) " + 
+					   "VALUES (?,?,?,?,?,?,?);";
 			}
 		});
 	}

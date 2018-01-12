@@ -9,8 +9,16 @@ public class Survey implements Serializable {
 	private int id;
 	private String subject;
 	private int creatorId;
+	private boolean isActive;
 	private ArrayList<SurveyBranch> surveyBranchList;
 	private ArrayList<SurveyQuestion> surveyQuestionList;
+
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 	public int getId() {
 		return id;
 	}
