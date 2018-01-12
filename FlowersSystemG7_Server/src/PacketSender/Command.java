@@ -56,6 +56,6 @@ public enum Command implements Serializable
 	addQuestionsToServey,
 	addSaleCatalogInBranch,
 	deleteSaleCatalogInBranch,
-	getAlLSurvey,
-	getAllQuestions
+	getAllSurvey,
+	getQuestions
 	}
