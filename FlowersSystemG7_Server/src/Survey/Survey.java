@@ -54,11 +54,14 @@ public class Survey implements Serializable {
 		this.id = id;
 		this.subject = subject;
 		this.creatorId = creatorId;
+		this.isActive = isActive;
 	} 
 	
 	public Survey(String subject, int creatorId,boolean isActive) {
+		
 		this.subject = subject;
 		this.creatorId = creatorId;
+		this.isActive = isActive;
 	} 
 	
 }

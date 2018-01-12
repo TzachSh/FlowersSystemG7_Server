@@ -7,7 +7,14 @@ import Branches.ServiceExpert;
 public class SurveyConclusion implements Serializable {
 	private int id;
 	private int serviceExpertId;
-	private int surveyBranchId;
+	private String conclusion;
+	
+	public String getConclusion() {
+		return conclusion;
+	}
+	public void setConclusion(String conclusion) {
+		this.conclusion = conclusion;
+	}
 	public int getId() {
 		return id;
 	}
@@ -20,16 +27,16 @@ public class SurveyConclusion implements Serializable {
 	public void setServiceExpertId(int serviceExpertId) {
 		this.serviceExpertId = serviceExpertId;
 	}
-	public int getSurveyBranchId() {
-		return surveyBranchId;
-	}
-	public void setSurveyBranchId(int surveyBranchId) {
-		this.surveyBranchId = surveyBranchId;
-	}
+
 	public SurveyConclusion(int id, int serviceExpertId, int surveyBranchId) {
 		super();
 		this.id = id;
 		this.serviceExpertId = serviceExpertId;
-		this.surveyBranchId = surveyBranchId;
+	}
+	
+	public SurveyConclusion(int serviceExpertId, String conclusion) {
+		super();
+		this.serviceExpertId = serviceExpertId;
+		this.conclusion = conclusion;
 	}
 }
