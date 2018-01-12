@@ -32,11 +32,16 @@ public class SurveyQuestion implements Serializable {
 	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
 	}
-	public SurveyQuestion(int id, int surveyId, ArrayList<AnswerSurvey> answerSurveyList, int questionId) {
+	public SurveyQuestion(int id, int surveyId, int questionId) {
 		super();
 		this.id = id;
 		this.surveyId = surveyId;
-		this.answerSurveyList = answerSurveyList;
+		this.questionId = questionId;
+	}
+	
+	public SurveyQuestion(int surveyId, int questionId) {
+		super();
+		this.surveyId = surveyId;
 		this.questionId = questionId;
 	}
 }

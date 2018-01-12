@@ -53,7 +53,7 @@ public enum Command implements Serializable
 	getAllCatalogProducts,
 	addSurvey, 
 	addQuestions,
-	attachQuestionsToServey,
+	addQuestionsToServey,
 	addSaleCatalogInBranch,
 	deleteSaleCatalogInBranch
 	}

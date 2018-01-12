@@ -36,7 +36,9 @@ import Products.Flower;
 import Products.FlowerInProduct;
 import Products.Product;
 import Products.ProductType;
+import Survey.Question;
 import Survey.Survey;
+import Survey.SurveyQuestion;
 import Users.Permission;
 import Users.User;
 import javafx.application.Platform;
@@ -1326,6 +1328,48 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	
+	private void addQuestionsToSurveyHandler(DbQuery db , Command key)
+	{
+		DbUpdater<SurveyQuestion> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<SurveyQuestion>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO surveyquestion (surId, qId) " + 
+				"VALUES (?, ?)";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, SurveyQuestion obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getSurveyId());
+				stmt.setInt(2, obj.getQuestionId());
+			}
+		});
+	}
+
+	private void addQuestionHandler(DbQuery db , Command key)
+	{
+		DbUpdater<Question> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<Question>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO question (question) " + 
+				"VALUES (?)";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Question obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setString(1, obj.getQuesiton());
+			}
+		});
+	}
+
 	// *****
 
 	@Override
@@ -1426,6 +1470,10 @@ public class SystemServer extends AbstractServer{
 				}	
 				else if(key.equals(Command.addSurvey))
 					addSurveyHandler(db, key);
+				else if(key.equals(Command.addQuestions))
+					addQuestionHandler(db,key);
+				else if(key.equals(Command.addQuestionsToServey))
+					addQuestionsToSurveyHandler(db,key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))
