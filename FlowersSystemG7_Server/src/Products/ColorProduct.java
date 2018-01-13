@@ -16,5 +16,9 @@ public class ColorProduct implements Serializable {
 		this.colId = colId;
 		this.colorName = colorName;
 	}
+	@Override
+	public String toString() {
+		return colorName;
+	}
 	
 }
