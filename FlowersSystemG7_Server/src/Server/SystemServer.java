@@ -1395,6 +1395,32 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	private void getQuestionsHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM question";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				
+				return new Question(rs.getInt(1),rs.getString(2));
+			}
+		});
+	}
+	
 	private void addQuestionsToSurveyHandler(DbQuery db , Command key)
 	{
 		DbUpdater<SurveyQuestion> dbUpdate = new DbUpdater<>(db, key);
@@ -1567,6 +1593,8 @@ public class SystemServer extends AbstractServer{
 					addQuestionsToSurveyHandler(db,key);
 				else if(key.equals(Command.getSurvey))
 					getSurveyHandler(db, key);
+				else if(key.equals(Command.getQuestions))
+					getQuestionsHandler(db, key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))

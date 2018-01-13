@@ -60,5 +60,6 @@ public enum Command implements Serializable
 	getBranchBybrId,
 	updateSurvey,
 	getUserByNameAndPass,
-	getEmployeeByUid
+	getEmployeeByUid,
+	getQuestions
 	}
