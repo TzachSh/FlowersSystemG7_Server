@@ -1629,7 +1629,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO answersurvey (sqId, sbId, answer) VALUES (?, ?, ?)";
+				return "INSERT INTO answersurvey (sqId, bId, answer) VALUES (?, ?, ?)";
 			}
 
 			@Override
@@ -1638,7 +1638,6 @@ public class SystemServer extends AbstractServer{
 				stmt.setInt(1, obj.getSurveyQuestionId());
 				stmt.setInt(2,obj.getBranchId());
 				stmt.setInt(3,obj.getAnswer());
-				
 			}
 		});
 	}
