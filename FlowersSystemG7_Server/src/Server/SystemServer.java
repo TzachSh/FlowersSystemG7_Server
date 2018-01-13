@@ -1463,6 +1463,31 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	private void getSurveyQuestionsHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM surveyquestion;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new SurveyQuestion(rs.getInt(1),rs.getInt(2),rs.getInt(3));
+			}
+		});
+	}
+	
 	private void updateSurveyHandler(DbQuery db, Command key) {
 		DbUpdater<Survey> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<Survey>() {
