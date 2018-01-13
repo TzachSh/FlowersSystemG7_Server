@@ -29,10 +29,11 @@ public class SurveyConclusion implements Serializable {
 		this.serviceExpertId = serviceExpertId;
 	}
 
-	public SurveyConclusion(int id, int serviceExpertId, int surveyBranchId) {
+	public SurveyConclusion(int id,int serviceExpertId, String conclusion) {
 		super();
 		this.id = id;
 		this.serviceExpertId = serviceExpertId;
+		this.conclusion = conclusion;
 	}
 	
 	public SurveyConclusion(int serviceExpertId, String conclusion) {

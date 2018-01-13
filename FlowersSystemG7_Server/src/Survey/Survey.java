@@ -10,8 +10,15 @@ public class Survey implements Serializable {
 	private String subject;
 	private int creatorId;
 	private boolean isActive;
+	private int surveyConclusionId;
 	private ArrayList<SurveyQuestion> surveyQuestionList;
 
+	public int getSurveyConclusionId() {
+		return surveyConclusionId;
+	}
+	public void setSurveyConclusionId(int surveyConclusionId) {
+		this.surveyConclusionId = surveyConclusionId;
+	}
 	public boolean isActive() {
 		return isActive;
 	}
@@ -43,16 +50,23 @@ public class Survey implements Serializable {
 	public void setSurveyQuestionList(ArrayList<SurveyQuestion> surveyQuestionList) {
 		this.surveyQuestionList = surveyQuestionList;
 	}
-	public Survey(int id, String subject, int creatorId,boolean isActive) {
+	public Survey(int id, String subject, int creatorId,boolean isActive,int surveyConclusionId) {
 	
 		this.id = id;
 		this.subject = subject;
 		this.creatorId = creatorId;
 		this.isActive = isActive;
+		this.surveyConclusionId = surveyConclusionId;
 	} 
 	
-	public Survey(String subject, int creatorId,boolean isActive) {
-		
+	public Survey(String subject, int creatorId,boolean isActive,int surveyConclusionId) {	
+		this.subject = subject;
+		this.creatorId = creatorId;
+		this.isActive = isActive;
+		this.surveyConclusionId = surveyConclusionId;
+	}
+	
+	public Survey(String subject, int creatorId,boolean isActive) {	
 		this.subject = subject;
 		this.creatorId = creatorId;
 		this.isActive = isActive;
