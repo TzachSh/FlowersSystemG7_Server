@@ -1671,6 +1671,34 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	
+	private void getAverageAnswersBySurveyIdHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				Integer surveyId = (Integer)(packet.getParameterForCommand(Command.getAverageAnswersBySurveyId).get(0));
+				stmt.setInt(1, surveyId);
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.bId ,AVG(answersurvey.answer) as answer FROM surveyquestion , answersurvey , survey " +
+						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId "+
+						"GROUP BY surveyquestion.sqId;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new AnswerSurvey(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4));
+			}
+		});
+	}
 
 	// *****
 
@@ -1784,6 +1812,8 @@ public class SystemServer extends AbstractServer{
 					getSurveyQuestionsHandler(db, key);
 				else if(key.equals(Command.addAnswerSurvey))
 					addAnswerSurveyHandler(db,key);
+				else if(key.equals(Command.getAverageAnswersBySurveyId))
+					getAverageAnswersBySurveyIdHandler(db, key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))
