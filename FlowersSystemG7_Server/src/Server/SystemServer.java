@@ -28,6 +28,7 @@ import Logic.DbQuery;
 import Logic.DbUpdater;
 import Logic.ISelect;
 import Logic.IUpdate;
+import Orders.Order;
 import PacketSender.Command;
 import PacketSender.FileSystem;
 import PacketSender.Packet;
@@ -537,6 +538,35 @@ public class SystemServer extends AbstractServer{
 				int discount = rs.getInt(3);
 				
 				return new CatalogInBranch(brId, catPid, discount);
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				int brId = (int)packet.getParameterForCommand(key).get(0);
+				stmt.setInt(1, brId);
+			}
+		});
+	}
+	public void getOrderHandler(DbQuery db,  Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		
+		dbGet.performAction(new ISelect() {
+			@Override
+			public String getQuery() {
+				return "SELECT * FROM order WHERE brId = ?";
+			}
+
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int oId=rs.getInt(1);
+				Date creationDate=rs.getDate(2);
+				Date requestedDate=rs.getDate(3);
+				int cId=rs.getInt(4);
+				int stId=rs.getInt(5);
+				int brId=rs.getInt(6);
+				Order order=new Order();
+				return (Object)order;
 			}
 
 			@Override
