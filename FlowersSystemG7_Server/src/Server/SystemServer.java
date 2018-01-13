@@ -1410,7 +1410,45 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	public void getComplainsForReportHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
 
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				int brId = (int)packet.getParameterForCommand(key).get(0);
+				int year =(int)packet.getParameterForCommand(key).get(1);
+				int quar =(int)packet.getParameterForCommand(key).get(2);
+				stmt.setInt(1,brId);
+				stmt.setInt(2, year);
+				stmt.setInt(3, quar);
+				}
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM complain where brId=? and YEAR(creationDate)=? and QUARTER(creationDate)=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				int complainId = rs.getInt(1);
+				java.sql.Date creationDate = rs.getDate(2);
+				String details = rs.getString(3);
+				String title = rs.getString(4);
+				int customerId = rs.getInt(5);
+				int creatorId = rs.getInt(6);
+				boolean isActive = rs.getBoolean(7);
+				int branchId = rs.getInt(8);
+
+				Complain complain = new Complain(complainId, creationDate, title, details, customerId,creatorId,isActive,branchId);
+				return (Object) complain;
+			}
+		});
+	}
 	/**
 	 * 
 	 * @param db -Stores database information 
