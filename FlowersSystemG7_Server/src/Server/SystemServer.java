@@ -1687,8 +1687,9 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.bId ,AVG(answersurvey.answer) as answer FROM surveyquestion , answersurvey , survey " +
-						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId "+
+				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.bId ,AVG(answersurvey.answer) as answer " +
+						"FROM surveyquestion , answersurvey , survey " +
+						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId " +
 						"GROUP BY surveyquestion.sqId;";
 			}
 			
@@ -1699,7 +1700,7 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-
+	
 	// *****
 
 	@Override
