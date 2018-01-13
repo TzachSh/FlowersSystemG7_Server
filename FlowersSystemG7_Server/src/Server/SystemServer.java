@@ -42,6 +42,7 @@ import Products.ProductType;
 import Survey.AnswerSurvey;
 import Survey.Question;
 import Survey.Survey;
+import Survey.SurveyConclusion;
 import Survey.SurveyQuestion;
 import Users.Permission;
 import Users.User;
@@ -1701,6 +1702,27 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	private void addConclusionHandler(DbQuery db , Command key)
+	{
+		DbUpdater<SurveyConclusion> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<SurveyConclusion>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO surveyconclusion (expertId,conclusion) " +
+					   "VALUES (?,?);";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, SurveyConclusion obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getServiceExpertId());
+				stmt.setString(2, obj.getConclusion());
+			}
+		});
+	}
+	
 	// *****
 
 	@Override
@@ -1815,6 +1837,8 @@ public class SystemServer extends AbstractServer{
 					addAnswerSurveyHandler(db,key);
 				else if(key.equals(Command.getAverageAnswersBySurveyId))
 					getAverageAnswersBySurveyIdHandler(db, key);
+				else if(key.equals(Command.addConclusion))
+					addConclusionHandler(db,key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))

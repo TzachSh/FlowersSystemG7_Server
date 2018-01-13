@@ -65,5 +65,6 @@ public enum Command implements Serializable
 	getSurveyQuestions,
 	setUserLoggedInState,
 	addAnswerSurvey,
-	getAverageAnswersBySurveyId
+	getAverageAnswersBySurveyId,
+	addConclusion
 	}
