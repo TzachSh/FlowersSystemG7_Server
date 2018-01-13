@@ -10,7 +10,6 @@ public class Survey implements Serializable {
 	private String subject;
 	private int creatorId;
 	private boolean isActive;
-	private ArrayList<SurveyBranch> surveyBranchList;
 	private ArrayList<SurveyQuestion> surveyQuestionList;
 
 	public boolean isActive() {
@@ -37,12 +36,7 @@ public class Survey implements Serializable {
 	public void setCreatorId(int creatorId) {
 		this.creatorId = creatorId;
 	}
-	public ArrayList<SurveyBranch> getSurveyBranchList() {
-		return surveyBranchList;
-	}
-	public void setSurveyBranchList(ArrayList<SurveyBranch> surveyBranchList) {
-		this.surveyBranchList = surveyBranchList;
-	}
+
 	public ArrayList<SurveyQuestion> getSurveyQuestionList() {
 		return surveyQuestionList;
 	}

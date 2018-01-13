@@ -1620,6 +1620,8 @@ public class SystemServer extends AbstractServer{
 					getSurveyHandler(db, key);
 				else if(key.equals(Command.getQuestions))
 					getQuestionsHandler(db, key);
+				else if(key.equals(Command.getSurveyQuestions))
+					getSurveyQuestionsHandler(db, key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))

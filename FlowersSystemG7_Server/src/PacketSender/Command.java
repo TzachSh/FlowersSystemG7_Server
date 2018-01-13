@@ -61,5 +61,6 @@ public enum Command implements Serializable
 	updateSurvey,
 	getUserByNameAndPass,
 	getEmployeeByUid,
-	getQuestions
+	getQuestions,
+	getSurveyQuestions
 	}
