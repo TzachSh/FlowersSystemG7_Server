@@ -13,6 +13,8 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 import Branches.Branch;
+import Branches.Employee;
+import Branches.Role;
 import Commons.Refund;
 import Customers.Account;
 import Customers.AccountStatus;
@@ -799,6 +801,49 @@ public class SystemServer extends AbstractServer{
 			
 		);
 	}
+	
+	//getting Customer by User ID
+	public void getEmployeeByuIdHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+		@Override
+		public String getQuery() {
+		return "SELECT uId, eId, role, brId FROM employe where uId=?";
+	}
+
+	@Override
+	public Object createObject(ResultSet rs) throws SQLException {
+		int uId = rs.getInt(1);
+		int eId = rs.getInt(2);
+		String role = rs.getString(3);
+		int brId = rs.getInt(4);
+		
+		Role roleEnum = null;
+		if (role.equals((Role.Branch).toString()))
+			roleEnum = Role.Branch;
+		else if (role.equals((Role.BranchesManager).toString()))
+			roleEnum = Role.BranchesManager;
+		else if (role.equals((Role.BranchManager).toString()))
+			roleEnum = Role.BranchManager;
+		else if (role.equals((Role.CustomerService).toString()))
+			roleEnum = Role.CustomerService;
+		else if (role.equals((Role.ServiceExpert).toString()))
+			roleEnum = Role.ServiceExpert;
+		else if (role.equals((Role.SystemManager).toString()))
+			roleEnum = Role.SystemManager;
+		
+		return new Employee(uId, eId, roleEnum, brId);
+	}
+
+	@Override
+	public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
+		Integer uId = (Integer) packet.getParameterForCommand(Command.getEmployeeByUid).get(0);
+		stmt.setInt(1, uId);
+		}
+	});
+}
+	
 	//getting Customer by User ID
 	public void getCustomersKeyByuIdHandler(DbQuery db, Command key)
 	{
@@ -826,6 +871,70 @@ public class SystemServer extends AbstractServer{
 		}
 	});
 }
+	
+	/** Set user logged in state */
+    public void updateUserIsLoggedHandler(DbQuery db,  Command key)
+    {
+        DbUpdater<User> dbUpdate = new DbUpdater<>(db, key);
+   
+        dbUpdate.performAction(new IUpdate<User>() {
+ 
+            @Override
+            public String getQuery() {
+                return "UPDATE user SET isLogged=? WHERE uId=?";
+            }
+ 
+            @Override
+            public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
+            	int logged = (obj.isLogged() ? 1 : 0);
+                stmt.setInt(1, logged);
+                stmt.setInt(2, obj.getuId());
+            }
+        });
+    }
+	
+	/** Get User instance by it's username and password */
+		public void getUserByNameAndPassHandler(DbQuery db, Command key)
+		{
+			DbGetter dbGet = new DbGetter(db, key);
+			dbGet.performAction(new ISelect() {
+			@Override
+			public String getQuery() {
+			return "SELECT uId, user, password, isLogged, permission FROM user where uId=? AND password=?";
+		}
+
+		@Override
+		public Object createObject(ResultSet rs) throws SQLException {
+			int uId = rs.getInt(1);
+			String user =rs.getString(2);
+			String password = rs.getString(3);
+			int islogged = rs.getInt(4);
+			String perm=rs.getString(5);
+			Permission permission = null;
+			boolean isloggedbool=(islogged==1);
+			
+			if(perm.equals((Permission.Administrator).toString()))
+				permission= Permission.Administrator;
+			else if(perm.equals((Permission.Blocked).toString()))
+				permission= Permission.Blocked;
+			else if(perm.equals((Permission.Limited).toString()))
+				permission= Permission.Limited;
+			else if(perm.equals((Permission.Client).toString()))
+				permission= Permission.Client;
+		
+			return new User(uId, user, password, isloggedbool, permission);
+		}
+
+		@Override
+		public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
+			ArrayList<Object> params = packet.getParameterForCommand(Command.getUserByNameAndPass);
+			User user = (User)params.get(0);
+			
+			stmt.setString(1, user.getUser());
+			stmt.setString(2, user.getPassword());
+			}
+		});
+	}
 	
 	//getting user by uId
 	public void getUserByuIdHandler(DbQuery db, Command key)
@@ -1658,6 +1767,12 @@ public class SystemServer extends AbstractServer{
 					getBranchBybrIdHandler(db, key);
 				else if(key.equals(Command.updateSurvey))
 					updateSurveyHandler(db,key);
+				else if(key.equals(Command.getUserByNameAndPass))
+					getUserByNameAndPassHandler(db, key);
+				else if(key.equals(Command.getEmployeeByUid))
+					getEmployeeByuIdHandler(db, key);
+				else if (key.equals(Command.setUserLoggedInState))
+					updateUserIsLoggedHandler(db, key);
 			}
 
 			db.connectionClose();

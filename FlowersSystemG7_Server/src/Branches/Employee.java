@@ -2,7 +2,7 @@ package Branches;
 
 import java.io.Serializable;
 
-import Users.User;
+import Users.*;
 
 public class Employee extends User implements Serializable {
 	
@@ -37,6 +37,22 @@ public class Employee extends User implements Serializable {
 	public Employee(int uId, String user, String password, boolean isLogged,Users.Permission permission,int eId,Role role,int branchId) {
 		super(uId, user, password, isLogged,permission);
 		// TODO Auto-generated constructor stub
+		seteId(eId);
+		setRole(role);
+		setBranchId(branchId);
+	}
+	
+	public Employee(User user, int eId,Role role,int branchId)
+	{
+		super(user);
+		seteId(eId);
+		setRole(role);
+		setBranchId(branchId);
+	}
+	
+	public Employee(int uId, int eId,Role role,int branchId)
+	{
+		super(uId);
 		seteId(eId);
 		setRole(role);
 		setBranchId(branchId);

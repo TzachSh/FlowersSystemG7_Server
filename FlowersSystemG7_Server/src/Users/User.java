@@ -64,4 +64,8 @@ public class User implements Serializable {
 		super();
 		this.uId = uId;
 	}
+	
+	public User(User user) {
+		this(user.uId, user.user, user.password, user.isLogged, user.permission);
+	}
 }
