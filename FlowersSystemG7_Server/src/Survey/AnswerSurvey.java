@@ -9,6 +9,18 @@ public class AnswerSurvey implements Serializable {
 	private int branchId;
 	private int answer;
 	
+	public int getBranchId() {
+		return branchId;
+	}
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
+	}
+	public int getAnswer() {
+		return answer;
+	}
+	public void setAnswer(int answer) {
+		this.answer = answer;
+	}
 	public int getId() {
 		return id;
 	}

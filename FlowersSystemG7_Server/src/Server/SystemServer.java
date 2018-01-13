@@ -38,6 +38,7 @@ import Products.Flower;
 import Products.FlowerInProduct;
 import Products.Product;
 import Products.ProductType;
+import Survey.AnswerSurvey;
 import Survey.Question;
 import Survey.Survey;
 import Survey.SurveyQuestion;
@@ -1618,7 +1619,28 @@ public class SystemServer extends AbstractServer{
 				stmt.setInt(4, obj.getId());
 			}
 		});
-		
+	}
+	
+	private void addAnswerSurveyHandler(DbQuery db , Command key)
+	{
+		DbUpdater<AnswerSurvey> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<AnswerSurvey>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO answersurvey (sqId, sbId, answer) VALUES (?, ?, ?)";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, AnswerSurvey obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getSurveyQuestionId());
+				stmt.setInt(2,obj.getBranchId());
+				stmt.setInt(3,obj.getAnswer());
+				
+			}
+		});
 	}
 
 	// *****
@@ -1731,6 +1753,8 @@ public class SystemServer extends AbstractServer{
 					getQuestionsHandler(db, key);
 				else if(key.equals(Command.getSurveyQuestions))
 					getSurveyQuestionsHandler(db, key);
+				else if(key.equals(Command.addAnswerSurvey))
+					addAnswerSurveyHandler(db,key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))
