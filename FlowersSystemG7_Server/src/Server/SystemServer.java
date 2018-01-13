@@ -42,6 +42,7 @@ import Products.ProductType;
 import Survey.AnswerSurvey;
 import Survey.Question;
 import Survey.Survey;
+import Survey.SurveyConclusion;
 import Survey.SurveyQuestion;
 import Users.Permission;
 import Users.User;
@@ -1530,7 +1531,7 @@ public class SystemServer extends AbstractServer{
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
 				
-				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4));
+				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4),rs.getInt(5));
 			}
 		});
 	}
@@ -1636,7 +1637,7 @@ public class SystemServer extends AbstractServer{
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "UPDATE survey " +
-					   "SET subject = ?, creatorId = ?, isActive = ? " +
+					   "SET subject = ?, creatorId = ?, isActive = ? , scId = ?" +
 				 	   "WHERE surId=?";
 			}
 
@@ -1647,6 +1648,7 @@ public class SystemServer extends AbstractServer{
 				stmt.setInt(2, obj.getCreatorId());
 				stmt.setBoolean(3, obj.isActive());
 				stmt.setInt(4, obj.getId());
+				stmt.setInt(5, obj.getSurveyConclusionId());
 			}
 		});
 	}
@@ -1671,7 +1673,104 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	
+	private void getAverageAnswersBySurveyIdHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				Integer surveyId = (Integer)(packet.getParameterForCommand(Command.getAverageAnswersBySurveyId).get(0));
+				stmt.setInt(1, surveyId);
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.bId ,AVG(answersurvey.answer) as answer " +
+						"FROM surveyquestion , answersurvey , survey " +
+						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId " +
+						"GROUP BY surveyquestion.sqId;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new AnswerSurvey(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4));
+			}
+		});
+	}
+	
+	private void addConclusionHandler(DbQuery db , Command key)
+	{
+		DbUpdater<SurveyConclusion> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<SurveyConclusion>() {
 
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO surveyconclusion (expertId,conclusion) " +
+					   "VALUES (?,?);";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, SurveyConclusion obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getServiceExpertId());
+				stmt.setString(2, obj.getConclusion());
+			}
+		});
+	}
+	
+	private void updateConclusionHandler(DbQuery db , Command key)
+	{
+		DbUpdater<SurveyConclusion> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<SurveyConclusion>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "UPDATE surveyconclusion SET expertId=?,conclusion=? WHERE scId = ?" +
+					   "VALUES (?,?);";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, SurveyConclusion obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getServiceExpertId());
+				stmt.setString(2, obj.getConclusion());
+				stmt.setInt(3, obj.getId());
+			}
+		});
+	}
+	
+	private void getConclusionsHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM surveyconclusion;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new SurveyConclusion(rs.getInt(1),rs.getInt(2),rs.getString(3));
+			}
+		});
+	}
+	
 	// *****
 
 	@Override
@@ -1732,8 +1831,7 @@ public class SystemServer extends AbstractServer{
 				}
 				else if (key.equals(Command.getFlowersInProducts)) {
 					getFlowersInProductHandler(db, key);
-				}
-				
+				}				
 				else if (key.equals(Command.getProductTypes)) {
 					getProductTypesHandler(db, key);
 				}
@@ -1770,6 +1868,8 @@ public class SystemServer extends AbstractServer{
 				else if(key.equals(Command.addComplainRefund)) {
 					addComplainRefundHandler(db,key);
 				}	
+				else if(key.equals(Command.updateConclusion))
+					updateConclusionHandler(db, key);
 				else if(key.equals(Command.addSurvey))
 					addSurveyHandler(db, key);
 				else if(key.equals(Command.addQuestions))
@@ -1784,6 +1884,12 @@ public class SystemServer extends AbstractServer{
 					getSurveyQuestionsHandler(db, key);
 				else if(key.equals(Command.addAnswerSurvey))
 					addAnswerSurveyHandler(db,key);
+				else if(key.equals(Command.getAverageAnswersBySurveyId))
+					getAverageAnswersBySurveyIdHandler(db, key);
+				else if(key.equals(Command.addConclusion))
+					addConclusionHandler(db,key);
+				else if(key.equals(Command.getConclusions))
+					getConclusionsHandler(db, key);
 				else if(key.equals(Command.getMemberShip))
 					getMemberShipHandler(db, key);
 				else if(key.equals(Command.getUsers))
@@ -1826,6 +1932,8 @@ public class SystemServer extends AbstractServer{
 					getEmployeeByuIdHandler(db, key);
 				else if (key.equals(Command.setUserLoggedInState))
 					updateUserIsLoggedHandler(db, key);
+				else if(key.equals(Command.getComplainsForReport))
+					getComplainsForReportHandler(db,key);
 			}
 
 			db.connectionClose();
