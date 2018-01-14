@@ -1922,6 +1922,8 @@ public class SystemServer extends AbstractServer{
 					getAverageAnswersBySurveyIdHandler(db, key);
 				else if(key.equals(Command.addConclusion))
 					addConclusionHandler(db,key);
+				else if(key.equals(Command.attachConclusionToSurvey))
+					attachConclusionToSurveyHandler(db, key);
 				else if(key.equals(Command.getConclusions))
 					getConclusionsHandler(db, key);
 				else if(key.equals(Command.getMemberShip))
