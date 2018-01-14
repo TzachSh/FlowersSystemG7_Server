@@ -1569,7 +1569,7 @@ public class SystemServer extends AbstractServer{
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
 				
-				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4),rs.getInt(5));
+				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4));
 			}
 		});
 	}

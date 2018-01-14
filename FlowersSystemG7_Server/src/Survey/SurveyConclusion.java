@@ -18,7 +18,6 @@ public class SurveyConclusion implements Serializable {
 		this.conclusion = conclusion;
 	}
 	
-	
 	public int getSurId() {
 		return surId;
 	}
