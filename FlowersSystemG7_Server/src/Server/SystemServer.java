@@ -36,6 +36,7 @@ import PacketSender.Packet;
 import Products.CatalogInBranch;
 import Products.CatalogProduct;
 import Products.ColorProduct;
+import Products.CustomProduct;
 import Products.Flower;
 import Products.FlowerInProduct;
 import Products.Product;
@@ -1823,6 +1824,64 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	private void createCustomProduct(DbQuery db , Command key) {
+		Packet packet = db.getPacket();
+		try {
+			// get all parameters
+			CustomProduct pro = (CustomProduct)packet.getParameterForCommand(Command.CreateCustomProduct).get(0);
+			ArrayList<FlowerInProduct> fpList = packet.<FlowerInProduct>convertedResultListForCommand(Command.insertFlowersInProduct);
+	
+			// prepare the values string for query
+			String formatSql = "";
+			for (int i = 0; i < fpList.size(); i++)
+			{
+				FlowerInProduct fp = fpList.get(i);
+				formatSql += String.format("(%d, @pId, %d)", fp.getFlowerId(), fp.getQuantity());
+				if (i != fpList.size() - 1)
+					formatSql += ",";
+			}
+			
+			
+
+			// create the connection to database
+			db.connectToDB();
+			Connection con = db.getConnection();
+			
+			String query = "INSERT INTO product (typeId, price) VALUES (?, ?); " + 
+	    				"SET @pId = LAST_INSERT_ID(); " + 
+	    				"INSERT INTO customproduct (pId, blessing) VALUES (@pId, ?); " +
+	    				"INSERT INTO flowerinproduct (fId, pId, quantity) VALUES " + formatSql + ";";
+	    	
+	 
+	    	// set the statements from the implemention
+	    	PreparedStatement stmt = con.prepareStatement(query);
+	    	stmt.setInt(1, pro.getProductTypeId());
+			stmt.setDouble(2, pro.getPrice());
+			stmt.setString(3, pro.getBlessing());
+	    	stmt.executeUpdate();
+	    
+	    	
+	    	// get the new product id
+	    	String queryPid = "SELECT P.pId FROM product P " + 
+	    			"INNER JOIN CatalogProduct C ON P.pId = C.pId " + 
+	    			"WHERE C.productName = ?";
+	    	
+	    	// set the statements from the implemention
+	    	PreparedStatement stmtPid = con.prepareStatement(queryPid);
+	    	stmtPid.setString(1, pro.getBlessing());
+	    	ResultSet rs = stmtPid.executeQuery();
+			while (rs.next()) {
+				pro.setId(rs.getInt(1));
+			}
+	    	
+			con.close();
+		}
+		catch (Exception e)
+		{
+			packet.setExceptionMessage(e.getMessage());
+		}
+		
+	}
 	
 	// *****
 
@@ -1987,6 +2046,8 @@ public class SystemServer extends AbstractServer{
 					getComplainsForReportHandler(db,key);
 				else if(key.equals(Command.getIncomeReport))
 					getIncomeReportHandler(db,key);
+				else if(key.equals(Command.CreateCustomProduct))
+					createCustomProduct(db,key);
 			}
 
 			db.connectionClose();
@@ -2004,5 +2065,6 @@ public class SystemServer extends AbstractServer{
 			}
 		}
 	}
+
 
 }
