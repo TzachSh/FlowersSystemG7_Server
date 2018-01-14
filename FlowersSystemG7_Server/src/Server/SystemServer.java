@@ -1690,27 +1690,6 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
-	private void attachConclusionToSurveyHandler(DbQuery db, Command key) {
-		DbUpdater<Survey> dbUpdater = new DbUpdater<>(db, key);
-		dbUpdater.performAction(new IUpdate<Survey>() {
-
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return "UPDATE survey " +
-					   "SET scId = ? " +
-				 	   "WHERE surId=?;";
-			}
-
-			@Override
-			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
-				// TODO Auto-generated method stub
-				stmt.setInt(1, obj.getSurveyConclusionId());
-				stmt.setInt(2, obj.getId());
-			}
-		});
-	}
-	
 	private void addAnswerSurveyHandler(DbQuery db , Command key)
 	{
 		DbUpdater<AnswerSurvey> dbUpdater = new DbUpdater<>(db, key);
@@ -1923,8 +1902,6 @@ public class SystemServer extends AbstractServer{
 					getAverageAnswersBySurveyIdHandler(db, key);
 				else if(key.equals(Command.addConclusion))
 					addConclusionHandler(db,key);
-				else if(key.equals(Command.attachConclusionToSurvey))
-					attachConclusionToSurveyHandler(db, key);
 				else if(key.equals(Command.getConclusions))
 					getConclusionsHandler(db, key);
 				else if(key.equals(Command.getMemberShip))

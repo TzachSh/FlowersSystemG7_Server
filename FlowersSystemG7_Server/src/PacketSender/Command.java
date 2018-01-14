@@ -70,5 +70,4 @@ public enum Command implements Serializable
 	getConclusions,
 	updateConclusion,
 	getComplainsForReport,
-	attachConclusionToSurvey
 	}
