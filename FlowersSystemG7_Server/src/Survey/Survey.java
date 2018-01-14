@@ -1,6 +1,7 @@
 package Survey;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import Branches.CustomerService;
@@ -10,14 +11,21 @@ public class Survey implements Serializable {
 	private String subject;
 	private int creatorId;
 	private boolean isActive;
-	private int surveyConclusionId;
+	private Date activatedDate;
+	private Date closedDate;
 	private ArrayList<SurveyQuestion> surveyQuestionList;
-
-	public int getSurveyConclusionId() {
-		return surveyConclusionId;
+	
+	public Date getActivatedDate() {
+		return activatedDate;
 	}
-	public void setSurveyConclusionId(int surveyConclusionId) {
-		this.surveyConclusionId = surveyConclusionId;
+	public void setActivatedDate(Date createdDate) {
+		this.activatedDate = createdDate;
+	}
+	public Date getClosedDate() {
+		return closedDate;
+	}
+	public void setClosedDate(Date closedDate) {
+		this.closedDate = closedDate;
 	}
 	public boolean isActive() {
 		return isActive;
@@ -50,26 +58,20 @@ public class Survey implements Serializable {
 	public void setSurveyQuestionList(ArrayList<SurveyQuestion> surveyQuestionList) {
 		this.surveyQuestionList = surveyQuestionList;
 	}
-	public Survey(int id, String subject, int creatorId,boolean isActive,int surveyConclusionId) {
+	public Survey(int id, String subject, int creatorId,boolean isActive,Date activatedDate,Date closedDate) {
 	
 		this.id = id;
 		this.subject = subject;
 		this.creatorId = creatorId;
 		this.isActive = isActive;
-		this.surveyConclusionId = surveyConclusionId;
+		this.activatedDate = activatedDate;
+		this.closedDate = closedDate;
 	} 
-	
-	public Survey(String subject, int creatorId,boolean isActive,int surveyConclusionId) {	
-		this.subject = subject;
-		this.creatorId = creatorId;
-		this.isActive = isActive;
-		this.surveyConclusionId = surveyConclusionId;
-	}
 	
 	public Survey(String subject, int creatorId,boolean isActive) {	
 		this.subject = subject;
 		this.creatorId = creatorId;
 		this.isActive = isActive;
-	} 
+	}
 	
 }

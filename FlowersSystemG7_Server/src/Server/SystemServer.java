@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 
 import Branches.Branch;
 import Branches.Employee;
+import Branches.IncomeReport;
 import Branches.Role;
 import Commons.Refund;
 import Customers.Account;
@@ -1410,6 +1411,41 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	public void getIncomeReportHandler(DbQuery db,Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				int brId = (int)packet.getParameterForCommand(key).get(0);
+				int year=(int)packet.getParameterForCommand(key).get(1);
+				int quar =(int)packet.getParameterForCommand(key).get(2);
+				
+				stmt.setInt(1,brId);
+				stmt.setInt(2,year);
+				stmt.setInt(3,quar);
+			}
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "select b.brId as 'Branch Number' ,b.brName as 'Branch Name',sum(op.amount) as 'Amount' from test.order o , test.orderpayment op,test.branch b   where o.brId=? and year(o.creationDate)=? and o.stId=1 and quarter(o.creationDate)=? and o.oId=op.oId and b.brId=o.brId ";
+			}	
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+			    IncomeReport incomeReport;
+			    int brId=rs.getInt(1);
+			    String brName=rs.getString(2);
+			    double amount=rs.getDouble(3);
+			    incomeReport=new IncomeReport(brId, brName, amount);		
+				return (Object)incomeReport;
+			}
+		});
+	
+	}
+	
 	public void getComplainsForReportHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
@@ -1534,8 +1570,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO survey (subject, creatorId,isActive) " + 
-				"VALUES (?, ?,?)";
+				return "INSERT INTO survey (subject,creatorId,isActive) " + 
+				"VALUES (?,?,?)";
 			}
 
 			@Override
@@ -1568,8 +1604,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				
-				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4),rs.getInt(5));
+				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4),rs.getDate(5),rs.getDate(6));
 			}
 		});
 	}
@@ -1675,7 +1710,7 @@ public class SystemServer extends AbstractServer{
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "UPDATE survey " +
-					   "SET subject = ?, creatorId = ?, isActive = ? , scId = ?" +
+					   "SET subject = ?, creatorId = ?, isActive = ? ,activatedDate = ?,closedDate = ? " +
 				 	   "WHERE surId=?";
 			}
 
@@ -1685,8 +1720,9 @@ public class SystemServer extends AbstractServer{
 				stmt.setString(1, obj.getSubject());
 				stmt.setInt(2, obj.getCreatorId());
 				stmt.setBoolean(3, obj.isActive());
-				stmt.setInt(4, obj.getId());
-				stmt.setInt(5, obj.getSurveyConclusionId());
+				stmt.setDate(4, obj.getActivatedDate());
+				stmt.setDate(5, obj.getClosedDate());
+				stmt.setInt(6, obj.getId());
 			}
 		});
 	}
@@ -1749,8 +1785,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO surveyconclusion (expertId,conclusion) " +
-					   "VALUES (?,?);";
+				return "INSERT INTO surveyconclusion (expertId,conclusion,surId) " +
+					   "VALUES (?,?,?);";
 			}
 
 			@Override
@@ -1758,32 +1794,11 @@ public class SystemServer extends AbstractServer{
 				// TODO Auto-generated method stub
 				stmt.setInt(1, obj.getServiceExpertId());
 				stmt.setString(2, obj.getConclusion());
+				stmt.setInt(3, obj.getSurId());
 			}
 		});
 	}
-	
-	private void updateConclusionHandler(DbQuery db , Command key)
-	{
-		DbUpdater<SurveyConclusion> dbUpdater = new DbUpdater<>(db, key);
-		dbUpdater.performAction(new IUpdate<SurveyConclusion>() {
 
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return "UPDATE surveyconclusion SET expertId=?,conclusion=? WHERE scId = ?" +
-					   "VALUES (?,?);";
-			}
-
-			@Override
-			public void setStatements(PreparedStatement stmt, SurveyConclusion obj) throws SQLException {
-				// TODO Auto-generated method stub
-				stmt.setInt(1, obj.getServiceExpertId());
-				stmt.setString(2, obj.getConclusion());
-				stmt.setInt(3, obj.getId());
-			}
-		});
-	}
-	
 	private void getConclusionsHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
@@ -1804,7 +1819,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				return new SurveyConclusion(rs.getInt(1),rs.getInt(2),rs.getString(3));
+				return new SurveyConclusion(rs.getInt(1),rs.getInt(2),rs.getString(3),rs.getInt(4));
 			}
 		});
 	}
@@ -1906,8 +1921,6 @@ public class SystemServer extends AbstractServer{
 				else if(key.equals(Command.addComplainRefund)) {
 					addComplainRefundHandler(db,key);
 				}	
-				else if(key.equals(Command.updateConclusion))
-					updateConclusionHandler(db, key);
 				else if(key.equals(Command.addSurvey))
 					addSurveyHandler(db, key);
 				else if(key.equals(Command.addQuestions))
@@ -1972,6 +1985,8 @@ public class SystemServer extends AbstractServer{
 					updateUserIsLoggedHandler(db, key);
 				else if(key.equals(Command.getComplainsForReport))
 					getComplainsForReportHandler(db,key);
+				else if(key.equals(Command.getIncomeReport))
+					getIncomeReportHandler(db,key);
 			}
 
 			db.connectionClose();
