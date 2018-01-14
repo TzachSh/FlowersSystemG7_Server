@@ -1534,8 +1534,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO survey (subject, creatorId,isActive) " + 
-				"VALUES (?, ? , ?)";
+				return "INSERT INTO survey (subject,creatorId,isActive) " + 
+				"VALUES (?,?,?)";
 			}
 
 			@Override
@@ -1568,8 +1568,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				
-				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4));
+				return new Survey(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getBoolean(4),rs.getDate(5),rs.getDate(6));
 			}
 		});
 	}
@@ -1675,7 +1674,7 @@ public class SystemServer extends AbstractServer{
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "UPDATE survey " +
-					   "SET subject = ?, creatorId = ?, isActive = ? " +
+					   "SET subject = ?, creatorId = ?, isActive = ? ,activatedDate = ?,closedDate = ? " +
 				 	   "WHERE surId=?";
 			}
 
@@ -1685,7 +1684,9 @@ public class SystemServer extends AbstractServer{
 				stmt.setString(1, obj.getSubject());
 				stmt.setInt(2, obj.getCreatorId());
 				stmt.setBoolean(3, obj.isActive());
-				stmt.setInt(4, obj.getId());
+				stmt.setDate(4, obj.getActivatedDate());
+				stmt.setDate(5, obj.getClosedDate());
+				stmt.setInt(6, obj.getId());
 			}
 		});
 	}

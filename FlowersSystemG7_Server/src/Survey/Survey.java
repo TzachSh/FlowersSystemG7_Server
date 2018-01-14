@@ -1,6 +1,7 @@
 package Survey;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import Branches.CustomerService;
@@ -10,8 +11,22 @@ public class Survey implements Serializable {
 	private String subject;
 	private int creatorId;
 	private boolean isActive;
+	private Date activatedDate;
+	private Date closedDate;
 	private ArrayList<SurveyQuestion> surveyQuestionList;
-
+	
+	public Date getActivatedDate() {
+		return activatedDate;
+	}
+	public void setActivatedDate(Date createdDate) {
+		this.activatedDate = createdDate;
+	}
+	public Date getClosedDate() {
+		return closedDate;
+	}
+	public void setClosedDate(Date closedDate) {
+		this.closedDate = closedDate;
+	}
 	public boolean isActive() {
 		return isActive;
 	}
@@ -43,12 +58,14 @@ public class Survey implements Serializable {
 	public void setSurveyQuestionList(ArrayList<SurveyQuestion> surveyQuestionList) {
 		this.surveyQuestionList = surveyQuestionList;
 	}
-	public Survey(int id, String subject, int creatorId,boolean isActive) {
+	public Survey(int id, String subject, int creatorId,boolean isActive,Date activatedDate,Date closedDate) {
 	
 		this.id = id;
 		this.subject = subject;
 		this.creatorId = creatorId;
 		this.isActive = isActive;
+		this.activatedDate = activatedDate;
+		this.closedDate = closedDate;
 	} 
 	
 	public Survey(String subject, int creatorId,boolean isActive) {	
