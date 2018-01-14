@@ -1535,7 +1535,7 @@ public class SystemServer extends AbstractServer{
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO survey (subject, creatorId,isActive) " + 
-				"VALUES (?, ?,?)";
+				"VALUES (?, ? , ?)";
 			}
 
 			@Override
@@ -1675,7 +1675,7 @@ public class SystemServer extends AbstractServer{
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "UPDATE survey " +
-					   "SET subject = ?, creatorId = ?, isActive = ? , scId = ?" +
+					   "SET subject = ?, creatorId = ?, isActive = ? " +
 				 	   "WHERE surId=?";
 			}
 
@@ -1685,8 +1685,28 @@ public class SystemServer extends AbstractServer{
 				stmt.setString(1, obj.getSubject());
 				stmt.setInt(2, obj.getCreatorId());
 				stmt.setBoolean(3, obj.isActive());
-				stmt.setInt(4, obj.getId());
-				stmt.setInt(5, obj.getSurveyConclusionId());
+				stmt.setInt(5, obj.getId());
+			}
+		});
+	}
+	
+	private void attachConclusionToSurveyHandler(DbQuery db, Command key) {
+		DbUpdater<Survey> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<Survey>() {
+
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "UPDATE survey " +
+					   "SET scId = ? " +
+				 	   "WHERE surId=?;";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getSurveyConclusionId());
+				stmt.setInt(2, obj.getId());
 			}
 		});
 	}
