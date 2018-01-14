@@ -1685,7 +1685,7 @@ public class SystemServer extends AbstractServer{
 				stmt.setString(1, obj.getSubject());
 				stmt.setInt(2, obj.getCreatorId());
 				stmt.setBoolean(3, obj.isActive());
-				stmt.setInt(5, obj.getId());
+				stmt.setInt(4, obj.getId());
 			}
 		});
 	}
@@ -1769,8 +1769,8 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO surveyconclusion (expertId,conclusion) " +
-					   "VALUES (?,?);";
+				return "INSERT INTO surveyconclusion (expertId,conclusion,surId) " +
+					   "VALUES (?,?,?);";
 			}
 
 			@Override
@@ -1778,6 +1778,7 @@ public class SystemServer extends AbstractServer{
 				// TODO Auto-generated method stub
 				stmt.setInt(1, obj.getServiceExpertId());
 				stmt.setString(2, obj.getConclusion());
+				stmt.setInt(3, obj.getSurId());
 			}
 		});
 	}
@@ -1802,7 +1803,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				return new SurveyConclusion(rs.getInt(1),rs.getInt(2),rs.getString(3));
+				return new SurveyConclusion(rs.getInt(1),rs.getInt(2),rs.getString(3),rs.getInt(4));
 			}
 		});
 	}

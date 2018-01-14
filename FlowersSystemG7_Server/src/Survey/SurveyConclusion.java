@@ -8,6 +8,7 @@ public class SurveyConclusion implements Serializable {
 	
 	private int id;
 	private int serviceExpertId;
+	private int surId;
 	private String conclusion;
 	
 	public String getConclusion() {
@@ -15,6 +16,14 @@ public class SurveyConclusion implements Serializable {
 	}
 	public void setConclusion(String conclusion) {
 		this.conclusion = conclusion;
+	}
+	
+	
+	public int getSurId() {
+		return surId;
+	}
+	public void setSurId(int surId) {
+		this.surId = surId;
 	}
 	public int getId() {
 		return id;
@@ -29,16 +38,18 @@ public class SurveyConclusion implements Serializable {
 		this.serviceExpertId = serviceExpertId;
 	}
 
-	public SurveyConclusion(int id,int serviceExpertId, String conclusion) {
+	public SurveyConclusion(int id,int serviceExpertId, String conclusion, int surId) {
 		super();
 		this.id = id;
 		this.serviceExpertId = serviceExpertId;
 		this.conclusion = conclusion;
+		this.surId = surId;
 	}
 	
-	public SurveyConclusion(int serviceExpertId, String conclusion) {
+	public SurveyConclusion(int serviceExpertId, String conclusion, int surId) {
 		super();
 		this.serviceExpertId = serviceExpertId;
 		this.conclusion = conclusion;
+		this.surId = surId;
 	}
 }
