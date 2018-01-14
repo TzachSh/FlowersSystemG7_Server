@@ -1761,29 +1761,7 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
-	private void updateConclusionHandler(DbQuery db , Command key)
-	{
-		DbUpdater<SurveyConclusion> dbUpdater = new DbUpdater<>(db, key);
-		dbUpdater.performAction(new IUpdate<SurveyConclusion>() {
 
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return "UPDATE surveyconclusion SET expertId=?,conclusion=? WHERE scId = ?" +
-					   "VALUES (?,?);";
-			}
-
-			@Override
-			public void setStatements(PreparedStatement stmt, SurveyConclusion obj) throws SQLException {
-				// TODO Auto-generated method stub
-				stmt.setInt(1, obj.getServiceExpertId());
-				stmt.setString(2, obj.getConclusion());
-				stmt.setInt(3, obj.getId());
-			}
-		});
-	}
-	
 	private void getConclusionsHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
@@ -1906,8 +1884,6 @@ public class SystemServer extends AbstractServer{
 				else if(key.equals(Command.addComplainRefund)) {
 					addComplainRefundHandler(db,key);
 				}	
-				else if(key.equals(Command.updateConclusion))
-					updateConclusionHandler(db, key);
 				else if(key.equals(Command.addSurvey))
 					addSurveyHandler(db, key);
 				else if(key.equals(Command.addQuestions))
