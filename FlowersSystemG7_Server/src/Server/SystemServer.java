@@ -843,7 +843,7 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 		@Override
 		public String getQuery() {
-		return "SELECT uId, eId, role, brId FROM employe where uId=?";
+		return "SELECT uId, eId, role, brId FROM employee where uId=?";
 	}
 
 	@Override
@@ -1773,7 +1773,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				return new AnswerSurvey(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4));
+				return new AnswerSurvey(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getDouble(4));
 			}
 		});
 	}
