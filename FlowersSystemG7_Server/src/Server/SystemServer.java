@@ -1433,16 +1433,21 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "select pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date', \r\n" + 
+				return "SELECT pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date', \r\n" + 
 						"pio.pId as 'product id', (\r\n" + 
 						"IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
 						"	(SELECT cp.productName FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
 						"	'Custom Product')) as 'Product Name',\r\n" + 
 						"p.price as 'Price',op.paymentMethod,d.delId as 'Delivery Number',d.Address,d.phone,d.receiver\r\n" + 
-						"from test.order o,orderpayment op,productinorder pio , product p,producttype pt ,delivery d\r\n" + 
-						"where o.brId=? and year(o.creationDate)=? and quarter(o.creationDate)=? and o.oId=pio.oId and p.pId = pio.pId and pt.typeId=p.typeId and d.oId=o.oId and op.oId=o.oId \r\n" + 
-						"order by pt.description ASC\r\n" + 
-						"";
+						"\r\n" + 
+						"FROM `order` o  INNER JOIN orderpayment op ON op.oId=o.oId\r\n" + 
+						"			    INNER JOIN productinorder pio ON o.oId=pio.oId\r\n" + 
+						"			    INNER JOIN product p ON  p.pId = pio.pId\r\n" + 
+						"                INNER JOIN producttype pt ON pt.typeId=p.typeId\r\n" + 
+						"			    LEFT OUTER JOIN delivery d ON d.oId=o.oId\r\n" + 
+						"             \r\n" + 
+						"WHERE o.brId=? AND year(o.creationDate)=? AND quarter(o.creationDate)=?\r\n" + 
+						"ORDER BY pt.description ASC";
 			}
 			
 			@Override
