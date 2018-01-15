@@ -1,17 +1,13 @@
 package Branches;
 
-public class OrderReport {
-
-}
-package Branches;
-
+import java.io.Serializable;
 import java.sql.Date;
 
-public class OrderReport {
+public class OrderReport implements Serializable {
 
 	private String productCategory;
 	private int	orderId;
-	private Date creationDate;
+	private String creationDate;
 	private int productId;
 	private String productName;
 	private double price;
@@ -37,11 +33,11 @@ public class OrderReport {
 		this.orderId = orderId;
 	}
 
-	public Date getCreationDate() {
+	public String getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -108,7 +104,7 @@ public class OrderReport {
 		this.receiver = receiver;
 	}
 
-	public OrderReport(String productCategory, int orderId, Date creationDate, int productId, String productName,
+	public OrderReport(String productCategory, int orderId, String creationDate, int productId, String productName,
 			double price, String paymentMethod, int deliveryNumber, String address, String phone, String receiver) {
 
 		this.productCategory = productCategory;

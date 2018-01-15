@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import Branches.Branch;
 import Branches.Employee;
 import Branches.IncomeReport;
+import Branches.OrderReport;
 import Branches.Role;
 import Commons.Refund;
 import Customers.Account;
@@ -1412,6 +1413,62 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	public void getOrderReportHandler(DbQuery db,Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				int brId = (int)packet.getParameterForCommand(key).get(0);
+				int year=(int)packet.getParameterForCommand(key).get(1);
+				int quar =(int)packet.getParameterForCommand(key).get(2);
+				stmt.setInt(1,brId);
+				stmt.setInt(2,year);
+				stmt.setInt(3,quar);
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "select pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date', \r\n" + 
+						"pio.pId as 'product id', (\r\n" + 
+						"IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
+						"	(SELECT cp.productName FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
+						"	'Custom Product')) as 'Product Name',\r\n" + 
+						"p.price as 'Price',op.paymentMethod,d.delId as 'Delivery Number',d.Address,d.phone,d.receiver\r\n" + 
+						"from test.order o,orderpayment op,productinorder pio , product p,producttype pt ,delivery d\r\n" + 
+						"where o.brId=? and year(o.creationDate)=? and quarter(o.creationDate)=? and o.oId=pio.oId and p.pId = pio.pId and pt.typeId=p.typeId and d.oId=o.oId and op.oId=o.oId \r\n" + 
+						"order by pt.description ASC\r\n" + 
+						"";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				String productCategory=rs.getString(1);
+				int	orderId=rs.getInt(2);
+				String creationDate=rs.getString(3);
+				int productId=rs.getInt(4);
+				String productName=rs.getString(5);
+				double price=rs.getDouble(6);
+				String paymentMethod=rs.getString(7);
+				int deliveryNumber=rs.getInt(8);
+				String address=rs.getString(9);
+				String phone=rs.getString(10);
+				String receiver=rs.getString(11);
+				OrderReport orderReport=new OrderReport(productCategory, orderId, creationDate, productId, productName, price, paymentMethod, deliveryNumber, address, phone, receiver);
+				
+				
+				return (Object)orderReport;
+				
+			}
+		});
+	}
+	
+	
 	public void getIncomeReportHandler(DbQuery db,Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
@@ -2048,6 +2105,8 @@ public class SystemServer extends AbstractServer{
 					getIncomeReportHandler(db,key);
 				else if(key.equals(Command.CreateCustomProduct))
 					createCustomProduct(db,key);
+				else if(key.equals(Command.getOrderReport))
+					getOrderReportHandler(db,key);
 			}
 
 			db.connectionClose();
