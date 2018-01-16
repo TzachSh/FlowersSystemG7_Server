@@ -169,8 +169,7 @@ public class SystemServer extends AbstractServer{
 		arg0.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				// TODO Auto-generated method stub
-				Platform.exit();
+				System.exit(0);
 			}
 		});
 	}
