@@ -953,8 +953,6 @@ public class SystemServer extends AbstractServer{
 				permission= Permission.Blocked;
 			else if(perm.equals((Permission.Limited).toString()))
 				permission= Permission.Limited;
-			else if(perm.equals((Permission.Client).toString()))
-				permission= Permission.Client;
 		
 			return new User(uId, user, password, isloggedbool, permission);
 		}
@@ -1254,7 +1252,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "update user set user=?,password=? where uId=?";
+				return "update user set user=?,password=?,isLogged =?,permission=? where uId=?";
 			
 			}
 			@Override
@@ -1262,7 +1260,9 @@ public class SystemServer extends AbstractServer{
 				// TODO Auto-generated method stub
 				stmt.setString(1,obj.getUser());
 				stmt.setString(2,obj.getPassword());
-				stmt.setInt(3,obj.getuId());
+				stmt.setBoolean(3, obj.isLogged());
+				stmt.setString(4, obj.getPermission().name());
+				stmt.setInt(5,obj.getuId());
 			}
 			
 		});
@@ -1973,6 +1973,26 @@ public class SystemServer extends AbstractServer{
 		
 	}
 	
+	private void deleteUserHandler(DbQuery db , Command key)
+	{
+		DbUpdater<User> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<User>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setInt(1, obj.getuId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "DELETE FROM user "+
+						"WHERE uId = ?;";
+			}
+		});
+	}
+	
 	// *****
 
 	@Override
@@ -2142,6 +2162,8 @@ public class SystemServer extends AbstractServer{
 					getOrderReportHandler(db,key);
 				else if(key.equals(Command.getOrderSatisfaction))
 					getOrderSatisfactionHandler(db,key);
+				else if(key.equals(Command.deleteUser))
+					deleteUserHandler(db,key);
 			}
 
 			db.connectionClose();

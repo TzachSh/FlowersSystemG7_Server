@@ -40,7 +40,6 @@ public enum Command implements Serializable
 	getBranches,
 	updateAccounts,
 	updateCustomer,
-	updateUser,
 	getColors,
 	addFlower,
 	getDiscountsByBranch,
