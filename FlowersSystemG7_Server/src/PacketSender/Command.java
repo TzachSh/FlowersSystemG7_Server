@@ -72,5 +72,6 @@ public enum Command implements Serializable
 	getComplainsForReport,
 	getIncomeReport,
 	CreateCustomProduct,
-	getOrderReport
+	getOrderReport,
+	getOrderSatisfaction
 	}

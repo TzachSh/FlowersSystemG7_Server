@@ -1826,9 +1826,38 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.bId ,AVG(answersurvey.answer) as answer " +
+				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.brId ,AVG(answersurvey.answer) as answer " +
 						"FROM surveyquestion , answersurvey , survey " +
 						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId " +
+						"GROUP BY surveyquestion.sqId;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new AnswerSurvey(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getDouble(4));
+			}
+		});
+	}
+	
+	private void getOrderSatisfactionHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				Integer surveyId = (Integer)(packet.getParameterForCommand(Command.getAverageAnswersBySurveyId).get(0));
+				stmt.setInt(1, surveyId);
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.brId ,AVG(answersurvey.answer) as answer " +
+						"FROM surveyquestion , answersurvey , survey " +
+						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId and answersurvey.bId=?  " +
 						"GROUP BY surveyquestion.sqId;";
 			}
 			
@@ -2112,6 +2141,8 @@ public class SystemServer extends AbstractServer{
 					createCustomProduct(db,key);
 				else if(key.equals(Command.getOrderReport))
 					getOrderReportHandler(db,key);
+				else if(key.equals(Command.getOrderSatisfaction))
+					getOrderSatisfactionHandler(db,key);
 			}
 
 			db.connectionClose();
