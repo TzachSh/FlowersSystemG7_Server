@@ -16,7 +16,16 @@ public class OrderReport implements Serializable {
 	private String address;
 	private String phone;
 	private String receiver;
+	private String status;
 	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getProductCategory() {
 		return productCategory;
 	}
@@ -105,7 +114,7 @@ public class OrderReport implements Serializable {
 	}
 
 	public OrderReport(String productCategory, int orderId, String creationDate, int productId, String productName,
-			double price, String paymentMethod, int deliveryNumber, String address, String phone, String receiver) {
+			double price, String paymentMethod, int deliveryNumber, String address, String phone, String receiver ,String status) {
 
 		this.productCategory = productCategory;
 		this.orderId = orderId;
@@ -118,6 +127,7 @@ public class OrderReport implements Serializable {
 		this.address = address;
 		this.phone = phone;
 		this.receiver = receiver;
+		this.status=status;
 	}
 	
 	

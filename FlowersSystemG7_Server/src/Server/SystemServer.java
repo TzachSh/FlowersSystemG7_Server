@@ -1,6 +1,7 @@
 package Server;
 
 
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -1433,21 +1434,20 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "SELECT pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date', \r\n" + 
-						"pio.pId as 'product id', (\r\n" + 
-						"IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
-						"	(SELECT cp.productName FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
-						"	'Custom Product')) as 'Product Name',\r\n" + 
-						"p.price as 'Price',op.paymentMethod,d.delId as 'Delivery Number',d.Address,d.phone,d.receiver\r\n" + 
-						"\r\n" + 
-						"FROM `order` o  INNER JOIN orderpayment op ON op.oId=o.oId\r\n" + 
-						"			    INNER JOIN productinorder pio ON o.oId=pio.oId\r\n" + 
-						"			    INNER JOIN product p ON  p.pId = pio.pId\r\n" + 
-						"                INNER JOIN producttype pt ON pt.typeId=p.typeId\r\n" + 
-						"			    LEFT OUTER JOIN delivery d ON d.oId=o.oId\r\n" + 
-						"             \r\n" + 
-						"WHERE o.brId=? AND year(o.creationDate)=? AND quarter(o.creationDate)=?\r\n" + 
-						"ORDER BY pt.description ASC";
+				return " SELECT pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date',\r\n" + 
+						"						pio.pId as 'product id',st.status, \r\n" + 
+						"						IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
+						"							(SELECT cp.productName FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
+						"							'Custom Product') as 'Product Name',\r\n" + 
+						"						p.price as 'Price',op.paymentMethod,d.delId as 'Delivery Number',d.Address,d.phone,d.receiver\r\n" + 
+						"						FROM `order` o  INNER JOIN orderpayment op ON op.oId=o.oId\r\n" + 
+						"									    INNER JOIN productinorder pio ON o.oId=pio.oId\r\n" + 
+						"										INNER JOIN product p ON  p.pId = pio.pId\r\n" + 
+						"						                INNER JOIN producttype pt ON pt.typeId=p.typeId\r\n" + 
+						"                                        Inner JOIN `status` st ON st.stId=o.stId\r\n" + 
+						"									    LEFT OUTER JOIN delivery d ON d.oId=o.oId\r\n" + 
+						"						WHERE o.brId=? AND year(o.creationDate)=? AND quarter(o.creationDate)=?\r\n" + 
+						"						ORDER BY pt.description ASC";
 			}
 			
 			@Override
@@ -1457,14 +1457,16 @@ public class SystemServer extends AbstractServer{
 				int	orderId=rs.getInt(2);
 				String creationDate=rs.getString(3);
 				int productId=rs.getInt(4);
-				String productName=rs.getString(5);
-				double price=rs.getDouble(6);
-				String paymentMethod=rs.getString(7);
-				int deliveryNumber=rs.getInt(8);
-				String address=rs.getString(9);
-				String phone=rs.getString(10);
-				String receiver=rs.getString(11);
-				OrderReport orderReport=new OrderReport(productCategory, orderId, creationDate, productId, productName, price, paymentMethod, deliveryNumber, address, phone, receiver);
+				String status=rs.getString(5);
+				String productName=rs.getString(6);
+				double price=rs.getDouble(7);
+				String paymentMethod=rs.getString(8);
+				int deliveryNumber=rs.getInt(9);
+				String address=rs.getString(10);
+				String phone=rs.getString(11);
+				String receiver=rs.getString(12);
+				
+				OrderReport orderReport=new OrderReport(productCategory, orderId, creationDate, productId, productName, price, paymentMethod, deliveryNumber, address, phone, receiver,status);
 				
 				
 				return (Object)orderReport;
@@ -2161,7 +2163,7 @@ public class SystemServer extends AbstractServer{
 					createCustomProduct(db,key);
 				else if(key.equals(Command.getOrderReport))
 					getOrderReportHandler(db,key);
-				else if(key.equals(Command.getOrderSatisfaction))
+				else if(key.equals(Command.getSatisfactionReport))
 					getOrderSatisfactionHandler(db,key);
 				else if(key.equals(Command.deleteUser))
 					deleteUserHandler(db,key);
