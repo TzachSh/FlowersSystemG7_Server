@@ -18,6 +18,7 @@ import Branches.Employee;
 import Branches.IncomeReport;
 import Branches.OrderReport;
 import Branches.Role;
+import Branches.SatisfactionReport;
 import Commons.Refund;
 import Customers.Account;
 import Customers.AccountStatus;
@@ -1842,7 +1843,7 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
-	private void getOrderSatisfactionHandler(DbQuery db , Command key)
+	private void getSatisfactionReportHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
@@ -1850,23 +1851,31 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
-				Integer surveyId = (Integer)(packet.getParameterForCommand(Command.getAverageAnswersBySurveyId).get(0));
-				stmt.setInt(1, surveyId);
+
+				int brId = (int)packet.getParameterForCommand(Command.getSatisfactionReport).get(0);
+				int year=(int)packet.getParameterForCommand(Command.getSatisfactionReport).get(1);
+				int quar =(int)packet.getParameterForCommand(Command.getSatisfactionReport).get(2);
+				stmt.setInt(1,brId);
+				stmt.setInt(2,year);
+				stmt.setInt(3,quar);
+
 			}
 			
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.brId ,AVG(answersurvey.answer) as answer " +
-						"FROM surveyquestion , answersurvey , survey " +
-						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId and answersurvey.bId=?  " +
-						"GROUP BY surveyquestion.sqId;";
+				return  "SELECT question.question,AVG(answersurvey.answer) as answer \r\n" + 
+						"						FROM surveyquestion , answersurvey , survey , question\r\n" + 
+						"						WHERE survey.surId= surveyquestion.surId and survey.subject='Satisfaction' AND surveyquestion.sqId = answersurvey.sqId and answersurvey.brId=?\r\n" + 
+						"                        and Year(survey.activatedDate)=? \r\n" + 
+						"                        and quarter(survey.activatedDate)=? and question.qId=surveyquestion.qId\r\n" + 
+						"						GROUP BY surveyquestion.sqId;";
 			}
 			
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				return new AnswerSurvey(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getDouble(4));
+				return new SatisfactionReport(rs.getString(1),rs.getString(2));
 			}
 		});
 	}
@@ -2164,7 +2173,7 @@ public class SystemServer extends AbstractServer{
 				else if(key.equals(Command.getOrderReport))
 					getOrderReportHandler(db,key);
 				else if(key.equals(Command.getSatisfactionReport))
-					getOrderSatisfactionHandler(db,key);
+					getSatisfactionReportHandler(db,key);
 				else if(key.equals(Command.deleteUser))
 					deleteUserHandler(db,key);
 			}
