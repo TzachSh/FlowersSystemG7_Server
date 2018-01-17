@@ -169,7 +169,8 @@ public class SystemServer extends AbstractServer{
 		arg0.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				System.exit(0);
+				// TODO Auto-generated method stub
+				Platform.exit();
 			}
 		});
 	}
@@ -953,6 +954,7 @@ public class SystemServer extends AbstractServer{
 				permission= Permission.Blocked;
 			else if(perm.equals((Permission.Limited).toString()))
 				permission= Permission.Limited;
+
 		
 			return new User(uId, user, password, isloggedbool, permission);
 		}
@@ -1252,7 +1254,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "update user set user=?,password=?,isLogged =?,permission=? where uId=?";
+				return "update user set user=?,password=? where uId=?";
 			
 			}
 			@Override
@@ -1260,9 +1262,7 @@ public class SystemServer extends AbstractServer{
 				// TODO Auto-generated method stub
 				stmt.setString(1,obj.getUser());
 				stmt.setString(2,obj.getPassword());
-				stmt.setBoolean(3, obj.isLogged());
-				stmt.setString(4, obj.getPermission().name());
-				stmt.setInt(5,obj.getuId());
+				stmt.setInt(3,obj.getuId());
 			}
 			
 		});
@@ -1839,7 +1839,7 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
-	private void getOrderSatisfactionHandler(DbQuery db , Command key)
+	private void getStatisfactionReportHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
@@ -1847,16 +1847,22 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
-				Integer surveyId = (Integer)(packet.getParameterForCommand(Command.getAverageAnswersBySurveyId).get(0));
-				stmt.setInt(1, surveyId);
+
+				int brId = (int)packet.getParameterForCommand(Command.getSatisfactionReport).get(0);
+				int year=(int)packet.getParameterForCommand(Command.getSatisfactionReport).get(1);
+				int quar =(int)packet.getParameterForCommand(Command.getSatisfactionReport).get(2);
+				stmt.setInt(1,brId);
+				stmt.setInt(2,year);
+				stmt.setInt(3,quar);
+
 			}
 			
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.brId ,AVG(answersurvey.answer) as answer " +
-						"FROM surveyquestion , answersurvey , survey " +
-						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId and answersurvey.bId=?  " +
+				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.brId ,AVG(answersurvey.answer) as answer \r\n" + 
+						"FROM surveyquestion , answersurvey , survey\r\n" + 
+						"WHERE surveyquestion.surId = 27 AND surveyquestion.sqId = answersurvey.sqId and answersurvey.brId=? and Year(survey.activatedDate)=? and quarter(survey.activatedDate)=?\r\n" + 
 						"GROUP BY surveyquestion.sqId;";
 			}
 			
@@ -1971,26 +1977,6 @@ public class SystemServer extends AbstractServer{
 			packet.setExceptionMessage(e.getMessage());
 		}
 		
-	}
-	
-	private void deleteUserHandler(DbQuery db , Command key)
-	{
-		DbUpdater<User> dbUpdater = new DbUpdater<>(db, key);
-		dbUpdater.performAction(new IUpdate<User>() {
-			
-			@Override
-			public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
-				// TODO Auto-generated method stub
-				stmt.setInt(1, obj.getuId());
-			}
-			
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return "DELETE FROM user "+
-						"WHERE uId = ?;";
-			}
-		});
 	}
 	
 	// *****
@@ -2160,10 +2146,8 @@ public class SystemServer extends AbstractServer{
 					createCustomProduct(db,key);
 				else if(key.equals(Command.getOrderReport))
 					getOrderReportHandler(db,key);
-				else if(key.equals(Command.getOrderSatisfaction))
-					getOrderSatisfactionHandler(db,key);
-				else if(key.equals(Command.deleteUser))
-					deleteUserHandler(db,key);
+				else if(key.equals(Command.getSatisfactionReport))
+					getStatisfactionReportHandler(db,key);
 			}
 
 			db.connectionClose();
