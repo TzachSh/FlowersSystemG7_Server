@@ -73,5 +73,6 @@ public enum Command implements Serializable
 	CreateCustomProduct,
 	getOrderReport,
 	getSatisfactionReport,
-	deleteUser
+	deleteUser, 
+	getAccountbycIDandBranch
 	}

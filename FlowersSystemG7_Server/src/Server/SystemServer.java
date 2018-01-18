@@ -888,7 +888,7 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 		@Override
 		public String getQuery() {
-		return "SELECT * FROM customer where uId=?";
+		return "SELECT customer.cId,uId,`mId` FROM customer inner join  membershipaccount on customer.cId= membershipaccount.cId where uId=?";
 	}
 
 	@Override
