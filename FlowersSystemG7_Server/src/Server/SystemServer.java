@@ -2005,6 +2005,61 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	private void getRefundsHandler(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		DbGetter dbGetter = new DbGetter(db, key);
+		
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM refund;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new Refund(rs.getInt(1),rs.getDate(2),rs.getDouble(3),rs.getInt(5));
+			}
+		});	
+	}
+
+	private void getRepliesHandler(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		
+		DbGetter dbGetter = new DbGetter(db, key);
+		
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM reply;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new Reply(rs.getInt(1),rs.getInt(2),rs.getString(3));
+			}
+		});
+		
+	}
+
+	
 	// *****
 
 	@Override
@@ -2102,6 +2157,10 @@ public class SystemServer extends AbstractServer{
 				else if(key.equals(Command.addComplainRefund)) {
 					addComplainRefundHandler(db,key);
 				}	
+				else if(key.equals(Command.getReplies))
+					getRepliesHandler(db,key);
+				else if(key.equals(Command.getRefunds))
+					getRefundsHandler(db,key);
 				else if(key.equals(Command.addSurvey))
 					addSurveyHandler(db, key);
 				else if(key.equals(Command.addQuestions))
@@ -2193,6 +2252,4 @@ public class SystemServer extends AbstractServer{
 			}
 		}
 	}
-
-
 }
