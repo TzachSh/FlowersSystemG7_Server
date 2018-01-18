@@ -910,7 +910,7 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 		@Override
 		public String getQuery() {
-		return "SELECT customer.cId,uId,`mId` FROM customer left outer join  membershipaccount on customer.cId= membershipaccount.cId where uId=?";
+		return "SELECT customer.cId,customer.uId,customer.mId FROM customer left outer join  membershipaccount on customer.cId= membershipaccount.cId where uId=?";
 	}
 
 	@Override
@@ -1823,7 +1823,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "INSERT INTO answersurvey (sqId, bId, answer) VALUES (?, ?, ?)";
+				return "INSERT INTO answersurvey (sqId, brId, answer) VALUES (?, ?, ?)";
 			}
 
 			@Override
