@@ -76,5 +76,6 @@ public enum Command implements Serializable
 	deleteUser, 
 	getAccountbycIDandBranch,
 	getRefunds,
-	getReplies;
+	getReplies,
+	getBranchesIncludeService;
 	}

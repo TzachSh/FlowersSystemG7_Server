@@ -512,6 +512,28 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
+				return "SELECT brId, brName FROM branch WHERE brName <> 'Service';";
+			}
+
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int brId = rs.getInt(1);
+				String brName = rs.getString(2);
+				return new Branch(brId, brName);
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
+		});
+	}
+	
+	public void getBranchesIncludeServiceHandler(DbQuery db,  Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		
+		dbGet.performAction(new ISelect() {
+			@Override
+			public String getQuery() {
 				return "SELECT brId, brName FROM branch;";
 			}
 
@@ -888,7 +910,7 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 		@Override
 		public String getQuery() {
-		return "SELECT customer.cId,uId,`mId` FROM customer inner join  membershipaccount on customer.cId= membershipaccount.cId where uId=?";
+		return "SELECT customer.cId,uId,`mId` FROM customer left outer join  membershipaccount on customer.cId= membershipaccount.cId where uId=?";
 	}
 
 	@Override
@@ -2235,6 +2257,8 @@ public class SystemServer extends AbstractServer{
 					getSatisfactionReportHandler(db,key);
 				else if(key.equals(Command.deleteUser))
 					deleteUserHandler(db,key);
+				else if (key.equals(Command.getBranchesIncludeService))
+					getBranchesIncludeServiceHandler(db,key);
 			}
 
 			db.connectionClose();
