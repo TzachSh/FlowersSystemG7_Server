@@ -1599,7 +1599,7 @@ public class SystemServer extends AbstractServer{
 		}
 	}
 	/**
-	 * 
+	 * Handle adding a refund
 	 * @param db -Stores database information 
 	 * @param key - Command operation which is performed
 	 */
@@ -1612,6 +1612,9 @@ public class SystemServer extends AbstractServer{
 		 */
 		dbUpdate.performAction(new IUpdate<Refund>() {
 			
+			/***
+			 * Initialize statement data for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Refund obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1632,7 +1635,7 @@ public class SystemServer extends AbstractServer{
 	}
 	
 	/**
-	 * 
+	 * Handle getting all of the complains
 	 * @param db -Stores database information 
 	 * @param key - Command operation which is performed
 	 */
@@ -1657,6 +1660,9 @@ public class SystemServer extends AbstractServer{
 				return "SELECT * FROM complain";
 			}
 			
+			/***
+			 * Parse the result set in to a Complain object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1675,18 +1681,28 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/***
+	 * Handle survey adding
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void addSurveyHandler(DbQuery db , Command key)
 	{
 		DbUpdater<Survey> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Survey>() {
 
+			/***
+			 * Insert query to be defined for survey adding
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO survey (subject,creatorId,isActive) " + 
 				"VALUES (?,?,?)";
 			}
-
+			/***
+			 * Set statement for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1696,24 +1712,36 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/***
+	 * Handle get all surveys from the server
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void getSurveyHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
 			
+			/***
+			 * Statement to initialize for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
+				// No statement needed
 				
 			}
 			
+			/***
+			 * Perform Select query to get the surveys
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM survey";
 			}
-			
+			/***
+			 * Parse the result set in to a Survey object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1722,23 +1750,34 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/***
+	 * Handle getting all the questions
+	 * @param db - database information
+	 * @param key - Operation to be performed
+	 */
 	private void getQuestionsHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			
+			/***
+			 * Statements to be initialized for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
+				// No statements needed
 				
 			}
-			
+			/***
+			 * Select query to get all the questions
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM question";
 			}
-			
+			/***
+			 * Parsing the result set in to a Question object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1747,12 +1786,19 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/***
+	 * Handle Attaching question to survey 
+	 * @param db
+	 * @param key
+	 */
 	private void addQuestionsToSurveyHandler(DbQuery db , Command key)
 	{
 		DbUpdater<SurveyQuestion> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<SurveyQuestion>() {
 
+			/***
+			 * Initialize a query to be performed
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1762,19 +1808,29 @@ public class SystemServer extends AbstractServer{
 						"		(SELECT * FROM question Q ORDER BY Q.qId DESC LIMIT 6) as LastQuestions" + 
 						");";
 			}
-
+			/***
+			 * Statements to be initialized for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, SurveyQuestion obj) throws SQLException {
-				// TODO Auto-generated method stub
+				// No statements needed
 			}
 		});
 	}
-
+	
+	/***
+	 * Handle adding a question
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void addQuestionHandler(DbQuery db , Command key)
 	{
 		DbUpdater<Question> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Question>() {
 
+			/***
+			 * Initialize qury for Insert the question
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1782,6 +1838,9 @@ public class SystemServer extends AbstractServer{
 				"VALUES (?)";
 			}
 
+			/***
+			 * Statements to be initialized for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Question obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1790,23 +1849,35 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/***
+	 * Handle getting all question in survey
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void getSurveyQuestionsHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
 			
+			/**
+			 *  Statements to be set for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
 				
 			}
-			
+			/***
+			 * Initializing Select query to get all the survey question data
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM surveyquestion;";
 			}
-			
+			/***
+			 * Parsing the result set in to a SurveyQuestion object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1814,11 +1885,18 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/***
+	 * Handle survey updating
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void updateSurveyHandler(DbQuery db, Command key) {
 		DbUpdater<Survey> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<Survey>() {
 
+			/***
+			 * Initialize a query for survey Updating to be performed
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1826,7 +1904,9 @@ public class SystemServer extends AbstractServer{
 					   "SET subject = ?, creatorId = ?, isActive = ? ,activatedDate = ?,closedDate = ? " +
 				 	   "WHERE surId=?";
 			}
-
+			/***
+			 * Initialize statements for the updating query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1840,17 +1920,27 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/***
+	 * Handle adding an answer
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void addAnswerSurveyHandler(DbQuery db , Command key)
 	{
 		DbUpdater<AnswerSurvey> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<AnswerSurvey>() {
 
+			/***
+			 * Answer query Insertion to be performed
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO answersurvey (sqId, brId, answer) VALUES (?, ?, ?)";
 			}
-
+			/***
+			 * Initialize the statements for the answer insertion query 
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, AnswerSurvey obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1861,11 +1951,19 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/***
+	 * Handle getting an average of a survey questions 
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void getAverageAnswersBySurveyIdHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
 			
+			/***
+			 * Setting statements for the Select questions average query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1873,6 +1971,9 @@ public class SystemServer extends AbstractServer{
 				stmt.setInt(1, surveyId);
 			}
 			
+			/***
+			 * Initialize the query to be performed
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1882,6 +1983,9 @@ public class SystemServer extends AbstractServer{
 						"GROUP BY surveyquestion.sqId;";
 			}
 			
+			/***
+			 * Parsing the result set in to an AnswerSurvey object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1889,21 +1993,27 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
-	
-	
+	/***
+	 * Handle adding a conclusion by service expert
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void addConclusionHandler(DbQuery db , Command key)
 	{
 		DbUpdater<SurveyConclusion> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<SurveyConclusion>() {
-
+			/***
+			 * Initialize the Insertion query of the conclusion
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO surveyconclusion (expertId,conclusion,surId) " +
 					   "VALUES (?,?,?);";
 			}
-
+			/***
+			 * Set statements for the Insert query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, SurveyConclusion obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1913,24 +2023,35 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-
+	
+	/***
+	 * Handle getting all conclusion 
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void getConclusionsHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			
+			/***
+			 * Initialize statements for the Selection query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
+				// No needed
 				
 			}
-			
+			/***
+			 * Initialize the query of the survey conclusion getting 
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM surveyconclusion;";
 			}
-			
+			/***
+			 * Parsing the result set in to a SurveyConclusion object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1996,18 +2117,26 @@ public class SystemServer extends AbstractServer{
 		}
 		
 	}
-	
+	/***
+	 * Handle a user deletion
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void deleteUserHandler(DbQuery db , Command key)
 	{
 		DbUpdater<User> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<User>() {
-			
+			/**
+			 * Initialize statements for the Delete query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
 				// TODO Auto-generated method stub
 				stmt.setInt(1, obj.getuId());
 			}
-			
+			/***
+			 * Initialize query of the user Deletion 
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -2017,24 +2146,35 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	/***
+	 * Handle get refunds
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 */
 	private void getRefundsHandler(DbQuery db, Command key) {
 		// TODO Auto-generated method stub
 		DbGetter dbGetter = new DbGetter(db, key);
 		
 		dbGetter.performAction(new ISelect() {
-			
+			/**
+			 * Statements to initialize for the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
-				
+				// No statements needed
 			}
 			
+			/**
+			 * Perform Select query to get all the refunds
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM refund;";
 			}
-			
+			/**
+			 * Parse the result set to a Refund object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2042,7 +2182,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});	
 	}
-
+	/***
+	 * Handle getting all of the replies 
+	 * @param db - database information
+	 * @param key - of the operation to perform
+	 */
 	private void getRepliesHandler(DbQuery db, Command key) {
 		// TODO Auto-generated method stub
 		
@@ -2050,18 +2194,24 @@ public class SystemServer extends AbstractServer{
 		
 		dbGetter.performAction(new ISelect() {
 			
+			/***
+			 * Adding statements to the query
+			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
-				
+				// No statements needed
 			}
-			
+			/***
+			 * Define Select query to get all of the replies
+			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM reply;";
 			}
-			
+			/***
+			 * Parsing the data result to a Reply object
+			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub

@@ -14,7 +14,9 @@ import Commons.Refund;
  */
 public class Complain implements IRefundAble, Serializable {
 	
-	//Instance members
+	/***
+	 * Instance members
+	 */
 	private int id;
 	private Date creationDate;
 	private String title;
@@ -23,11 +25,18 @@ public class Complain implements IRefundAble, Serializable {
 	private int customerServiceId;
 	private int branchId;
 	private boolean isActive;
-	
+	/***
+	 * 
+	 * @return branch id
+	 */
 	public int getBranchId() {
 		return branchId;
 	}
 
+	/***
+	 * 
+	 * @param branchId to set
+	 */
 	public void setBranchId(int branchId) {
 		this.branchId = branchId;
 	}
