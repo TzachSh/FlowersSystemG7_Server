@@ -73,6 +73,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import ocsf.server.AbstractServer;
@@ -110,6 +111,8 @@ public class SystemServer extends AbstractServer{
 	private PasswordField txtPass;
 	@FXML
 	private Button btnClear;
+    @FXML
+    private Pane paneDetails;
 	int port = 0; // Port to listen on
 	public SystemServer() {
 		super(DEFAULT_PORT);
@@ -139,6 +142,7 @@ public class SystemServer extends AbstractServer{
 			} catch (Throwable t) {//if  port is wrong or listening already
 				printlogMsg("ERROR - Could not listen for clients from this port! Using default port");
 				this.setPort(DEFAULT_PORT);
+				paneDetails.setDisable(false);
 				return;
 			}
 		}
@@ -159,6 +163,7 @@ public class SystemServer extends AbstractServer{
 					timer = new Timer();
 					timer.schedule(new ScheduleTask(dbConnection, this), today.getTime(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)); // period: 1 day
 					
+					paneDetails.setDisable(true);
 					btnSchedule.setDisable(false);
 					btnSubmit.setText("Stop service");//update button
 				}
@@ -169,6 +174,7 @@ public class SystemServer extends AbstractServer{
 					// cancel the scheduling
 					timer.cancel();
 					
+					paneDetails.setDisable(false);
 					btnSchedule.setDisable(true);
 					btnSubmit.setText("Start service");///update button
 				}

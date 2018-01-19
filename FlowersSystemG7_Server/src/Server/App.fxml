@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="494.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Server.SystemServer">
    <children>
-      <Pane layoutX="49.0" layoutY="77.0" prefHeight="146.0" prefWidth="445.0">
+      <Pane fx:id="paneDetails" layoutX="49.0" layoutY="77.0" prefHeight="146.0" prefWidth="445.0">
          <children>
             <TextField fx:id="txtPort" layoutX="145.0" layoutY="4.0" promptText="enter port to listen" text="5555" />
             <Label layoutX="83.0" layoutY="8.0" text="Port:" />
