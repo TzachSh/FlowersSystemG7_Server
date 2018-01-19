@@ -1524,7 +1524,7 @@ public class SystemServer extends AbstractServer{
 			int year = params.get(1);
 			int quarter = params.get(2);
 			
-			OrderReportGeneration orderReport = new OrderReportGeneration(db, year, quarter);
+			ReportGeneration orderReport = new OrderReportGeneration(db, year, quarter);
 			ArrayList<Object> report = orderReport.getReport(branchId);
 			packet.setParametersForCommand(Command.getOrderReport, report);
 			
@@ -1546,7 +1546,7 @@ public class SystemServer extends AbstractServer{
 			int year = params.get(1);
 			int quarter = params.get(2);
 			
-			IncomeReportGeneration orderReport = new IncomeReportGeneration(db, year, quarter);
+			ReportGeneration orderReport = new IncomeReportGeneration(db, year, quarter);
 			ArrayList<Object> report = orderReport.getReport(branchId);
 			packet.setParametersForCommand(Command.getIncomeReport, report);
 			
@@ -1568,7 +1568,7 @@ public class SystemServer extends AbstractServer{
 			int year = params.get(1);
 			int quarter = params.get(2);
 			
-			ComplainsReportGeneration orderReport = new ComplainsReportGeneration(db, year, quarter);
+			ReportGeneration orderReport = new ComplainsReportGeneration(db, year, quarter);
 			ArrayList<Object> report = orderReport.getReport(branchId);
 			packet.setParametersForCommand(Command.getComplainsForReport, report);
 			
@@ -1590,7 +1590,7 @@ public class SystemServer extends AbstractServer{
 			int year = params.get(1);
 			int quarter = params.get(2);
 			
-			SatisfactionReportGeneration orderReport = new SatisfactionReportGeneration(db, year, quarter);
+			ReportGeneration orderReport = new SatisfactionReportGeneration(db, year, quarter);
 			ArrayList<Object> report = orderReport.getReport(branchId);
 			packet.setParametersForCommand(Command.getSatisfactionReport, report);
 		}
