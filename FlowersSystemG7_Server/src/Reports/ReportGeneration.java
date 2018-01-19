@@ -24,7 +24,6 @@ import Logic.DbQuery;
  */
 public abstract class ReportGeneration implements IReport
 {	
-	//protected ArrayList<String[]> csvData = new ArrayList<>();
 	protected ArrayList<Branch> branchesList = new ArrayList<>();
 	protected int year;
 	protected int quarter;
