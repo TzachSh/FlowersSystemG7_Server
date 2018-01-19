@@ -5,6 +5,10 @@ import Logic.DbQuery;
 import Server.SystemServer;
 import javafx.application.Platform;
 
+/**
+ * Thread for running the schedule task immediately 
+ *
+ */
 public class ScheduleThread extends Thread {
 
 	private DbQuery db;
