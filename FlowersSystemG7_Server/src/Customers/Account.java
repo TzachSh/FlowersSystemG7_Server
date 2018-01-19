@@ -80,6 +80,14 @@ public class Account implements Serializable {
 		this.accountStatus = accountStatus;
 		this.creditCard = creditCard;
 	}
+	public Account(int branchId, int customerId,double balance, AccountStatus accountStatus, String creditCard) {
+		super();
+		this.customerId = customerId;
+		this.balance = balance;
+		this.branchId = branchId;
+		this.accountStatus = accountStatus;
+		this.creditCard = creditCard;
+	}
 
 }
 

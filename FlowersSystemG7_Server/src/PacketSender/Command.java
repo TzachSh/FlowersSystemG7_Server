@@ -78,5 +78,7 @@ public enum Command implements Serializable
 	getRefunds,
 	getReplies,
 	getBranchesIncludeService,
-	addMemberShipAccount
+	addMemberShipAccount,
+	updateMemberShipAccountByAcNum,
+	getMemberShipAccountByAcNum
 	}

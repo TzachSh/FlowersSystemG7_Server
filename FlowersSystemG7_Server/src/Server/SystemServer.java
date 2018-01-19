@@ -2228,7 +2228,56 @@ public class SystemServer extends AbstractServer{
 		
 	}
 
+
+	public void updateMemberShipAccountByAcNumHandler(DbQuery db, Command key)
+	{
+		DbUpdater<MemberShipAccount> dbUpdate = new DbUpdater<>(db, key);
+		
+		dbUpdate.performAction(new IUpdate<MemberShipAccount>() {
+
+			@Override
+			public String getQuery() {
+				return "UPDATE MemberShipAccount SET mId=? , CreationDate=?  WHERE acNum = ?";
+			}
+
+			@Override
+			public void setStatements(PreparedStatement stmt, MemberShipAccount obj) throws SQLException {
+				stmt.setInt(1, obj.getmId());
+				stmt.setDate(2,obj.getCreationDate());
+				stmt.setInt(3,obj.getAcNum());
+			}
+		});
+	}
 	
+	public void getMemberShipAccountByAcNumHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				int acNum = (int)packet.getParameterForCommand(key).get(0);
+				stmt.setInt(1, acNum);
+
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "Select * from MemberShipAccount where acNum=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int acNum=rs.getInt(0);
+				int mId=rs.getInt(1);
+				java.sql.Date creationDate=rs.getDate(3);
+				
+				return (Object) (new MemberShipAccount(acNum, mId, creationDate));
+			}
+		});
+	}
 	// *****
 
 	@Override
@@ -2407,6 +2456,10 @@ public class SystemServer extends AbstractServer{
 					getBranchesIncludeServiceHandler(db,key);
 				else if (key.equals(Command.addMemberShipAccount))
 					addMemberShipAccountHandler(db,key);
+				else if(key.equals(Command.updateMemberShipAccountByAcNum))
+					updateMemberShipAccountByAcNumHandler(db,key);
+				else if(key.equals(Command.getMemberShipAccountByAcNum))
+					getMemberShipAccountByAcNumHandler(db,key);
 			}
 
 			db.connectionClose();
