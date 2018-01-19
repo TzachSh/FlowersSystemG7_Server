@@ -32,54 +32,39 @@ public class OrderReportGeneration extends ReportGeneration {
 				"						ORDER BY pt.description ASC";
 	}
 	
-	/**
-	 * Read and get the report for specified branch id
-	 * @param branchId Branch id to create for it the report
-	 * @return Collection of Order report
-	 * @throws Exception Exception when failed on reading the report
-	 */
-	public ArrayList<Object> getReport(int branchId) throws Exception
-	{
-		ArrayList<String[]> csvData = getReportInString(branchId);
+	@Override
+	public Object createObject(String[] row) {
+		String productCategory = row[0];
+		int	orderId = Integer.valueOf(row[1]);
+		String creationDate = row[2];
+		int productId = Integer.valueOf(row[3]);
+		String status = row[4];
+		String productName = row[5];
+		double price = Double.valueOf(row[6]);
+		String paymentMethod = row[7];
 		
-		// convert each column in string array to order report entity
-		ArrayList<Object> report = new ArrayList<>();
-		
-		for (String[] row : csvData)
+		int deliveryNumber = 0;
+
+		try
 		{
-			String productCategory = row[0];
-			int	orderId = Integer.valueOf(row[1]);
-			String creationDate = row[2];
-			int productId = Integer.valueOf(row[3]);
-			String status = row[4];
-			String productName = row[5];
-			double price = Double.valueOf(row[6]);
-			String paymentMethod = row[7];
-			
-			int deliveryNumber = 0;
-
-			try
-			{
-				deliveryNumber = Integer.valueOf(row[8]);
-			}
-			catch (Exception e) 
-			{ 
-				deliveryNumber = -1;
-			}
-			
-			String address = row[9];
-			String phone = row[10];
-			String receiver = row[11];
-			
-			OrderReport orderReport = new OrderReport(productCategory, orderId, creationDate, productId, productName, price, paymentMethod, deliveryNumber, address, phone, receiver,status);
-			report.add(orderReport);
+			deliveryNumber = Integer.valueOf(row[8]);
 		}
-
-		return report;
+		catch (Exception e) 
+		{ 
+			deliveryNumber = -1;
+		}
+		
+		String address = row[9];
+		String phone = row[10];
+		String receiver = row[11];
+		
+		return new OrderReport(productCategory, orderId, creationDate, productId, productName, price, paymentMethod, deliveryNumber, address, phone, receiver,status);
 	}
 
 	@Override
 	public String toString() {
 		return "OrderReport";
 	}
+
+
 }

@@ -1,7 +1,5 @@
 package Reports;
 
-import java.util.ArrayList;
-
 import Branches.SatisfactionReport;
 import Logic.DbQuery;
 
@@ -23,35 +21,19 @@ public class SatisfactionReportGeneration extends ReportGeneration {
 				"                       AND quarter(survey.activatedDate)=? and question.qId=surveyquestion.qId " + 
 				"						GROUP BY surveyquestion.sqId;";
 	}
-	
-	/**
-	 * Read and get the report for specified branch id
-	 * @param branchId Branch id to create for it the report
-	 * @return Collection of Satisfaction report
-	 * @throws Exception Exception when failed on reading the report
-	 */
-	public ArrayList<Object> getReport(int branchId) throws Exception
-	{
-		ArrayList<String[]> csvData = getReportInString(branchId);
-		
-		// convert each column in string array to order report entity
-		ArrayList<Object> report = new ArrayList<>();
-		
-		for (String[] row : csvData)
-		{
-			String question = row[0];
-			String avg = row[1];
-			
-			SatisfactionReport satisfaction = new SatisfactionReport(question, avg);
-			report.add(satisfaction);
-		}
 
-		return report;
+	@Override
+	public Object createObject(String[] row) {
+		String question = row[0];
+		String avg = row[1];
+		
+		return new SatisfactionReport(question, avg);
 	}
 
 	@Override
 	public String toString() {
 		return "SatisfactionReport";
 	}
+
 
 }

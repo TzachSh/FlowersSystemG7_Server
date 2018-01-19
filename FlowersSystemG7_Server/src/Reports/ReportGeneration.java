@@ -250,6 +250,29 @@ public abstract class ReportGeneration implements IReport
 	    return path;
 	}
 	
+	/**
+	 * Read and get the report for specified branch id
+	 * @param branchId Branch id to create for it the report
+	 * @return Collection of relevant report
+	 * @throws Exception Exception when failed on reading the report
+	 */
+	public ArrayList<Object> getReport(int branchId) throws Exception
+	{
+		ArrayList<String[]> csvData = getReportInString(branchId);
+		
+		// convert each column in string array to order report entity
+		ArrayList<Object> report = new ArrayList<>();
+		
+		for (String[] row : csvData)
+		{
+			// call to implementation of create object on the concrete class
+			Object obj = createObject(row);
+			report.add(obj);
+		}
+
+		return report;
+	}
+	
 	/** 
 	 * Create all the data of the report for specified branch.
 	 * Each column is shown as string array
@@ -355,7 +378,7 @@ public abstract class ReportGeneration implements IReport
 			}
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
