@@ -12,7 +12,6 @@ public class Customer extends User implements Serializable {
 	private int id;
 	private ArrayList<Order> orderList;
 	private ArrayList<Complain> complainList;
-	private int membershipId;
 	private int accountNum;
 	public int getId() {
 		return id;
@@ -32,12 +31,7 @@ public class Customer extends User implements Serializable {
 	public void setComplainList(ArrayList<Complain> complainList) {
 		this.complainList = complainList;
 	}
-	public int getMembershipId() {
-		return membershipId;
-	}
-	public void setMembershipId(int membershipId) {
-		this.membershipId = membershipId;
-	}
+
 	public int getAccountNum() {
 		return accountNum;
 	}
@@ -45,32 +39,30 @@ public class Customer extends User implements Serializable {
 		this.accountNum = accountNum;
 	}
 	public Customer(int uId, String user, String password, boolean isLogged, Permission permission, int id,
-			ArrayList<Order> orderList, ArrayList<Complain> complainList, int membershipId, int accountNum) {
+			ArrayList<Order> orderList, ArrayList<Complain> complainList, int accountNum) {
 		super(uId, user, password, isLogged, permission);
 		this.id = id;
 		this.orderList = orderList;
 		this.complainList = complainList;
-		this.membershipId = membershipId;
 		this.accountNum = accountNum;
 	}
-	public Customer(int uId, String user, String password, boolean isLogged, Permission permission,int membershipId) {
+	public Customer(int uId, String user, String password, boolean isLogged, Permission permission) {
 		super(uId, user, password, isLogged, permission);
-		this.membershipId = membershipId;
 	}
-	public Customer(int uId,int mId ) {
+
+	public Customer(int id,int uId ) {
 		super(uId);
-		this.membershipId = mId;
-	}
-	public Customer(int id,int uId,int mId ) {
-		super(uId);
-		this.membershipId = mId;
 		this.id=id;
 	}
 	
-	public Customer(User user, int id, int mId)
+	public Customer(User user, int id)
 	{
 		super(user);
-		this.membershipId = mId;
 		this.id=id;
+	}
+	public Customer( int cId)
+	{
+		super(cId);
+		this.id=cId;
 	}
 }

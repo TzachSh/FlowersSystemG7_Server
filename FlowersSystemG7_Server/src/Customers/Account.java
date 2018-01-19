@@ -9,6 +9,15 @@ public class Account implements Serializable {
 	private int num;
 	private int customerId;
 	private double balance;
+	private int mId;
+	
+	public int getmId() {
+		return mId;
+	}
+	public void setmId(int mId) {
+		this.mId = mId;
+	}
+
 	private int branchId;
 	private AccountStatus accountStatus;
 	private String creditCard;
@@ -49,24 +58,28 @@ public class Account implements Serializable {
 	public void setCreditCard(String creditCard) {
 		this.creditCard = creditCard;
 	}
-	public Account(int num,int branchId, int customerId, double balance, AccountStatus accountStatus, String creditCard) {
+
+	
+	public Account(int branchId, int customerId, int mId,double balance, AccountStatus accountStatus, String creditCard) {
 		super();
-		this.num = num;
 		this.customerId = customerId;
+		this.mId = mId;
 		this.balance = balance;
 		this.branchId = branchId;
 		this.accountStatus = accountStatus;
 		this.creditCard = creditCard;
 	}
-	
-	public Account(int branchId, int customerId, double balance, AccountStatus accountStatus, String creditCard) {
+	public Account(int num, int customerId,int mId, double balance, int branchId, AccountStatus accountStatus,
+			String creditCard) {
 		super();
 		this.num = num;
 		this.customerId = customerId;
+		this.mId=mId;
 		this.balance = balance;
 		this.branchId = branchId;
 		this.accountStatus = accountStatus;
 		this.creditCard = creditCard;
 	}
-	
+
 }
+

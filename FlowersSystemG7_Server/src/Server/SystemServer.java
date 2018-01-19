@@ -27,6 +27,7 @@ import Customers.Account;
 import Customers.AccountStatus;
 import Customers.Complain;
 import Customers.Customer;
+import Customers.MemberShipAccount;
 import Customers.Membership;
 import Customers.MembershipType;
 import Customers.Reply;
@@ -964,16 +965,15 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 		@Override
 		public String getQuery() {
-		return "SELECT C.cId, C.uId, M.mId FROM customer C LEFT OUTER JOIN membershipaccount M on C.cId= M.cId WHERE C.uId=?";
+		return "SELECT cId,uId FROM customer where uId=?";
 	}
 
 	@Override
 	public Object createObject(ResultSet rs) throws SQLException {
 		int cId = rs.getInt(1);
 		int uId=rs.getInt(2);
-		int mId=rs.getInt(3);
 		Customer cus;
-		cus=new Customer(cId, uId, mId);
+		cus=new Customer(cId, uId);
 		return (Object)cus;
 	}
 
@@ -1160,7 +1160,7 @@ public class SystemServer extends AbstractServer{
 	}
 	
 	
-	public void getAccountBycIdHandler(DbQuery db, Command key)
+	public void getAccountbycIDandBranchHandler(DbQuery db, Command key)
 	{
 		DbGetter dbGet = new DbGetter(db, key);
 		dbGet.performAction(new ISelect() {
@@ -1168,14 +1168,17 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
-				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountbycID).get(0);
+				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountbycIDandBranch).get(0);
+				Integer brId = (Integer) packet.getParameterForCommand(Command.getAccountbycIDandBranch).get(1);
 				stmt.setInt(1, customerCid);
+				stmt.setInt(2, brId);
+
 			}
 			
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "select * from account where cId=?";
+				return "SELECT * FROM account  where account.cId=? and account.brId=?";
 			}
 			
 			@Override
@@ -1197,7 +1200,7 @@ public class SystemServer extends AbstractServer{
 				else if(statusString.equals((AccountStatus.Closed).toString()))
 					status= AccountStatus.Closed;
 				
-				newacc=new Account(acNum, brId, cId, balance, status, creditCard);
+				newacc=new Account(acNum, cId, 0, balance, brId, status, creditCard);
 				return (Object)newacc;
 				
 			}
@@ -1212,7 +1215,7 @@ public class SystemServer extends AbstractServer{
 		@Override
 		public String getQuery() {
 		// TODO Auto-generated method stub
-			return "INSERT into Customer (uId,mId) values(?,?)";
+			return "INSERT into Customer (uId) values(?)";
 	
 		}
 	
@@ -1220,7 +1223,6 @@ public class SystemServer extends AbstractServer{
 		public void setStatements(PreparedStatement stmt, Customer obj) throws SQLException {
 		// TODO Auto-generated method stub
 			stmt.setInt(1, obj.getuId());
-			stmt.setInt(2, obj.getMembershipId()); 
 		}
 	});
 	}
@@ -1355,13 +1357,12 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "update customer set mId=? where uId=?";
+				return "update customer set where uId=?";
 			}
 
 			@Override
 			public void setStatements(PreparedStatement stmt, Customer obj) throws SQLException {
 				// TODO Auto-generated method stub
-				stmt.setInt(1,obj.getMembershipId());
 				stmt.setInt(2,obj.getuId());
 			}
 		});
@@ -1492,6 +1493,25 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
+	public void addMemberShipAccountHandler(DbQuery db,Command key) {
+		DbUpdater<MemberShipAccount> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<MemberShipAccount>() {
+			@Override
+			public String getQuery() {
+				return "insert into MemberShipAccount values (?,?,?)";
+			}
+		
+			@Override
+			public void setStatements(PreparedStatement stmt, MemberShipAccount obj) throws SQLException {
+				stmt.setInt(1, obj.getAcNum());
+				stmt.setInt(2, obj.getmId());
+				stmt.setDate(3,obj.getCreationDate());
+				
+			}
+		});
+		
+	}
+	
 	public void getOrderReportHandler(DbQuery db, Command key)
 	{
 		Packet packet = db.getPacket();
@@ -1578,7 +1598,6 @@ public class SystemServer extends AbstractServer{
 			packet.setExceptionMessage(e.getMessage());
 		}
 	}
-	
 	/**
 	 * 
 	 * @param db -Stores database information 
@@ -2091,8 +2110,8 @@ public class SystemServer extends AbstractServer{
 					getCustomersKeyByuIdHandler(db, key);
 				else if(key.equals(Command.getUserByuId))
 					getUserByuIdHandler(db, key);
-				else if(key.equals(Command.getAccountbycID))
-					getAccountBycIdHandler(db, key);
+				else if(key.equals(Command.getAccountbycIDandBranch))
+					getAccountbycIDandBranchHandler(db, key);
 				else if(key.equals(Command.updateUserByuId))
 					updateUserByuIdHandler(db, key);
 				else if(key.equals(Command.updateCustomerByuId))
@@ -2196,8 +2215,7 @@ public class SystemServer extends AbstractServer{
 					updateCustomerByuIdHandler(db, key);
 				else if(key.equals(Command.updateAccountsBycId))
 					updateAccountsBycIdHandler(db,key);
-				else if(key.equals(Command.getAccountbycID))
-					getAccountBycIdHandler(db, key);
+				
 				else if(key.equals(Command.setProductAsDeleted))
 					setProductAsDeletedHandler(db, key);
 				else if(key.equals(Command.getAllCatalogProducts))
@@ -2230,6 +2248,8 @@ public class SystemServer extends AbstractServer{
 					deleteUserHandler(db,key);
 				else if (key.equals(Command.getBranchesIncludeService))
 					getBranchesIncludeServiceHandler(db,key);
+				else if (key.equals(Command.addMemberShipAccount))
+					addMemberShipAccountHandler(db,key);
 			}
 
 			db.connectionClose();
