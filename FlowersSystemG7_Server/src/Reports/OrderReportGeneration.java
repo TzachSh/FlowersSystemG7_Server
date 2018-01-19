@@ -15,13 +15,8 @@ public class OrderReportGeneration extends ReportGeneration {
 	}
 
 	@Override
-	public int getIndexOfBranchInArray() {
-		return 0;
-	}
-
-	@Override
-	public String getQueryReport() {
-		return " SELECT  o.brId, pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date', " + 
+	public String getQueryReport(int branchId) {
+		return " SELECT pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date', " + 
 				"						pio.pId as 'product id',st.status,  " + 
 				"						IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId), " + 
 				"							(SELECT cp.productName FROM catalogproduct cp WHERE cp.pId = p.pId), " + 
@@ -31,9 +26,9 @@ public class OrderReportGeneration extends ReportGeneration {
 				"									    INNER JOIN productinorder pio ON o.oId=pio.oId " + 
 				"										INNER JOIN product p ON  p.pId = pio.pId " + 
 				"						                INNER JOIN producttype pt ON pt.typeId=p.typeId " + 
-				"                                        Inner JOIN `status` st ON st.stId=o.stId " + 
+				"                                       INNER JOIN `status` st ON st.stId=o.stId " + 
 				"									    LEFT OUTER JOIN delivery d ON d.oId=o.oId " + 
-				"						WHERE year(o.creationDate)=? AND quarter(o.creationDate)=? " + 
+				"						WHERE o.brId = ? AND year(o.creationDate)=? AND quarter(o.creationDate)=? " + 
 				"						ORDER BY pt.description ASC";
 	}
 	
@@ -43,12 +38,12 @@ public class OrderReportGeneration extends ReportGeneration {
 	 * @return Collection of Order report
 	 * @throws Exception Exception when failed on reading the report
 	 */
-	public ArrayList<OrderReport> getReport(int branchId) throws Exception
+	public ArrayList<Object> getReport(int branchId) throws Exception
 	{
 		ArrayList<String[]> csvData = getReportInString(branchId);
 		
 		// convert each column in string array to order report entity
-		ArrayList<OrderReport> report = new ArrayList<>();
+		ArrayList<Object> report = new ArrayList<>();
 		
 		for (String[] row : csvData)
 		{
@@ -62,20 +57,19 @@ public class OrderReportGeneration extends ReportGeneration {
 			String paymentMethod = row[7];
 			
 			int deliveryNumber = 0;
-			String address = "";
-			String phone = "";
-			String receiver = "";
-			
+
 			try
 			{
 				deliveryNumber = Integer.valueOf(row[8]);
 			}
-			catch (Exception e) { deliveryNumber = -1; }
-			address = row[9];
+			catch (Exception e) 
+			{ 
+				deliveryNumber = -1;
+			}
 			
-			phone = row[10];
-			
-			receiver = row[11];
+			String address = row[9];
+			String phone = row[10];
+			String receiver = row[11];
 			
 			OrderReport orderReport = new OrderReport(productCategory, orderId, creationDate, productId, productName, price, paymentMethod, deliveryNumber, address, phone, receiver,status);
 			report.add(orderReport);

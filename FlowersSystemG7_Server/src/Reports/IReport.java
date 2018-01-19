@@ -6,13 +6,9 @@ package Reports;
  * each field separators by the String array 
  */
 public interface IReport {
- 	/** 
-	 * return the position in the csv data array that explain the branch id position
-	 */
- 	int getIndexOfBranchInArray();
-	
  	/**
  	 * return the query for generation report
+ 	 * @param branchId The branch id to perform the query
  	 */
- 	String getQueryReport();
+ 	String getQueryReport(int branchId);
 }

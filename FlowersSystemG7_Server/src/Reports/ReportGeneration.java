@@ -14,11 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import Branches.Branch;
-
 import Logic.DbQuery;
 
 /**
@@ -28,7 +24,7 @@ import Logic.DbQuery;
  */
 public abstract class ReportGeneration implements IReport
 {	
-	protected ArrayList<String[]> csvData = new ArrayList<>();
+	//protected ArrayList<String[]> csvData = new ArrayList<>();
 	protected ArrayList<Branch> branchesList = new ArrayList<>();
 	protected int year;
 	protected int quarter;
@@ -56,47 +52,6 @@ public abstract class ReportGeneration implements IReport
 		}
 	}
 
-	
-	/**
-	 * Create hash map table that each key the branch id, and the value is the data csv for this branch
-	 * @return Hash Map for each branch and it's report data
-	 */
-	private LinkedHashMap<Integer, ArrayList<String[]>> createCsvDataByBranch()
-	{
-		LinkedHashMap<Integer, ArrayList<String[]>> csvDataBranch = new LinkedHashMap<>();
-		
-		for (String[] row : csvData)
-		{
-			int branchIndexInArray = getIndexOfBranchInArray();
-			int branchId = Integer.valueOf(row[branchIndexInArray]);
-			
-			// create a new array that not contains the branch id
-			String[] csvDataRow = new String[row.length - 1];
-			int rowIndex = 0;
-			for (int i = 0; i < row.length; i++)
-			{
-				if (i != branchIndexInArray)
-				{
-					csvDataRow[rowIndex] = row[i];
-					rowIndex++;
-				}
-			}
-			
-			if (!csvDataBranch.containsKey(branchId))
-			{
-				ArrayList<String[]> list = new ArrayList<>();
-				list.add(csvDataRow);
-				
-				csvDataBranch.put(branchId, list);
-			}
-			else
-			{
-				csvDataBranch.get(branchId).add(csvDataRow);
-			}
-		}
-		
-		return csvDataBranch;
-	}
 	/**
 	 * Get The collection of all branches in the database
 	 * @throws Exception Exception when failed to get all branches
@@ -105,15 +60,15 @@ public abstract class ReportGeneration implements IReport
 	{
 		ArrayList<Branch> branchesList = new ArrayList<>();
 		
-		db.connectToDB();
-		
 		try
 		{
+			db.connectToDB();
+			
 			// create the connection to db
 			Connection con = db.getConnection();
 						
 			// query for get all branches
-			String qry = "SELECT brId, brName FROM branch;";
+			String qry = "SELECT brId, brName FROM branch WHERE brName <> 'Service';";
 					
 			PreparedStatement stmt = con.prepareStatement(qry);
 		
@@ -154,28 +109,30 @@ public abstract class ReportGeneration implements IReport
 	 */
 	public void performReport() throws Exception
 	{
-		// creates the data report for all branches
-		createCsvData();
-		
-		// map the whole report of all branches to mapping by each branch
-		LinkedHashMap<Integer, ArrayList<String[]>> csvDataBranch = createCsvDataByBranch();
-		
-		for (Map.Entry<Integer, ArrayList<String[]>> entry : csvDataBranch.entrySet())
+		// pass over each branch and check if there is a quarter report for it on the database,
+		// if report is not found, create for it a new report
+		for (Branch branch : branchesList)
 		{
-		    int branchId = entry.getKey();
-		    ArrayList<String[]> csvDataValue = entry.getValue();
-		    
-		    // generate absolute path for the csv file
-		    Branch matchedBranch = getBranchByBranchId(branchId);
-		    
-		    String absolutePath = String.format("Reports/%s/%s/%s/%s.csv", 
-		    		matchedBranch.getName(), year, quarter, this);
-		    
-		    // create and write the csv file based on the collection data
-		    writeCSVFile(csvDataValue, absolutePath);
-		    
-		    // save the line of relevant report on database
-		    saveReportPathInDb(branchId, absolutePath);
+			int branchId = branch.getbId();
+			
+			// generate report only for branch that there is no report for it
+			if (!checkIfThereIsQuarterReportForBranch(branchId))
+			{
+				// creates the data report for current branch
+				ArrayList<String[]> csvData = createCsvData(branchId);
+				
+			    // generate absolute path for the csv file
+				Branch matchedBranch = getBranchByBranchId(branchId);
+				    
+				String absolutePath = String.format("Reports/%s/%s/%s/%s.csv", 
+				    matchedBranch.getName(), year, quarter, this);
+				    
+				// create and write the csv file based on the collection data
+				writeCSVFile(csvData, absolutePath);
+				    
+				// save the line of relevant report on database
+				saveReportPathInDb(branchId, absolutePath);
+			}
 		}
 	}
 	
@@ -187,13 +144,12 @@ public abstract class ReportGeneration implements IReport
 	 */
 	private void saveReportPathInDb(int branchId, String csvFile) throws Exception
 	{
-		db.connectToDB();
-		Connection con = db.getConnection();
-		
 	    try
 	    {
+	    	db.connectToDB();
+			Connection con = db.getConnection();
+			
 	    	String query = "INSERT INTO report (year,quarter, branch, report, path) VALUES (?,?,?,?,?)";
-		
 	    
 	    	PreparedStatement stmt = con.prepareStatement(query);
 	    	stmt.setInt(1, year);
@@ -216,7 +172,7 @@ public abstract class ReportGeneration implements IReport
 	}
 	
 	/**
-	 * Read and get the report as String for specified branch id
+	 * Read and get the report from the csv file as String Array for specified branch id
 	 * @param branchId Branch id to create for it the report
 	 * @return Collection of Order report
 	 * @throws Exception Exception when failed on reading the report
@@ -232,19 +188,43 @@ public abstract class ReportGeneration implements IReport
 		return csvData;
 	}
 
+	/**
+	 * Check if there is a quarter report for specified branch
+	 * @param branchId The branch id to check for it
+	 * @return true - quarter report exists, false - not exists
+	 */
+	private boolean checkIfThereIsQuarterReportForBranch(int branchId)
+	{
+		boolean result = false;
+		try
+		{
+			String path = getReportPathFromDb(branchId);
+			if (path.isEmpty())
+				result = false;
+			else
+				result = true;
+		}
+		catch (Exception e)
+		{
+			result = false;
+		}
+		
+		return result;
+	}
 	
 	/**
 	 * get the report path from the database
 	 * @param branchId The branch id for report
 	 * @throws Exception Throws when there was an exception during the saving in database
 	 */
-	protected String getReportPathFromDb(int branchId) throws Exception
+	private String getReportPathFromDb(int branchId) throws Exception
 	{
-		db.connectToDB();
-		Connection con = db.getConnection();
 		String path = "";
 	    try
 	    {
+	    	db.connectToDB();
+			Connection con = db.getConnection();
+			
 	    	String query = "SELECT path FROM report WHERE year=? AND quarter=? AND branch=? AND report=?";
 		
 	    
@@ -271,23 +251,27 @@ public abstract class ReportGeneration implements IReport
 	}
 	
 	/** 
-	 * create and set all the lines in the report that each column is shown as string array
+	 * Create all the data of the report for specified branch.
+	 * Each column is shown as string array
+	 * @param branchId The branch id to perform for it the csv data
+	 * @return The csv data of all branches as ArrayList
 	 */
-	private void createCsvData() throws Exception {
+	private ArrayList<String[]> createCsvData(int branchId) throws Exception {
 
-		db.connectToDB();
-		csvData.clear();
+		ArrayList<String[]> csvData = new ArrayList<>();
 		try
 		{
+			db.connectToDB();
 			// create the connection to db
 			Connection con = db.getConnection();
 						
 			// query for get all orders in the quarter
-			String qry = getQueryReport();
+			String qry = getQueryReport(branchId);
 					
 			PreparedStatement stmt = con.prepareStatement(qry);
-			stmt.setInt(1,year);
-			stmt.setInt(2,quarter);
+			stmt.setInt(1,branchId);
+			stmt.setInt(2,year);
+			stmt.setInt(3,quarter);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -308,6 +292,8 @@ public abstract class ReportGeneration implements IReport
 		finally {
 			db.connectionClose();
 		}
+		
+		return csvData;
 	}
 	
 	/**
@@ -354,7 +340,7 @@ public abstract class ReportGeneration implements IReport
 	 * Read and return the collection from csv file
 	 * @param csvFile The csv file name and path
 	 */
-	protected ArrayList<String[]> readCSVFile(String csvFile) {
+	private ArrayList<String[]> readCSVFile(String csvFile) {
 		ArrayList<String[]> csvDataFile = new ArrayList<>();
 		BufferedReader br = null;
 		String line = "";

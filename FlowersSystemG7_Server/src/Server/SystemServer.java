@@ -9,7 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -44,6 +47,12 @@ import Products.Flower;
 import Products.FlowerInProduct;
 import Products.Product;
 import Products.ProductType;
+import Reports.ComplainsReportGeneration;
+import Reports.IncomeReportGeneration;
+import Reports.OrderReportGeneration;
+import Reports.SatisfactionReportGeneration;
+import Reports.ScheduleTask;
+import Reports.ScheduleThread;
 import Survey.AnswerSurvey;
 import Survey.Question;
 import Survey.Survey;
@@ -80,7 +89,11 @@ public class SystemServer extends AbstractServer{
 	private String user = "root";
 	private String password = "1q2w3e!";
 	private String database;
+	private Timer timer = new Timer();
 	private static final int DEFAULT_PORT = 5555;
+	private DbQuery dbConnection;
+    @FXML
+    private Button btnSchedule;
 	@FXML
 	private TextField txtPort;
 	@FXML
@@ -134,15 +147,53 @@ public class SystemServer extends AbstractServer{
 					user = txtUser.getText();
 					password=txtPass.getText();
 					printlogMsg("Server has started listening on port:"+port);//write to log
+					
+					// start scheduling task every night at 2:00 am
+					dbConnection = new DbQuery(user, password, database);
+					Calendar today = Calendar.getInstance();
+					today.set(Calendar.HOUR_OF_DAY, 2);
+					today.set(Calendar.MINUTE, 0);
+					today.set(Calendar.SECOND, 0);
+					timer = new Timer();
+					timer.schedule(new ScheduleTask(dbConnection, this), today.getTime(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)); // period: 1 day
+					
+					btnSchedule.setDisable(false);
 					btnSubmit.setText("Stop service");//update button
 				}
 				else//if it was listen
 				{
 					printlogMsg("Server has finished listening on port:"+port);
+					
+					// cancel the scheduling
+					timer.cancel();
+					
+					btnSchedule.setDisable(true);
 					btnSubmit.setText("Start service");///update button
 				}
 			}
 	}
+	
+	public void logStartSchedule()
+	{
+		printlogMsg("Server start scheduling tasks...");
+	}
+	
+	public void logErrorSchedule(String msgError)
+	{
+		printlogMsg("Schedule task failed: " + msgError);
+	}
+	
+	public void logEndSchedule()
+	{
+		printlogMsg("Server ends scheduling tasks...");
+	}
+	
+	public void onClickForceScheduleButton()
+	{
+		ScheduleThread thread = new ScheduleThread(dbConnection, this);
+		thread.start();
+	}
+	
 	/***
 	 * clear log text area
 	 */
@@ -172,6 +223,9 @@ public class SystemServer extends AbstractServer{
 		arg0.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
+				// cancel the scheduling
+				timer.cancel();
+				
 				System.exit(0);
 			}
 		});
@@ -910,7 +964,7 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 		@Override
 		public String getQuery() {
-		return "SELECT customer.cId,customer.uId,customer.mId FROM customer left outer join  membershipaccount on customer.cId= membershipaccount.cId where uId=?";
+		return "SELECT C.cId, C.uId, M.mId FROM customer C LEFT OUTER JOIN membershipaccount M on C.cId= M.cId WHERE C.uId=?";
 	}
 
 	@Override
@@ -1437,142 +1491,94 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	public void getOrderReportHandler(DbQuery db,Command key)
+	
+	public void getOrderReportHandler(DbQuery db, Command key)
 	{
-		DbGetter dbGetter = new DbGetter(db, key);
-		dbGetter.performAction(new ISelect() {
+		Packet packet = db.getPacket();
+		
+		try
+		{
+			ArrayList<Integer> params = packet.<Integer>convertedResultListForCommand(Command.getOrderReport);
+			int branchId = params.get(0);
+			int year = params.get(1);
+			int quarter = params.get(2);
 			
-			@Override
-			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
-				int brId = (int)packet.getParameterForCommand(key).get(0);
-				int year=(int)packet.getParameterForCommand(key).get(1);
-				int quar =(int)packet.getParameterForCommand(key).get(2);
-				stmt.setInt(1,brId);
-				stmt.setInt(2,year);
-				stmt.setInt(3,quar);
-				
-			}
+			OrderReportGeneration orderReport = new OrderReportGeneration(db, year, quarter);
+			ArrayList<Object> report = orderReport.getReport(branchId);
+			packet.setParametersForCommand(Command.getOrderReport, report);
 			
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return " SELECT pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date',\r\n" + 
-						"						pio.pId as 'product id',st.status, \r\n" + 
-						"						IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
-						"							(SELECT cp.productName FROM catalogproduct cp WHERE cp.pId = p.pId),\r\n" + 
-						"							'Custom Product') as 'Product Name',\r\n" + 
-						"						p.price as 'Price',op.paymentMethod,d.delId as 'Delivery Number',d.Address,d.phone,d.receiver\r\n" + 
-						"						FROM `order` o  INNER JOIN orderpayment op ON op.oId=o.oId\r\n" + 
-						"									    INNER JOIN productinorder pio ON o.oId=pio.oId\r\n" + 
-						"										INNER JOIN product p ON  p.pId = pio.pId\r\n" + 
-						"						                INNER JOIN producttype pt ON pt.typeId=p.typeId\r\n" + 
-						"                                        Inner JOIN `status` st ON st.stId=o.stId\r\n" + 
-						"									    LEFT OUTER JOIN delivery d ON d.oId=o.oId\r\n" + 
-						"						WHERE o.brId=? AND year(o.creationDate)=? AND quarter(o.creationDate)=?\r\n" + 
-						"						ORDER BY pt.description ASC";
-			}
-			
-			@Override
-			public Object createObject(ResultSet rs) throws SQLException {
-				// TODO Auto-generated method stub
-				String productCategory=rs.getString(1);
-				int	orderId=rs.getInt(2);
-				String creationDate=rs.getString(3);
-				int productId=rs.getInt(4);
-				String status=rs.getString(5);
-				String productName=rs.getString(6);
-				double price=rs.getDouble(7);
-				String paymentMethod=rs.getString(8);
-				int deliveryNumber=rs.getInt(9);
-				String address=rs.getString(10);
-				String phone=rs.getString(11);
-				String receiver=rs.getString(12);
-				
-				OrderReport orderReport=new OrderReport(productCategory, orderId, creationDate, productId, productName, price, paymentMethod, deliveryNumber, address, phone, receiver,status);
-				
-				
-				return (Object)orderReport;
-				
-			}
-		});
+		}
+		catch (Exception e)
+		{
+			packet.setExceptionMessage(e.getMessage());
+		}
 	}
 	
-	
-	public void getIncomeReportHandler(DbQuery db,Command key)
+	public void getIncomeReportHandler(DbQuery db, Command key)
 	{
-		DbGetter dbGetter = new DbGetter(db, key);
-		dbGetter.performAction(new ISelect() {
+		Packet packet = db.getPacket();
+		
+		try
+		{
+			ArrayList<Integer> params = packet.<Integer>convertedResultListForCommand(Command.getIncomeReport);
+			int branchId = params.get(0);
+			int year = params.get(1);
+			int quarter = params.get(2);
 			
-			@Override
-			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
-				int brId = (int)packet.getParameterForCommand(key).get(0);
-				int year=(int)packet.getParameterForCommand(key).get(1);
-				int quar =(int)packet.getParameterForCommand(key).get(2);
-				
-				stmt.setInt(1,brId);
-				stmt.setInt(2,year);
-				stmt.setInt(3,quar);
-			}
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return "select b.brId as 'Branch Number' ,b.brName as 'Branch Name',sum(op.amount) as 'Amount' from test.order o , test.orderpayment op,test.branch b   where o.brId=? and year(o.creationDate)=? and o.stId=1 and quarter(o.creationDate)=? and o.oId=op.oId and b.brId=o.brId ";
-			}	
-			@Override
-			public Object createObject(ResultSet rs) throws SQLException {
-				// TODO Auto-generated method stub
-			    IncomeReport incomeReport;
-			    int brId=rs.getInt(1);
-			    String brName=rs.getString(2);
-			    double amount=rs.getDouble(3);
-			    incomeReport=new IncomeReport(brId, brName, amount);		
-				return (Object)incomeReport;
-			}
-		});
-	
+			IncomeReportGeneration orderReport = new IncomeReportGeneration(db, year, quarter);
+			ArrayList<Object> report = orderReport.getReport(branchId);
+			packet.setParametersForCommand(Command.getIncomeReport, report);
+			
+		}
+		catch (Exception e)
+		{
+			packet.setExceptionMessage(e.getMessage());
+		}
 	}
 	
-	public void getComplainsForReportHandler(DbQuery db , Command key)
+	public void getComplainsForReportHandler(DbQuery db, Command key)
 	{
-		DbGetter dbGetter = new DbGetter(db, key);
-		dbGetter.performAction(new ISelect() {
-
-			@Override
-			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
-				int brId = (int)packet.getParameterForCommand(key).get(0);
-				int year =(int)packet.getParameterForCommand(key).get(1);
-				int quar =(int)packet.getParameterForCommand(key).get(2);
-				stmt.setInt(1,brId);
-				stmt.setInt(2, year);
-				stmt.setInt(3, quar);
-				}
-
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return "SELECT * FROM complain where brId=? and YEAR(creationDate)=? and QUARTER(creationDate)=?";
-			}
+		Packet packet = db.getPacket();
+		
+		try
+		{
+			ArrayList<Integer> params = packet.<Integer>convertedResultListForCommand(Command.getComplainsForReport);
+			int branchId = params.get(0);
+			int year = params.get(1);
+			int quarter = params.get(2);
 			
-			@Override
-			public Object createObject(ResultSet rs) throws SQLException {
-				// TODO Auto-generated method stub
-				int complainId = rs.getInt(1);
-				java.sql.Date creationDate = rs.getDate(2);
-				String details = rs.getString(3);
-				String title = rs.getString(4);
-				int customerId = rs.getInt(5);
-				int creatorId = rs.getInt(6);
-				boolean isActive = rs.getBoolean(7);
-				int branchId = rs.getInt(8);
-
-				Complain complain = new Complain(complainId, creationDate, title, details, customerId,creatorId,isActive,branchId);
-				return (Object) complain;
-			}
-		});
+			ComplainsReportGeneration orderReport = new ComplainsReportGeneration(db, year, quarter);
+			ArrayList<Object> report = orderReport.getReport(branchId);
+			packet.setParametersForCommand(Command.getComplainsForReport, report);
+			
+		}
+		catch (Exception e)
+		{
+			packet.setExceptionMessage(e.getMessage());
+		}
 	}
+	
+	public void getSatisfactionReportHandler(DbQuery db, Command key)
+	{
+		Packet packet = db.getPacket();
+		
+		try
+		{
+			ArrayList<Integer> params = packet.<Integer>convertedResultListForCommand(Command.getSatisfactionReport);
+			int branchId = params.get(0);
+			int year = params.get(1);
+			int quarter = params.get(2);
+			
+			SatisfactionReportGeneration orderReport = new SatisfactionReportGeneration(db, year, quarter);
+			ArrayList<Object> report = orderReport.getReport(branchId);
+			packet.setParametersForCommand(Command.getSatisfactionReport, report);
+		}
+		catch (Exception e)
+		{
+			packet.setExceptionMessage(e.getMessage());
+		}
+	}
+	
 	/**
 	 * 
 	 * @param db -Stores database information 
@@ -1865,42 +1871,7 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
-	private void getSatisfactionReportHandler(DbQuery db , Command key)
-	{
-		DbGetter dbGetter = new DbGetter(db, key);
-		dbGetter.performAction(new ISelect() {
-			
-			@Override
-			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
-
-				int brId = (int)packet.getParameterForCommand(Command.getSatisfactionReport).get(0);
-				int year=(int)packet.getParameterForCommand(Command.getSatisfactionReport).get(1);
-				int quar =(int)packet.getParameterForCommand(Command.getSatisfactionReport).get(2);
-				stmt.setInt(1,brId);
-				stmt.setInt(2,year);
-				stmt.setInt(3,quar);
-
-			}
-			
-			@Override
-			public String getQuery() {
-				// TODO Auto-generated method stub
-				return  "SELECT question.question,AVG(answersurvey.answer) as answer \r\n" + 
-						"						FROM surveyquestion , answersurvey , survey , question\r\n" + 
-						"						WHERE survey.surId= surveyquestion.surId and survey.subject='Satisfaction' AND surveyquestion.sqId = answersurvey.sqId and answersurvey.brId=?\r\n" + 
-						"                        and Year(survey.activatedDate)=? \r\n" + 
-						"                        and quarter(survey.activatedDate)=? and question.qId=surveyquestion.qId\r\n" + 
-						"						GROUP BY surveyquestion.sqId;";
-			}
-			
-			@Override
-			public Object createObject(ResultSet rs) throws SQLException {
-				// TODO Auto-generated method stub
-				return new SatisfactionReport(rs.getString(1),rs.getString(2));
-			}
-		});
-	}
+	
 	
 	private void addConclusionHandler(DbQuery db , Command key)
 	{
