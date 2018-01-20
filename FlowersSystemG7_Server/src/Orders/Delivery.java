@@ -48,5 +48,10 @@ public class Delivery implements Serializable {
 		this.receiver = receiver;
 		this.orderId = orderId;
 	}
-	
+	public Delivery(String address, String phone, String receiver) {
+		super();
+		this.address = address;
+		this.phone = phone;
+		this.receiver = receiver;
+	}
 }
