@@ -2278,6 +2278,79 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	
+	private void getMembershipsBycID(DbQuery db, Command key) {
+		DbGetter dbGetter = new DbGetter(db, key);
+		
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				int acNum = (int)packet.getParameterForCommand(key).get(0);
+				stmt.setInt(1, acNum);
+
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "Select membershipaccount.acNum,membershipaccount.mId,membershipaccount.CreationDate from  account inner join MemberShipAccount on account.acNum= membershipaccount.acNum\r\n" + 
+						"where cId=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int acNum=rs.getInt(1);
+				int mId=rs.getInt(2);
+				java.sql.Date creationDate=rs.getDate(3);
+				
+				return (Object) (new MemberShipAccount(acNum, mId, creationDate));
+			}
+		});
+		
+	}
+	private void getAccountbycID(DbQuery db, Command key) {
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountbycID).get(0);
+				stmt.setInt(1, customerCid);
+
+			}
+			
+			@Override
+			public String getQuery() {
+				return "SELECT * FROM account  where account.cId=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				int acNum = rs.getInt(1);
+				int brId =rs.getInt(2);
+				int cId = rs.getInt(3);
+				int balance=rs.getInt(4);
+				String creditCard=rs.getString(5);
+				String statusString=rs.getString(6);
+				AccountStatus status = AccountStatus.Active;
+				
+				Account newacc;
+				if(statusString.equals((AccountStatus.Active).toString()))
+					status= AccountStatus.Active;
+				else if(statusString.equals((AccountStatus.Blocked).toString()))
+					status= AccountStatus.Blocked;
+				else if(statusString.equals((AccountStatus.Closed).toString()))
+					status= AccountStatus.Closed;
+				
+				newacc=new Account(acNum, cId, 0, balance, brId, status, creditCard);
+				return (Object)newacc;
+				
+			}
+		});
+		
+	}
 	// *****
 
 	@Override
@@ -2289,178 +2362,212 @@ public class SystemServer extends AbstractServer{
 			db.connectToDB();
 			for (Command key : packet.getCommands())
 			{
-				if (key.equals(Command.getCatalogProducts)) {
+				switch(key)
+				{
+				case getCatalogProducts:
 					getActiveCatalogProductsHandler(db, key);
-				}
-	
-				else if (key.equals(Command.updateCatalogProduct)) {
+					break;
+				case updateCatalogProduct:
 					updateCatalogProductHandler(db, key);
-				}
-				
-				else if (key.equals(Command.getFlowers)) {
+					break;
+				case getFlowers:
 					getFlowersHandler(db, key);
-				}
-				else if(key.equals(Command.getMemberShip))
+					break;
+				case getMemberShip:
 					getMemberShipHandler(db, key);
-				else if(key.equals(Command.getUsers))
+					break;
+				case getUsers:
 					getUsersHandler(db, key);
-				else if(key.equals(Command.addCustomers))
+					break;
+				case addCustomers:
 					addCustomertHandler(db,key);
-				else if(key.equals(Command.addUsers))
+					break;
+				case addUsers:
 					addUserHandler(db, key);
-				else if(key.equals(Command.getUsersByUserName))
+					break;
+				case getUsersByUserName:
 					getUserByUserNameHandler(db, key);
-				else if(key.equals(Command.addAccounts))
+					break;
+				case addAccounts:
 					addAccountrHandler(db, key);
-				else if(key.equals(Command.getCustomersKeyByuId))
+					break;
+				case getCustomersKeyByuId:
 					getCustomersKeyByuIdHandler(db, key);
-				else if(key.equals(Command.getUserByuId))
+					break;
+				case getUserByuId:
 					getUserByuIdHandler(db, key);
-				else if(key.equals(Command.getAccountbycIDandBranch))
-					getAccountbycIDandBranchHandler(db, key);
-				else if(key.equals(Command.updateUserByuId))
+					break;
+				case getAccountbycIDandBranch:
+					getAccountbycIDandBranchHandler(db, key);;
+					break;
+				case updateUserByuId:
 					updateUserByuIdHandler(db, key);
-				else if(key.equals(Command.updateCustomerByuId))
+					break;
+				case updateCustomerByuId:
 					updateCustomerByuIdHandler(db, key);
-				else if(key.equals(Command.updateAccountsBycId))
-					updateAccountsBycIdHandler(db,key);
-				else if(key.equals(Command.getColors))
+					break;
+				case getColors:
 					getColors(db,key);
-				else if(key.equals(Command.addFlower))
+					break;
+				case addFlower:
 					createFlower(db,key);
-				else if(key.equals(Command.getDiscountsByBranch))
+					break;
+				case getDiscountsByBranch:
 					getDiscounts(db,key);
-				else if (key.equals(Command.updateProduct)) {
+					break;
+				case updateProduct:
 					updateProductHandler(db, key);
-				}
-				else if (key.equals(Command.deleteFlowersInProduct)) {
+					break;
+				case deleteFlowersInProduct:
 					deleteFlowersInProductHandler(db, key);
-				}
-				else if (key.equals(Command.getFlowersInProducts)) {
+					break;
+				case getFlowersInProducts:
 					getFlowersInProductHandler(db, key);
-				}				
-				else if (key.equals(Command.getProductTypes)) {
+					break;
+				case getProductTypes:
 					getProductTypesHandler(db, key);
-				}
-				else if (key.equals(Command.insertCatalogProduct)) {
+					break;
+				case insertCatalogProduct:
 					insertCatalogProductHandler(db, key);
-				}
-				else if (key.equals(Command.updateFlowersInProduct)){
+					break;
+				case updateFlowersInProduct:
 					updateFlowersInProductHandler(db, key);
-				}
-				else if (key.equals(Command.updateCatalogImage)){
+					break;
+				case updateCatalogImage:
 					updateImageInProductHandler(db, key);
-				}
-				else if (key.equals(Command.getCatalogImage)) {
+					break;
+				case getCatalogImage:
 					getCatalogImageHandler(db, key);
-				}
-				else if (key.equals(Command.getBranches)) {
+					break;
+				case getBranches:
 					getBranchesHandler(db, key);
-				}
-				else if (key.equals(Command.getBranchSales)) {
+					break;
+				case getBranchSales:
 					getBranchSalesHandler(db, key);
-				}
-				else if(key.equals(Command.updateComplain)) {
+					break;
+				case updateComplain:
 					updateComplainHandler(db,key);
-				}
-				else if (key.equals(Command.addComplain)) {
+					break;
+				case addComplain:
 					addComplainHandler(db,key);
-				}
-				else if(key.equals(Command.getComplains)) {
+					break;
+				case getComplains:
 					getComplainsHandler(db, key);
-				}
-				else if(key.equals(Command.addReply)) {
+					break;
+				case addReply:
 					addReplyHandler(db,key);
-				}
-				else if(key.equals(Command.addComplainRefund)) {
+					break;
+				case addComplainRefund:
 					addComplainRefundHandler(db,key);
-				}	
-				else if(key.equals(Command.getReplies))
+					break;
+				case getReplies:
 					getRepliesHandler(db,key);
-				else if(key.equals(Command.getRefunds))
+					break;
+				case getRefunds:
 					getRefundsHandler(db,key);
-				else if(key.equals(Command.addSurvey))
+					break;
+				case addSurvey:
 					addSurveyHandler(db, key);
-				else if(key.equals(Command.addQuestions))
+					break;
+				case addQuestions:
 					addQuestionHandler(db,key);
-				else if(key.equals(Command.addQuestionsToServey))
+					break;
+				case addQuestionsToServey:
 					addQuestionsToSurveyHandler(db,key);
-				else if(key.equals(Command.getSurvey))
+					break;
+				case getSurvey:
 					getSurveyHandler(db, key);
-				else if(key.equals(Command.getQuestions))
+					break;
+				case getQuestions:
 					getQuestionsHandler(db, key);
-				else if(key.equals(Command.getSurveyQuestions))
+					break;
+				case getSurveyQuestions:
 					getSurveyQuestionsHandler(db, key);
-				else if(key.equals(Command.addAnswerSurvey))
+					break;
+				case addAnswerSurvey:
 					addAnswerSurveyHandler(db,key);
-				else if(key.equals(Command.getAverageAnswersBySurveyId))
+					break;
+				case getAverageAnswersBySurveyId:
 					getAverageAnswersBySurveyIdHandler(db, key);
-				else if(key.equals(Command.addConclusion))
+					break;
+				case addConclusion:
 					addConclusionHandler(db,key);
-				else if(key.equals(Command.getConclusions))
+					break;
+				case getConclusions:
 					getConclusionsHandler(db, key);
-				else if(key.equals(Command.getMemberShip))
-					getMemberShipHandler(db, key);
-				else if(key.equals(Command.getUsers))
-					getUsersHandler(db, key);
-				else if(key.equals(Command.addCustomers))
-					addCustomertHandler(db,key);
-				else if(key.equals(Command.addUsers))
-					addUserHandler(db, key);
-				else if(key.equals(Command.getUsersByUserName))
-					getUserByUserNameHandler(db, key);
-				else if(key.equals(Command.addAccounts))
-					addAccountrHandler(db, key);
-				else if(key.equals(Command.getCustomersKeyByuId))
-					getCustomersKeyByuIdHandler(db, key);
-				else if(key.equals(Command.getUserByuId))
-					getUserByuIdHandler(db, key);
-				else if(key.equals(Command.updateUserByuId))
-					updateUserByuIdHandler(db, key);
-				else if(key.equals(Command.updateCustomerByuId))
-					updateCustomerByuIdHandler(db, key);
-				else if(key.equals(Command.updateAccountsBycId))
+					break;
+				case updateAccountsBycId:
 					updateAccountsBycIdHandler(db,key);
-				
-				else if(key.equals(Command.setProductAsDeleted))
+					break;
+				case setProductAsDeleted:
 					setProductAsDeletedHandler(db, key);
-				else if(key.equals(Command.getAllCatalogProducts))
+					break;
+				case getAllCatalogProducts:
 					getAllCatalogProductsHandler(db, key);
-				else if (key.equals(Command.addSaleCatalogInBranch))
+					break;
+				case addSaleCatalogInBranch:
 					addSaleCatalogInBranchHandler(db, key);
-				else if(key.equals(Command.deleteSaleCatalogInBranch))
+					break;
+				case deleteSaleCatalogInBranch:
 					deleteSaleCatalogInBranchHandler(db, key);
-				else if(key.equals(Command.getBranchBybrId))
+					break;
+				case getBranchBybrId:
 					getBranchBybrIdHandler(db, key);
-				else if(key.equals(Command.updateSurvey))
+					break;
+				case updateSurvey:
 					updateSurveyHandler(db,key);
-				else if(key.equals(Command.getUserByNameAndPass))
+					break;
+				case getUserByNameAndPass:
 					getUserByNameAndPassHandler(db, key);
-				else if(key.equals(Command.getEmployeeByUid))
+					break;
+				case getEmployeeByUid:
 					getEmployeeByuIdHandler(db, key);
-				else if (key.equals(Command.setUserLoggedInState))
+					break;
+				case setUserLoggedInState:
 					updateUserIsLoggedHandler(db, key);
-				else if(key.equals(Command.getComplainsForReport))
+					break;
+				case getComplainsForReport:
 					getComplainsForReportHandler(db,key);
-				else if(key.equals(Command.getIncomeReport))
+					break;
+				case getIncomeReport:
 					getIncomeReportHandler(db,key);
-				else if(key.equals(Command.CreateCustomProduct))
+					break;
+				case CreateCustomProduct:
 					createCustomProduct(db,key);
-				else if(key.equals(Command.getOrderReport))
+					break;
+				case getOrderReport:
 					getOrderReportHandler(db,key);
-				else if(key.equals(Command.getSatisfactionReport))
+					break;
+				case getSatisfactionReport:
 					getSatisfactionReportHandler(db,key);
-				else if(key.equals(Command.deleteUser))
+					break;
+				case deleteUser:
 					deleteUserHandler(db,key);
-				else if (key.equals(Command.getBranchesIncludeService))
+					break;
+				case getBranchesIncludeService:
 					getBranchesIncludeServiceHandler(db,key);
-				else if (key.equals(Command.addMemberShipAccount))
+					break;
+				case addMemberShipAccount:
 					addMemberShipAccountHandler(db,key);
-				else if(key.equals(Command.updateMemberShipAccountByAcNum))
+					break;
+				case updateMemberShipAccountByAcNum:
 					updateMemberShipAccountByAcNumHandler(db,key);
-				else if(key.equals(Command.getMemberShipAccountByAcNum))
+					break;
+				case getMemberShipAccountByAcNum:
 					getMemberShipAccountByAcNumHandler(db,key);
+					break;
+				case getAccountbycID:
+					getAccountbycID(db,key);
+					break;
+				case getMemberShipAccount:
+					getMembershipsBycID(db,key);
+					break;
+					default:;
+				}
+				
 			}
+			
+			
 
 			db.connectionClose();
 		}
@@ -2477,4 +2584,6 @@ public class SystemServer extends AbstractServer{
 			}
 		}
 	}
+
+
 }

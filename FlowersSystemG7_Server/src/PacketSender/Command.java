@@ -80,5 +80,6 @@ public enum Command implements Serializable
 	getBranchesIncludeService,
 	addMemberShipAccount,
 	updateMemberShipAccountByAcNum,
-	getMemberShipAccountByAcNum
+	getMemberShipAccountByAcNum,
+	getMemberShipAccount
 	}
