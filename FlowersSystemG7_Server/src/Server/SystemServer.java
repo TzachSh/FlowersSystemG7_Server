@@ -2271,11 +2271,11 @@ public class SystemServer extends AbstractServer{
 			
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
-				int acNum=rs.getInt(0);
-				int mId=rs.getInt(1);
+				int acNum=rs.getInt(1);
+				int mId=rs.getInt(2);
 				java.sql.Date creationDate=rs.getDate(3);
-				
-				return (Object) (new MemberShipAccount(acNum, mId, creationDate));
+				MemberShipAccount memacc =new MemberShipAccount(acNum, mId, creationDate);
+				return (Object)memacc;
 			}
 		});
 	}
@@ -2309,6 +2309,48 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 		
+	}
+	private void getAccountByuIdHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountByuId).get(0);
+				stmt.setInt(1, customerCid);
+
+			}
+			
+			@Override
+			public String getQuery() {
+				return "SELECT acNum,brId,account.cId,balance,creditCard,status FROM account inner join customer on customer.cId=account.cId  where customer.uId=?";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				int acNum = rs.getInt(1);
+				int brId =rs.getInt(2);
+				int cId = rs.getInt(3);
+				int balance=rs.getInt(4);
+				String creditCard=rs.getString(5);
+				String statusString=rs.getString(6);
+				AccountStatus status = AccountStatus.Active;
+				
+				Account newacc;
+				if(statusString.equals((AccountStatus.Active).toString()))
+					status= AccountStatus.Active;
+				else if(statusString.equals((AccountStatus.Blocked).toString()))
+					status= AccountStatus.Blocked;
+				else if(statusString.equals((AccountStatus.Closed).toString()))
+					status= AccountStatus.Closed;
+				
+				newacc=new Account(acNum, cId, 0, balance, brId, status, creditCard);
+				return (Object)newacc;
+				
+			}
+		});
 	}
 	private void getAccountbycID(DbQuery db, Command key) {
 		DbGetter dbGet = new DbGetter(db, key);
@@ -2562,6 +2604,9 @@ public class SystemServer extends AbstractServer{
 					break;
 				case getMemberShipAccount:
 					getMembershipsBycID(db,key);
+					break;
+				case getAccountByuId:
+					getAccountByuIdHandler(db,key);
 					break;
 					default:;
 				}
