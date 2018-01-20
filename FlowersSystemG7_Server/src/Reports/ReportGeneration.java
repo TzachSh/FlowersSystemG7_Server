@@ -259,7 +259,7 @@ public abstract class ReportGeneration implements IReport
 	{
 		ArrayList<String[]> csvData = getReportInString(branchId);
 		
-		// convert each column in string array to order report entity
+		// convert each column in string array to relevant report entity
 		ArrayList<Object> report = new ArrayList<>();
 		
 		for (String[] row : csvData)
