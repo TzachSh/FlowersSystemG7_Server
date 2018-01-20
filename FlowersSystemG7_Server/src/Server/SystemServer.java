@@ -655,6 +655,7 @@ public class SystemServer extends AbstractServer{
 				int cId=rs.getInt(4);
 				int stId=rs.getInt(5);
 				int brId=rs.getInt(6);
+				double total = rs.getDouble(7);
 				Order order=new Order();
 				return (Object)order;
 			}

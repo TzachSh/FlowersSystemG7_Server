@@ -17,6 +17,9 @@ public class Order implements Serializable {
 	private ArrayList<ProductInOrder> productInOrderList;
 	private Refund Refund;
 	private Delivery deliery;
+	private int brId;
+	private int stId;
+	private double total;
 	
 	public int getoId() {
 		return id;
@@ -72,5 +75,32 @@ public class Order implements Serializable {
 	public void setDeliery(Delivery deliery) {
 		this.deliery = deliery;
 	}
+	public Order(int id, Date creationDate, Date requestedDate, Customer customer, Status status,
+			OrderPayment orderPayment, ArrayList<ProductInOrder> productInOrderList, Commons.Refund refund,
+			Delivery deliery) {
 
+		this.id = id;
+		this.creationDate = creationDate;
+		this.requestedDate = requestedDate;
+		this.customerId = customerId;
+		this.status = status;
+		this.orderPaymentId = orderPaymentId;
+		this.productInOrderList = productInOrderList;
+		Refund = refund;
+		this.deliery = deliery;
+	}
+	public Order(int id,Date creationDate, Date requestedDate,int cId,int stId,int brId,double total)
+	{
+		this.id=id;
+		this.creationDate=creationDate;
+		this.requestedDate=requestedDate;
+		this.customerId=cId;
+		this.stId=stId;
+		this.brId=brId;
+		this.total=total;
+	}
+	public Order()
+	{
+
+	}
 }
