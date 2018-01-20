@@ -22,6 +22,7 @@ import Branches.IncomeReport;
 import Branches.OrderReport;
 import Branches.Role;
 import Branches.SatisfactionReport;
+import Commons.ProductInOrder;
 import Commons.Refund;
 import Customers.Account;
 import Customers.AccountStatus;
@@ -36,7 +37,9 @@ import Logic.DbQuery;
 import Logic.DbUpdater;
 import Logic.ISelect;
 import Logic.IUpdate;
+import Orders.Delivery;
 import Orders.Order;
+import Orders.OrderPayment;
 import PacketSender.Command;
 import PacketSender.FileSystem;
 import PacketSender.Packet;
@@ -2105,13 +2108,10 @@ public class SystemServer extends AbstractServer{
 	    
 	    	
 	    	// get the new product id
-	    	String queryPid = "SELECT P.pId FROM product P " + 
-	    			"INNER JOIN CatalogProduct C ON P.pId = C.pId " + 
-	    			"WHERE C.productName = ?";
+	    	String queryPid = "select Max(pId) from customproduct";
 	    	
 	    	// set the statements from the implemention
 	    	PreparedStatement stmtPid = con.prepareStatement(queryPid);
-	    	stmtPid.setString(1, pro.getBlessing());
 	    	ResultSet rs = stmtPid.executeQuery();
 			while (rs.next()) {
 				pro.setId(rs.getInt(1));
@@ -2271,11 +2271,11 @@ public class SystemServer extends AbstractServer{
 			
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
-				int acNum=rs.getInt(1);
-				int mId=rs.getInt(2);
+				int acNum=rs.getInt(0);
+				int mId=rs.getInt(1);
 				java.sql.Date creationDate=rs.getDate(3);
-				MemberShipAccount memacc =new MemberShipAccount(acNum, mId, creationDate);
-				return (Object)memacc;
+				
+				return (Object) (new MemberShipAccount(acNum, mId, creationDate));
 			}
 		});
 	}
@@ -2309,6 +2309,64 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 		
+	}
+	private void createOrder(DbQuery db, Command key) {
+		Packet packet = db.getPacket();
+		try {
+			// get all parameters
+			Order order = (Order)packet.getParameterForCommand(Command.createOrder).get(0);
+			ArrayList<ProductInOrder> prodInOrderList = packet.<ProductInOrder>convertedResultListForCommand(Command.createProductsInOrder);
+			ArrayList<OrderPayment> paymentList = packet.<OrderPayment>convertedResultListForCommand(Command.createOrderPayments);
+			Delivery delivery = (Delivery)packet.getParameterForCommand(Command.createDelivery).get(0);
+			// prepare the values string for query
+			String formatSqlProdLines = "";
+			String formatSqlPaymentsLines="";
+			for (int i = 0; i < prodInOrderList.size(); i++)
+			{
+				ProductInOrder proLine = prodInOrderList.get(i);
+				formatSqlProdLines += String.format("(%d,@oId, %d)", proLine.getProductId(),proLine.getQuantity());
+				if (i != prodInOrderList.size() - 1)
+					formatSqlProdLines += ",";
+			}
+			for (int i = 0; i < paymentList.size(); i++)
+			{
+				OrderPayment payment = paymentList.get(i);
+				if(payment.getPaymentDate()!=null)
+					formatSqlPaymentsLines += String.format("INSERT INTO orderpayment (oId,paymentMethod,amount,paymentDate) VALUES "+"(@oId,'%s', %.2f,'%s')", payment.getPaymentMethod(),payment.getAmount(),payment.getPaymentDate());
+				else
+					formatSqlPaymentsLines += String.format("INSERT INTO orderpayment (oId,paymentMethod,amount) VALUES "+"(@oId,'%s', %.2f)", payment.getPaymentMethod(),payment.getAmount());
+				if (i != paymentList.size() - 1)
+					formatSqlPaymentsLines += ";";
+			}
+			
+
+			// create the connection to database
+			db.connectToDB();
+			Connection con = db.getConnection();
+			
+			String query = "INSERT INTO `order` (`creationDate`,`requestedDate`,`cId`,`stId`,`brId`,`Total`) VALUES (curdate(), ?,?,1,?,?); " + 
+	    				"SET @oId = LAST_INSERT_ID(); "  
+	    				 + formatSqlPaymentsLines + ";"+
+	    				"INSERT INTO `test`.`productinorder`(`pId`,`oId`,`quantity`)VALUES" + formatSqlProdLines+";"+
+	    				"INSERT INTO `test`.`delivery`(`Address`,`phone`,`receiver`,`oId`)"
+	    				+ "VALUES('"+delivery.getAddress()+"','"+delivery.getPhone()+"','"+delivery.getReceiver()+"',@oId);"
+	    				;
+	    	
+	 
+	    	// set the statements from the implemention
+	    	PreparedStatement stmt = con.prepareStatement(query);
+	    	stmt.setTimestamp(1, order.getRequestedDate());
+			stmt.setInt(2, order.getCustomerId());
+			stmt.setInt(3, order.getBrId());
+			stmt.setDouble(4, order.getTotal());
+	    	stmt.executeUpdate();
+	    
+			con.close();
+		}
+		catch (Exception e)
+		{
+			packet.setExceptionMessage(e.getMessage());
+		}
 	}
 	private void getAccountByuIdHandler(DbQuery db, Command key)
 	{
@@ -2605,6 +2663,9 @@ public class SystemServer extends AbstractServer{
 				case getMemberShipAccount:
 					getMembershipsBycID(db,key);
 					break;
+				case createOrder:
+					createOrder(db,key);
+					break;
 				case getAccountByuId:
 					getAccountByuIdHandler(db,key);
 					break;
@@ -2630,6 +2691,7 @@ public class SystemServer extends AbstractServer{
 			}
 		}
 	}
+
 
 
 }
