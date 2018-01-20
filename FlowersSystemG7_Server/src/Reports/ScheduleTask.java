@@ -7,7 +7,7 @@ import Server.SystemServer;
 import javafx.application.Platform;
 
 /**
- * ScheduleTask class that runs every night at 2:00 am 
+ * ScheduleTask class that runs every night at 0:00 am 
  *
  */
 public class ScheduleTask extends TimerTask {

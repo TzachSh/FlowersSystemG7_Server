@@ -154,10 +154,10 @@ public class SystemServer extends AbstractServer{
 					password=txtPass.getText();
 					printlogMsg("Server has started listening on port:"+port);//write to log
 					
-					// start scheduling task every night at 2:00 am
+					// start scheduling task every night at 0:00 am
 					dbConnection = new DbQuery(user, password, database);
 					Calendar today = Calendar.getInstance();
-					today.set(Calendar.HOUR_OF_DAY, 2);
+					today.set(Calendar.HOUR_OF_DAY, 0);
 					today.set(Calendar.MINUTE, 0);
 					today.set(Calendar.SECOND, 0);
 					timer = new Timer();
