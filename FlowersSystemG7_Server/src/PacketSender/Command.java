@@ -81,5 +81,9 @@ public enum Command implements Serializable
 	addMemberShipAccount,
 	updateMemberShipAccountByAcNum,
 	getMemberShipAccountByAcNum,
-	getMemberShipAccount
+	getMemberShipAccount,
+	createOrder,
+	createProductsInOrder,
+	createOrderPayments,
+	updateAccountBalance
 	}

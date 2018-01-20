@@ -4,5 +4,6 @@ import java.io.Serializable;
 
 public enum PaymentMethod implements Serializable {
 	Cash,
-	CreditCard
+	CreditCard,
+	BalancePayment
 }

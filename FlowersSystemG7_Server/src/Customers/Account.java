@@ -10,12 +10,20 @@ public class Account implements Serializable {
 	private int customerId;
 	private double balance;
 	private int mId;
+	private Membership memberShip;
 	
 	public int getmId() {
 		return mId;
 	}
 	public void setmId(int mId) {
 		this.mId = mId;
+	}
+
+	public Membership getMemberShip() {
+		return memberShip;
+	}
+	public void setMemberShip(Membership memberShip) {
+		this.memberShip = memberShip;
 	}
 
 	private int branchId;
