@@ -3,11 +3,8 @@ package Server;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class ServerUI extends Application{
+public class ServerUI extends Application {
 
-	
-
-	
 	
 	/**
 	 * initialize the window of the server

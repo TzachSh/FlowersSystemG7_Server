@@ -46,7 +46,7 @@ public class MemberShipDeleting {
 					"						   INNER JOIN account a ON a.acNum = msa.acNum " + 
 					"                           INNER JOIN customer c ON a.cId = c.cId " + 
 					"                           INNER JOIN user u ON u.uId = c.uId " + 
-					"WHERE TIMESTAMPDIFF(MONTH, CreationDate, CURDATE()) >= IF(ms.memberShipType = 'Monthly', 1, 12);";
+					"WHERE TIMESTAMPDIFF(MONTH, msa.CreationDate, CURDATE()) >= IF(msa.mId = 1, 1, 12);";
 					
 			PreparedStatement stmt = con.prepareStatement(qry);
 
@@ -81,22 +81,12 @@ public class MemberShipDeleting {
 	    	db.connectToDB();
 			Connection con = db.getConnection();
 			
-	    	String query = "DROP TEMPORARY TABLE IF EXISTS MemberShipsToDelete; " + 
-	    			"CREATE TEMPORARY TABLE MemberShipsToDelete ( " + 
-	    			"acNum int(6) NOT NULL, " + 
-	    			"mId int(9) NOT NULL " + 
-	    			") ENGINE=MEMORY; " + 
-	    			"INSERT INTO MemberShipsToDelete " + 
-	    			"(SELECT msa.acNum, msa.mId " + 
-	    			"FROM membershipaccount msa INNER JOIN membership ms ON msa.mId = ms.mId " + 
-	    			"WHERE TIMESTAMPDIFF(MONTH, CreationDate, CURDATE()) >= IF(ms.memberShipType = 'Monthly', 1, 12)); " + 
-	    			"DELETE FROM membershipaccount " + 
-	    			"WHERE (acNum, mId) IN (SELECT acNum, mId FROM MemberShipsToDelete);";
+	    	String query = "DELETE FROM membershipaccount\r\n" + 
+	    				   "WHERE TIMESTAMPDIFF(MONTH, CreationDate, CURDATE()) >= IF(mId = 1, 1, 12);";
 	    
 	    	PreparedStatement ps = con.prepareStatement(query);
 	    	ps.executeUpdate();
 	    }
-	    catch (SQLException e) { }
 	    catch (Exception e) { throw e; }
 	    finally {
 	    	db.connectionClose();

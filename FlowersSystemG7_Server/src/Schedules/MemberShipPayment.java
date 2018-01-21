@@ -48,7 +48,7 @@ public class MemberShipPayment {
 					"FROM `order` o INNER JOIN customer c ON c.cId = o.cId " + 
 					"			   INNER JOIN user u ON u.uId = c.uId " + 
 					"			   INNER JOIN orderpayment op ON op.oId = o.oId " + 
-					"WHERE year(o.creationDate) = ? AND month(o.creationDate) = ? AND o.stId = 2 " + 
+					"WHERE year(o.creationDate) = ? AND month(o.creationDate) = ? AND op.paymentDate IS NULL " + 
 					"GROUP BY c.uId";
 					
 			PreparedStatement stmt = con.prepareStatement(qry);
@@ -88,12 +88,10 @@ public class MemberShipPayment {
 			
 
 	    	String query =  "SET @creationYear = ?; " + 
-	    					"SET @creationMonth = ?; " + 
-			    			"UPDATE orderpayment op SET op.paymentDate = CURDATE() " + 
-			    			"WHERE op.oId IN (SELECT oId FROM `order` o " + 
-			    			"			     WHERE  year(o.creationDate) = @creationYear AND month(o.creationDate) = @creationMonth AND o.stId = 2); " + 
-			    			"UPDATE `order` o SET o.stId = 1 " + 
-			    			"WHERE year(o.creationDate) = @creationYear AND month(o.creationDate) = @creationMonth AND o.stId = 2;";
+			    			"SET @creationMonth = ?; " + 
+			    			"UPDATE orderpayment op INNER JOIN `order` o ON op.oId = o.oId " + 
+			    			"SET op.paymentDate = CURDATE() " + 
+			    			"WHERE year(o.creationDate) = @creationYear AND month(o.creationDate) = @creationMonth AND op.paymentDate IS NULL;";
 	    
 	    	PreparedStatement stmt = con.prepareStatement(query);
 	    	stmt.setInt(1, year);
