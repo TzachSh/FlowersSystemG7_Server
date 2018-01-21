@@ -89,5 +89,6 @@ public enum Command implements Serializable
 	getAccountByuId,
 	createDelivery,
 	getOrdersByCIdandBrId, 
-	getOrderDetails
+	getOrderPaymentDetails,
+	getOrderInProducts
 	}
