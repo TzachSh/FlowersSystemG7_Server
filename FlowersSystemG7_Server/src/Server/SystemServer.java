@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -2308,7 +2309,50 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	private void getOrderByCIdandBrId(DbQuery db , Command key) {
+		DbGetter dbGetter = new DbGetter(db, key);
+		Packet pack =db.getPacket();
+		Account account = (Account) pack.getParameterForCommand(key).get(0);
+		int brId = account.getBranchId();
+		int cId = account.getCustomerId();
+		dbGetter.performAction(new ISelect() {
+			/***
+			 * Initialize statements for the Selection query
+			 */
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				
+				stmt.setInt(1, cId);
+				stmt.setInt(2, brId);
+				
+			}
+			/***
+			 * Initialize the query of the survey conclusion getting 
+			 */
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT oId,creationDate,requestedDate,stId,total FROM test.`order` where cId=? and brId=?;";
+			}
+			/***
+			 * Parsing the result set in to a SurveyConclusion object
+			 */
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				//new Order(id, creationDate, requestedDate, cId, stId, brId, total)
+				int id = rs.getInt(1);
+				java.sql.Date creation = rs.getDate(2);
+				Timestamp requested = rs.getTimestamp(3);
+				int cId = account.getCustomerId();
+				int stId = rs.getInt(4);
+				int brId=account.getBranchId();
+				double total = rs.getDouble(5);
+				
+				return new Order(id, creation, requested, cId, stId, brId, total);
+			}
+		});
+	}
 	/***
 	 * Handle get refunds
 	 * @param db - database information
@@ -2656,6 +2700,10 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
+	private void getOrderDetails(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -2872,6 +2920,11 @@ public class SystemServer extends AbstractServer{
 				case getAccountByuId:
 					getAccountByuIdHandler(db,key);
 					break;
+				case getOrdersByCIdandBrId:
+					getOrderByCIdandBrId(db, key);
+					break;
+				case getOrderDetails:
+					getOrderDetails(db,key);
 					default:;
 				}
 				
@@ -2894,6 +2947,8 @@ public class SystemServer extends AbstractServer{
 			}
 		}
 	}
+
+
 
 
 
