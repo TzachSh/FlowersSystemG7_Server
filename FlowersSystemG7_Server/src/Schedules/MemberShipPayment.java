@@ -87,12 +87,13 @@ public class MemberShipPayment {
 			Connection con = db.getConnection();
 			
 
-	    	String query = "SET @creationMonth = ?; " + 
+	    	String query =  "SET @creationYear = ?; " + 
+	    					"SET @creationMonth = ?; " + 
 			    			"UPDATE orderpayment op SET op.paymentDate = CURDATE() " + 
 			    			"WHERE op.oId IN (SELECT oId FROM `order` o " + 
-			    			"			     WHERE month(o.creationDate) = @creationMonth AND o.stId = 2); " + 
+			    			"			     WHERE  year(o.creationDate) = @creationYear AND month(o.creationDate) = @creationMonth AND o.stId = 2); " + 
 			    			"UPDATE `order` o SET o.stId = 1 " + 
-			    			"WHERE year(o.creationDate) = ? AND month(o.creationDate) = @creationMonth AND o.stId = 2;";
+			    			"WHERE year(o.creationDate) = @creationYear AND month(o.creationDate) = @creationMonth AND o.stId = 2;";
 	    
 	    	PreparedStatement stmt = con.prepareStatement(query);
 	    	stmt.setInt(1, year);
