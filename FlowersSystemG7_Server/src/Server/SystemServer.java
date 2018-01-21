@@ -18,10 +18,7 @@ import javax.swing.JOptionPane;
 
 import Branches.Branch;
 import Branches.Employee;
-import Branches.IncomeReport;
-import Branches.OrderReport;
 import Branches.Role;
-import Branches.SatisfactionReport;
 import Commons.ProductInOrder;
 import Commons.Refund;
 import Customers.Account;
@@ -66,7 +63,6 @@ import Survey.SurveyConclusion;
 import Survey.SurveyQuestion;
 import Users.Permission;
 import Users.User;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
