@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Paths;
 
 import javafx.scene.image.Image;
 
@@ -83,7 +84,7 @@ public class FileSystem implements Serializable {
 		}
 		catch (FileNotFoundException e)
 		{
-			newFile = new File(dir + "/blank.png");
+			newFile = new File(Paths.get(dir, "blank.png").toString());
 		}
 		finally
 		{

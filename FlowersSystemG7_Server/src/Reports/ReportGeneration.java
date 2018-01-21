@@ -122,8 +122,8 @@ public abstract class ReportGeneration implements IReport
 				
 			    // generate absolute path for the csv file
 				Branch matchedBranch = getBranchByBranchId(branchId);
-				    
-				String absolutePath = String.format("Reports/%s/%s/%s/%s.csv", 
+
+				String absolutePath = String.format("Reports\\%s\\%s\\%s\\%s.csv", 
 				    matchedBranch.getName(), year, quarter, this);
 				    
 				// create and write the csv file based on the collection data
