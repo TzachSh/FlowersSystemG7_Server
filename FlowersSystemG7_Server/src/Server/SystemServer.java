@@ -2279,8 +2279,8 @@ public class SystemServer extends AbstractServer{
 			
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
-				int acNum=rs.getInt(0);
-				int mId=rs.getInt(1);
+				int acNum=rs.getInt(1);
+				int mId=rs.getInt(2);
 				java.sql.Date creationDate=rs.getDate(3);
 				MemberShipAccount memacc=new MemberShipAccount(acNum, mId, creationDate);
 				return (Object) memacc;
