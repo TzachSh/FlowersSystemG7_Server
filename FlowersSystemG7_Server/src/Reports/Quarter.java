@@ -1,6 +1,7 @@
 package Reports;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * This class stores the quarter details
@@ -40,6 +41,20 @@ public class Quarter {
 		int lastQuarter = (calculatedLastQuarter > 0) ? calculatedLastQuarter : 4;
 
 		return new Quarter(lastQuarter, lastQuarterYear);
+	}
+	
+	public static Date getFirstDayOfQuarter() {
+	    Calendar cal = Calendar.getInstance();
+	    cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)/3 * 3);
+	    cal.set(Calendar.DAY_OF_MONTH, 1);
+	    return cal.getTime();
+	}
+
+	public static Date getLastDayOfQuarter() {
+	    Calendar cal = Calendar.getInstance();
+	    cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)/3 * 3 + 2);
+	    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+	    return cal.getTime();
 	}
 
 }

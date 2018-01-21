@@ -56,8 +56,9 @@ import Reports.IncomeReportGeneration;
 import Reports.OrderReportGeneration;
 import Reports.ReportGeneration;
 import Reports.SatisfactionReportGeneration;
-import Reports.ScheduleTask;
-import Reports.ScheduleThread;
+import Schedules.ScheduleTask;
+import Schedules.ScheduleThread;
+import Schedules.ScheduleThread.ThreadType;
 import Survey.AnswerSurvey;
 import Survey.Question;
 import Survey.Survey;
@@ -73,6 +74,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -99,7 +102,13 @@ public class SystemServer extends AbstractServer{
 	private static final int DEFAULT_PORT = 5555;
 	private DbQuery dbConnection;
     @FXML
-    private Button btnSchedule;
+    private MenuButton btnSchedule;  
+    @FXML
+    private MenuItem btnCharging;
+    @FXML
+    private MenuItem btnReport;
+    @FXML
+    private MenuItem btnDelete;
 	@FXML
 	private TextField txtPort;
 	@FXML
@@ -124,7 +133,7 @@ public class SystemServer extends AbstractServer{
 	 * 
 	 * @param msg log message to see the information
 	 */
-	private void printlogMsg(String msg)
+	public void printlogMsg(String msg)
 	{
 		String time=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());//get datetime for log print
 		txtLog.setText(time+"---"+msg+"\n\r"+txtLog.getText());
@@ -184,24 +193,27 @@ public class SystemServer extends AbstractServer{
 			}
 	}
 	
-	public void logStartSchedule()
-	{
-		printlogMsg("Server start scheduling tasks...");
-	}
 	
 	public void logErrorSchedule(String msgError)
 	{
-		printlogMsg("Schedule task failed: " + msgError);
+		printlogMsg("Failed: " + msgError);
 	}
 	
-	public void logEndSchedule()
+	public void onClickForceReportsButton()
 	{
-		printlogMsg("Server ends scheduling tasks...");
+		ScheduleThread thread = new ScheduleThread(dbConnection, this, ThreadType.Reports);
+		thread.start();
 	}
 	
-	public void onClickForceScheduleButton()
+	public void onClickForceChargingButton()
 	{
-		ScheduleThread thread = new ScheduleThread(dbConnection, this);
+		ScheduleThread thread = new ScheduleThread(dbConnection, this, ThreadType.Paying);
+		thread.start();
+	}
+	
+	public void onClickForceDeletingButton()
+	{
+		ScheduleThread thread = new ScheduleThread(dbConnection, this, ThreadType.DeleteMemberships);
 		thread.start();
 	}
 	
