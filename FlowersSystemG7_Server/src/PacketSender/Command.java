@@ -90,5 +90,8 @@ public enum Command implements Serializable
 	createDelivery,
 	getOrdersByCIdandBrId, 
 	getOrderPaymentDetails,
-	getOrderInProducts
+	getOrderInProductsDetails,
+	getAllProductsInOrder,
+	getFlowersInProductInOrder,
+	getAllFlowersInOrder
 	}

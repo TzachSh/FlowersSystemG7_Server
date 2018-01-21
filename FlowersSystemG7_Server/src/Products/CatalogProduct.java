@@ -22,6 +22,11 @@ public class CatalogProduct extends Product implements Serializable {
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
+	public CatalogProduct(double price,int typeId,String prodName,int pId)
+	{
+		super(price,typeId,pId);
+		this.name=prodName;
+	}
 	public CatalogProduct(int id, int catPid, int productTypeId, double price, ArrayList<FlowerInProduct> flowerInProductList,
 			ArrayList<ProductInOrder> productInOrderList, String name, String imgUrl) {
 		

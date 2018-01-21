@@ -21,5 +21,7 @@ public class CustomProduct extends Product implements Serializable {
 		super(id, productTypeId, price, flowerInProductList, productInOrderList);
 		this.blessing = blessing;
 	}
-
+	public CustomProduct(double price,int typeId,int pId) {
+		super(price,typeId,pId);
+	}
 }

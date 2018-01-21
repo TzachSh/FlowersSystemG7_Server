@@ -61,6 +61,7 @@ public class Product implements Serializable {
 	{
 		
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,5 +83,10 @@ public class Product implements Serializable {
 		return true;
 	}
 	
-	
+	public Product(double price,int typeId,int pId)
+	{
+		this.id=pId;
+		this.price=price;
+		this.productTypeId=typeId;
+	}
 }

@@ -38,6 +38,7 @@ import Logic.IUpdate;
 import Orders.Delivery;
 import Orders.Order;
 import Orders.OrderPayment;
+import Orders.PaymentMethod;
 import PacketSender.Command;
 import PacketSender.FileSystem;
 import PacketSender.Packet;
@@ -2389,6 +2390,54 @@ public class SystemServer extends AbstractServer{
 			}
 		});	
 	}
+	private void getProductsInOrder(DbQuery db, Command key) throws Exception {
+		db.getPacket().addCommand(Command.getAllProductsInOrder);
+		Packet packet = db.getPacket();
+		ArrayList<ProductInOrder> prodLine = packet.<ProductInOrder>convertedResultListForCommand(Command.getOrderInProductsDetails);
+		String valuesIn = new String("(");
+		int i;
+		for(i = 0 ; i < prodLine.size()-1;i++)
+		{
+			valuesIn+=prodLine.get(i).getProductId()+",";
+		}
+		valuesIn+=prodLine.get(i).getProductId()+")";
+		
+		String query = "select productName,price,typeId,product.pId \r\n" + 
+		"from product inner join catalogproduct \r\n" + 
+		"	on product.pId= catalogproduct.pId \r\n" + 
+		"where product.pId in "+valuesIn+"\r\n" + 
+		"union\r\n" + 
+		"select 'custom product' as productName,price,typeId,product.pId \r\n" + 
+		"from product inner join customproduct\r\n" + 
+		"	on product.pId= customproduct.pId \r\n" + 
+		"where product.pId in "+valuesIn+";";
+		// get the new product id
+			db.connectToDB();
+			Connection con = db.getConnection();
+	    	// set the statements from the implemention
+	    	PreparedStatement stmtPid;
+			
+			stmtPid = con.prepareStatement(query);
+		
+	    	ResultSet rs = stmtPid.executeQuery();
+	    	ArrayList<Object> prodList = new ArrayList<>();
+			while (rs.next()) {
+				String prodName = rs.getString(1);
+				double price = rs.getDouble(2);
+				int typeId = rs.getInt(3);
+				int pId = rs.getInt(4);
+				if(prodName.equals("custom"))
+					prodList.add(new CustomProduct(price,typeId,pId));
+				else
+					prodList.add(new CatalogProduct(price,typeId,prodName,pId));
+			}
+	    	
+			con.close();
+			packet.setParametersForCommand(Command.getAllProductsInOrder, prodList);
+			packet.addCommand(Command.getFlowersInProductInOrder);
+			packet.setParametersForCommand(Command.getFlowersInProductInOrder, prodList);
+			
+	}
 	/***
 	 * Handle getting all of the replies 
 	 * @param db - database information
@@ -2700,11 +2749,139 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
-	private void getOrderDetails(DbQuery db, Command key) {
-		// TODO Auto-generated method stub
+	private void getFlowerInProductInOrder(DbQuery db, Command key) throws Exception {
+		Packet packet = db.getPacket();
+		ArrayList<Product> prodLine = packet.<Product>convertedResultListForCommand(Command.getFlowersInProductInOrder);
+		String valuesIn = new String("(");
+		int i;
+		for(i = 0 ; i < prodLine.size()-1;i++)
+		{
+			valuesIn+=prodLine.get(i).getId()+",";
+		}
+		valuesIn+=prodLine.get(i).getId()+")";
+		String query = "Select * from flowerInProduct where pId in "+valuesIn+";";
+		// get the new product id
+			db.connectToDB();
+			Connection con = db.getConnection();
+	    	// set the statements from the implemention
+	    	PreparedStatement stmtPid;
+			
+			stmtPid = con.prepareStatement(query);
+		
+	    	ResultSet rs = stmtPid.executeQuery();
+	    	ArrayList<Object> floInProd = new ArrayList<>();
+			while (rs.next()) {
+				int pId = rs.getInt(1);
+				int fId = rs.getInt(2);
+				int quantity = rs.getInt(3);
+				floInProd.add(new FlowerInProduct(pId,fId,quantity));
+			}
+	    	
+			con.close();
+			packet.setParametersForCommand(Command.getFlowersInProductInOrder, floInProd);
+			packet.addCommand(Command.getAllFlowersInOrder);
+			packet.setParametersForCommand(Command.getAllFlowersInOrder, floInProd);
+	}
+	private void getAllFlowersFromOrder(DbQuery db, Command key) throws Exception {
+		Packet packet = db.getPacket();
+		ArrayList<FlowerInProduct> prodLine = packet.<FlowerInProduct>convertedResultListForCommand(Command.getAllFlowersInOrder);
+		String valuesIn = new String("(");
+		int i;
+		for(i = 0 ; i < prodLine.size()-1;i++)
+		{
+			valuesIn+=prodLine.get(i).getFlowerId()+",";
+		}
+		valuesIn+=prodLine.get(i).getFlowerId()+")";
+		String query = "Select * from flower where fId in "+valuesIn+";";
+		// get the new product id
+			db.connectToDB();
+			Connection con = db.getConnection();
+	    	// set the statements from the implemention
+	    	PreparedStatement stmtPid;
+			
+			stmtPid = con.prepareStatement(query);
+		
+	    	ResultSet rs = stmtPid.executeQuery();
+	    	ArrayList<Object> floList = new ArrayList<>();
+			while (rs.next()) {
+				int fId = rs.getInt(1);
+				String flower = rs.getString(2);
+				floList.add(new Flower(fId,flower));
+			}
+	    	
+			con.close();
+			packet.setParametersForCommand(Command.getAllFlowersInOrder, floList);
+	}
+	private void getOrderPaymentsDetails(DbQuery db, Command key) {
+		DbGetter dbGetter = new DbGetter(db, key);
+		Packet pack =db.getPacket();
+		int oId = (Integer) pack.getParameterForCommand(key).get(0);
+		dbGetter.performAction(new ISelect() {
+			/***
+			 * Initialize statements for the Selection query
+			 */
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				
+				stmt.setInt(1, oId);				
+			}
+			/***
+			 * Initialize the query of the survey conclusion getting 
+			 */
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT pId,paymentMethod,amount,paymentDate FROM test.orderpayment where  oId=?;";
+			}
+			/***
+			 * Parsing the result set in to a SurveyConclusion object
+			 */
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int pId = rs.getInt(1);
+				String method = rs.getString(2);
+				double amount = rs.getDouble(3);
+				java.sql.Date date = rs.getDate(4);
+
+				return new OrderPayment(pId, oId, PaymentMethod.valueOf(method), amount, date);
+			}
+		});
 		
 	}
+	private void getOrderProductsDetails(DbQuery db, Command key) {
+		DbGetter dbGetter = new DbGetter(db, key);
+		Packet packet =db.getPacket();
+		int oId = (Integer) packet.getParameterForCommand(key).get(0);
+		dbGetter.performAction(new ISelect() {
+			/***
+			 * Initialize statements for the Selection query
+			 */
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				
+				stmt.setInt(1, oId);
+			}
+			/***
+			 * Initialize the query of the survey conclusion getting 
+			 */
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT pId,quantity FROM test.productinorder where  oId=?;";
+			}
+			/***
+			 * Parsing the result set in to a SurveyConclusion object
+			 */
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int pId = rs.getInt(1);
+				int quantity = rs.getInt(1);
 
+				return new ProductInOrder(oId, pId, quantity);
+			}
+		});
+			
+	}
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
@@ -2923,8 +3100,16 @@ public class SystemServer extends AbstractServer{
 				case getOrdersByCIdandBrId:
 					getOrderByCIdandBrId(db, key);
 					break;
-				case getOrderDetails:
-					getOrderDetails(db,key);
+				case getOrderPaymentDetails:
+					getOrderPaymentsDetails(db,key);
+					break;
+				case getOrderInProductsDetails:
+					getOrderProductsDetails(db,key);
+					getProductsInOrder(db,key);
+					getFlowerInProductInOrder(db,Command.getFlowersInProductInOrder);
+					getAllFlowersFromOrder(db, Command.getFlowersInProducts);
+					break;
+
 					default:;
 				}
 				
@@ -2947,6 +3132,10 @@ public class SystemServer extends AbstractServer{
 			}
 		}
 	}
+
+
+
+
 
 
 

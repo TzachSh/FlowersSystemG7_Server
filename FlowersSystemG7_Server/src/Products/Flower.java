@@ -55,6 +55,10 @@ public class Flower implements Serializable {
 	public Flower(String name, double price, int color) {
 		this(0, name, price, color);
 	}
+	public Flower(int fId,String name ) {
+		this.id = fId;
+		this.name = name;
+	}
 	
 	@Override
 	public String toString() {
