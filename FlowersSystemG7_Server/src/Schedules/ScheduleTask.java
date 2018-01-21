@@ -98,14 +98,13 @@ public class ScheduleTask extends TimerTask {
 		// or flag for first month is off
 		if (!onlyOnFirstMonth || MemberShipPayment.isFirstDayofMonth(currentDate))
 		{
-			sysServer.printlogMsg("Finding Memberships for Charging...");
-			
 			// calc the last month
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, -1);
 			int year = cal.get(Calendar.YEAR);
 			int month = cal.get(Calendar.MONTH) + 1;
-	
+			
+			sysServer.printlogMsg(String.format("Finding Memberships for Charging [Year: %d, Month: %d]", year, month));
 			MemberShipPayment mp = new MemberShipPayment(db, year, month);
 			try
 			{
@@ -139,11 +138,12 @@ public class ScheduleTask extends TimerTask {
 		Calendar currentDate = Calendar.getInstance();
 		if (!onlyOnFirstQuarter || Quarter.getFirstDayOfQuarter().equals(currentDate.getTime()))
 		{
-			sysServer.printlogMsg("Starting Reports Generation...");
 			// calc the last quarter details
 			Quarter lastQuarter = Quarter.getLastQuarter();
 			int year = lastQuarter.getYear();
 			int quarter = lastQuarter.getQuarter();
+			
+			sysServer.printlogMsg(String.format("Starting Reports Generation [Year: %d, Quarter: %d]", year, quarter));
 			
 			OrderReportGeneration orderReport = new OrderReportGeneration(db, year, quarter);
 			IncomeReportGeneration incomeReport = new IncomeReportGeneration(db, year, quarter);
