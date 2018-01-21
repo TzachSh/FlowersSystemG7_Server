@@ -2282,8 +2282,8 @@ public class SystemServer extends AbstractServer{
 				int acNum=rs.getInt(0);
 				int mId=rs.getInt(1);
 				java.sql.Date creationDate=rs.getDate(3);
-				
-				return (Object) (new MemberShipAccount(acNum, mId, creationDate));
+				MemberShipAccount memacc=new MemberShipAccount(acNum, mId, creationDate);
+				return (Object) memacc;
 			}
 		});
 	}
