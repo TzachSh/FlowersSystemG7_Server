@@ -71,9 +71,7 @@ public class MemberShipPayment {
 		}
 		
 		return accounts;
-	}
-	
-	
+	}	
 	
 	/**
 	 * Update database for charging each membership account that not payed yet for instance month

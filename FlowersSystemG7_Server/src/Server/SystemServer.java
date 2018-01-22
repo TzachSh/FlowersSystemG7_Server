@@ -1575,7 +1575,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
 				// TODO Auto-generated method stub
-				stmt.setDate(1, obj.getCreationDate());
+				stmt.setTimestamp(1, obj.getCreationDate());
 				stmt.setString(2, obj.getDetails());
 				stmt.setString(3, obj.getTitle());
 				stmt.setInt(4, obj.getCustomerId());
@@ -1632,7 +1632,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
 				// TODO Auto-generated method stub
-				stmt.setDate(1,obj.getCreationDate());
+				stmt.setTimestamp(1,obj.getCreationDate());
 				stmt.setString(2, obj.getDetails());
 				stmt.setString(3, obj.getTitle());
 				stmt.setInt(4, obj.getCustomerId());
@@ -1835,7 +1835,7 @@ public class SystemServer extends AbstractServer{
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
 				int complainId = rs.getInt(1);
-				java.sql.Date creationDate = rs.getDate(2);
+				java.sql.Timestamp creationDate = rs.getTimestamp(2);
 				String details = rs.getString(3);
 				String title = rs.getString(4);
 				int customerId = rs.getInt(5);

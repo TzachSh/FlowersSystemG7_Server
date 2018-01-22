@@ -2,6 +2,7 @@ package Customers;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import Branches.CustomerService;
 import Commons.IRefundAble;
@@ -12,13 +13,13 @@ import Commons.Refund;
  * Complain entity class
  *
  */
-public class Complain implements IRefundAble, Serializable {
+public class Complain implements IRefundAble,Comparable<Complain>, Serializable {
 	
 	/***
 	 * Instance members
 	 */
 	private int id;
-	private Date creationDate;
+	private Timestamp creationDate;
 	private String title;
 	private String details;
 	private int customerId;
@@ -61,7 +62,7 @@ public class Complain implements IRefundAble, Serializable {
 	 * 
 	 * @return creation date
 	 */
-	public Date getCreationDate() {
+	public Timestamp getCreationDate() {
 		return creationDate;
 	}
 
@@ -69,7 +70,7 @@ public class Complain implements IRefundAble, Serializable {
 	 * 
 	 * @param creationDate - set a creation date
 	 */
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -149,7 +150,7 @@ public class Complain implements IRefundAble, Serializable {
 	 * 
 	 * for Client side use
 	 */
-	public Complain(Date creationDate, String title, String details, int customerId,
+	public Complain(Timestamp creationDate, String title, String details, int customerId,
 			int customerServiceId,boolean isActive,int branchId) {
 		super();
 		this.creationDate = creationDate;
@@ -174,7 +175,7 @@ public class Complain implements IRefundAble, Serializable {
 	 * 
 	 * for server side use
 	 */
-	public Complain(int id, Date creationDate, String title, String details, int customerId,
+	public Complain(int id, Timestamp creationDate, String title, String details, int customerId,
 			int customerServiceId,boolean isActive,int branchId) {
 		super();
 		this.id = id;
@@ -200,5 +201,14 @@ public class Complain implements IRefundAble, Serializable {
 	 */
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	/***
+	 * Comparator to compare the creation date time between two complains 
+	 */
+	@Override
+	public int compareTo(Complain complain) {
+		// TODO Auto-generated method stub
+		 return getCreationDate().compareTo(complain.getCreationDate());
 	}
 }

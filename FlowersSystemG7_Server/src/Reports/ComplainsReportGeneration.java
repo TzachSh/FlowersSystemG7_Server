@@ -21,7 +21,7 @@ public class ComplainsReportGeneration extends ReportGeneration {
 	@Override
 	public Object createObject(String[] row) {
 		int complainId = Integer.valueOf(row[0]);
-		java.sql.Date creationDate = java.sql.Date.valueOf(row[1]);
+		java.sql.Timestamp creationDate = java.sql.Timestamp.valueOf(row[1]);
 		String details = row[2];
 		String title = row[3];
 		int customerId = Integer.valueOf(row[4]);
