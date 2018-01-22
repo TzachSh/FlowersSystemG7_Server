@@ -13,7 +13,7 @@ public class SatisfactionReportGeneration extends ReportGeneration {
 	}
 
 	@Override
-	public String getQueryReport(int branchId) {
+	public String getQueryReport() {
 		return "SELECT question.question,AVG(answersurvey.answer) as answer " + 
 				"						FROM surveyquestion , answersurvey , survey , question " + 
 				"						WHERE survey.surId= surveyquestion.surId and survey.subject='Satisfaction' AND surveyquestion.sqId = answersurvey.sqId and answersurvey.brId=? " + 

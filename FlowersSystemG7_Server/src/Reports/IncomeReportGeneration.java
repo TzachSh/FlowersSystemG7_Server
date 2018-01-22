@@ -14,7 +14,7 @@ public class IncomeReportGeneration extends ReportGeneration {
 		}
 
 		@Override
-		public String getQueryReport(int branchId) {
+		public String getQueryReport() {
 			return "SELECT b.brId as 'Branch Number' ,b.brName as 'Branch Name',SUM(op.amount) as 'Amount' "
 				  + "FROM `order` o, orderpayment op, branch b "
 				  + "WHERE o.brId=? AND year(o.creationDate)=? AND o.stId=1 AND quarter(o.creationDate)=? AND o.oId=op.oId AND b.brId=o.brId ";

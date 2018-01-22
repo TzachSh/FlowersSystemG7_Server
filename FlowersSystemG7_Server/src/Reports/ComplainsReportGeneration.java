@@ -13,7 +13,7 @@ public class ComplainsReportGeneration extends ReportGeneration {
 	}
 
 	@Override
-	public String getQueryReport(int branchId) {
+	public String getQueryReport() {
 		return "SELECT * FROM complain " +
 			   "WHERE brId=? and YEAR(creationDate)=? and QUARTER(creationDate)=?";
 	}

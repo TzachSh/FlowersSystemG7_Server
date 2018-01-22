@@ -288,7 +288,7 @@ public abstract class ReportGeneration implements IReport
 			Connection con = db.getConnection();
 						
 			// query for get all orders in the quarter
-			String qry = getQueryReport(branchId);
+			String qry = getQueryReport();
 					
 			PreparedStatement stmt = con.prepareStatement(qry);
 			stmt.setInt(1,branchId);

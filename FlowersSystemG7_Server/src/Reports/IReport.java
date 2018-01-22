@@ -18,9 +18,8 @@ package Reports;
 	 * }
 	 * </pre>
  	 *  
- 	 * @param branchId The branch id to perform the query
  	 */
- 	String getQueryReport(int branchId);
+ 	String getQueryReport();
  	
  	/**
  	 * Create and return concrete object based on the row

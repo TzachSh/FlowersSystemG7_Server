@@ -15,7 +15,7 @@ public class OrderReportGeneration extends ReportGeneration {
 	}
 
 	@Override
-	public String getQueryReport(int branchId) {
+	public String getQueryReport() {
 		return " SELECT pt.description as 'Product Category', o.oId as 'Order Id',o.creationDate as 'Creation Date', " + 
 				"						pio.pId as 'product id',st.status,  " + 
 				"						IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId), " + 
