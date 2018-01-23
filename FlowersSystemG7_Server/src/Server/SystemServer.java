@@ -555,7 +555,29 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/**
+	 * this function delete membership from specific account
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
+	public void deleteMemberShipAccountByacNumHandler(DbQuery db,  Command key)
+	{
+		DbUpdater<MemberShipAccount> dbUpdate = new DbUpdater<>(db, key);
+		dbUpdate.performAction(new IUpdate<MemberShipAccount>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, MemberShipAccount obj) throws SQLException {
+				stmt.setInt(1, obj.getAcNum());
+
+			}
+			
+			@Override
+			public String getQuery() {
+				return "delete from membershipaccount where membershipaccount.acNum=?; ";			
+				}
+		});
+		
+	}
 	public void getCatalogImageHandler(DbQuery db,  Command key)
 	{
 		DbGetter dbGet = new DbGetter(db, key);
@@ -3108,6 +3130,9 @@ public class SystemServer extends AbstractServer{
 					getProductsInOrder(db,key);
 					getFlowerInProductInOrder(db,Command.getFlowersInProductInOrder);
 					getAllFlowersFromOrder(db, Command.getFlowersInProducts);
+					break;
+				case deleteMemberShipAccountByacNum:
+					deleteMemberShipAccountByacNumHandler(db,key);
 					break;
 
 					default:;

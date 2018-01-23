@@ -20,6 +20,15 @@ public class MemberShipAccount implements Serializable{
 		this.creationDate = creationDate;
 	}
 	/**
+	 * membership account constructor
+	 * @param acNum account number
+	 */
+	public MemberShipAccount(int acNum) {
+		super();
+		this.acNum = acNum;
+
+	}
+	/**
 	 * 
 	 * @return account number
 	 */
