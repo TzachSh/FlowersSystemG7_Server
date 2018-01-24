@@ -1466,9 +1466,7 @@ public class SystemServer extends AbstractServer{
 		MembershipType memtype;
 		Membership newmemship;
 	
-		if(memship.equals((MembershipType.Normal).toString()))
-		memtype= MembershipType.Normal;
-		else if(memship.equals((MembershipType.Monthly).toString()))
+	   if(memship.equals((MembershipType.Monthly).toString()))
 		memtype= MembershipType.Monthly;
 		else
 		memtype= MembershipType.Yearly;
@@ -1654,13 +1652,13 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
 				// TODO Auto-generated method stub
-				stmt.setTimestamp(1,obj.getCreationDate());
-				stmt.setString(2, obj.getDetails());
-				stmt.setString(3, obj.getTitle());
-				stmt.setInt(4, obj.getCustomerId());
-				stmt.setInt(5, obj.getCustomerServiceId());
-				stmt.setBoolean(6, obj.isActive());
-				stmt.setInt(7, obj.getBranchId());
+				
+				stmt.setString(1, obj.getDetails());
+				stmt.setString(2, obj.getTitle());
+				stmt.setInt(3, obj.getCustomerId());
+				stmt.setInt(4, obj.getCustomerServiceId());
+				stmt.setBoolean(5, obj.isActive());
+				stmt.setInt(6, obj.getBranchId());
 			}
 			/**
 			 * Register an Insert query
@@ -1669,7 +1667,7 @@ public class SystemServer extends AbstractServer{
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO complain (creationDate, details, title,cId,eId,isActive,brId) " + 
-					   "VALUES (?,?,?,?,?,?,?);";
+					   "VALUES (curdate(),?,?,?,?,?,?);";
 			}
 		});
 	}
