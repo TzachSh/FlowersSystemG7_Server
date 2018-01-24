@@ -6,6 +6,7 @@ public class FlowerInProduct implements Serializable {
 	
 	private int flowerId;
 	private int productId;
+	private Flower flower;
 	private int quantity;
 	
 	public int getFlowerId() {
@@ -35,5 +36,11 @@ public class FlowerInProduct implements Serializable {
 	
 	public FlowerInProduct(int flowerId, int quantity) {
 		this(flowerId, 0, quantity);
+	}
+	public Flower getFlower() {
+		return flower;
+	}
+	public void setFlower(Flower flower) {
+		this.flower = flower;
 	}
 }

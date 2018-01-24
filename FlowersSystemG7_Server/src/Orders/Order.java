@@ -16,6 +16,7 @@ public class Order implements Serializable {
 	private Status status;
 	private int orderPaymentId;
 	private ArrayList<ProductInOrder> productInOrderList;
+	private ArrayList<OrderPayment> orderPaymentList;
 	private Refund Refund;
 	private Delivery deliery;
 	private int brId;
@@ -116,5 +117,11 @@ public class Order implements Serializable {
 	}
 	public void setRequestedDate(Timestamp requestedDate) {
 		this.requestedDate = requestedDate;
+	}
+	public ArrayList<OrderPayment> getOrderPaymentList() {
+		return orderPaymentList;
+	}
+	public void setOrderPaymentList(ArrayList<OrderPayment> orderPaymentList) {
+		this.orderPaymentList = orderPaymentList;
 	}
 }
