@@ -13,7 +13,7 @@ import Commons.Refund;
  * Complain entity class
  *
  */
-public class Complain implements IRefundAble,Comparable<Complain>, Serializable {
+public class Complain implements IRefundAble, Serializable {
 	
 	/***
 	 * Instance members
@@ -201,14 +201,5 @@ public class Complain implements IRefundAble,Comparable<Complain>, Serializable 
 	 */
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
-	}
-	
-	/***
-	 * Comparator to compare the creation date time between two complains 
-	 */
-	@Override
-	public int compareTo(Complain complain) {
-		// TODO Auto-generated method stub
-		 return getCreationDate().compareTo(complain.getCreationDate());
 	}
 }
