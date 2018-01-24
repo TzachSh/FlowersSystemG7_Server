@@ -94,5 +94,6 @@ public enum Command implements Serializable
 	getAllProductsInOrder,
 	getFlowersInProductInOrder,
 	getAllFlowersInOrder,
-	deleteMemberShipAccountByacNum
+	deleteMemberShipAccountByacNum,
+	getCustomers
 	}

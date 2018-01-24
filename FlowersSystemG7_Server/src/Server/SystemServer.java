@@ -973,6 +973,31 @@ public class SystemServer extends AbstractServer{
 		);
 	}
 	
+	private void getCustomersHandler(DbQuery db , Command key)
+	{
+		DbGetter dbGetter = new DbGetter(db, key);
+		dbGetter.performAction(new ISelect() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "SELECT * FROM customer;";
+			}
+			
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				return new Customer(rs.getInt(1),rs.getInt(2));
+			}
+		});
+	}
+	
 	 /**
 	  * getting employee by user id  
 	  * @param db -Stores database information 
@@ -3131,6 +3156,9 @@ public class SystemServer extends AbstractServer{
 					break;
 				case deleteMemberShipAccountByacNum:
 					deleteMemberShipAccountByacNumHandler(db,key);
+					break;
+				case getCustomers:
+					getCustomersHandler(db, key);
 					break;
 
 					default:;
