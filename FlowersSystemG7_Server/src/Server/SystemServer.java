@@ -1667,7 +1667,7 @@ public class SystemServer extends AbstractServer{
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO complain (creationDate, details, title,cId,eId,isActive,brId) " + 
-					   "VALUES (curdate(),?,?,?,?,?,?);";
+					   "VALUES (NOW(),?,?,?,?,?,?);";
 			}
 		});
 	}
