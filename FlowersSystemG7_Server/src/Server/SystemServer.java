@@ -2984,7 +2984,25 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	private void updateOrderStatus(DbQuery db, Command key) {
+		DbUpdater<Account> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<Account>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Account obj) throws SQLException {
+				stmt.setInt(1,obj.getBranchId());
+				stmt.setInt(2,obj.getCustomerId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return  "UPDATE `order` SET stId=(select stId from status where status='Completed')"
+						+ " where brId=? and stId=(select stId from status where status='Pending') "
+						+ "and cId=? and curdate()> `order`.requestedDate;";
+			}
+		});
+	}
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
@@ -3201,6 +3219,7 @@ public class SystemServer extends AbstractServer{
 					getAccountByuIdHandler(db,key);
 					break;
 				case getOrdersByCIdandBrId:
+					updateOrderStatus(db,key);
 					getOrderByCIdandBrId(db, key);
 					break;
 				case getPaymentDetails:
@@ -3241,6 +3260,7 @@ public class SystemServer extends AbstractServer{
 			}
 		}
 	}
+	
 
 
 
