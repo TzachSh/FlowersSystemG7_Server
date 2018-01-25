@@ -3166,9 +3166,6 @@ public class SystemServer extends AbstractServer{
 				}
 				
 			}
-			
-			
-
 			db.connectionClose();
 		}
 		catch (Exception e) {
