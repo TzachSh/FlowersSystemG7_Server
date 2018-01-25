@@ -2400,7 +2400,7 @@ public class SystemServer extends AbstractServer{
 					status = Status.Pending;
 					break;
 				case 3:
-					status = Status.Completed;
+					status = Status.Canceled;
 					break;
 				}
 				
