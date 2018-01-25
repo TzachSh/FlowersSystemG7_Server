@@ -25,7 +25,7 @@ public class IncomeReportGeneration extends ReportGeneration {
 			int brId = Integer.valueOf(row[0]);
 			String brName = row[1];
 			double amount = Double.valueOf(row[2]);
-			return new IncomeReport(brId, brName, amount);	
+			return new IncomeReport(brId, brName, amount+" ₪");	
 		}
 
 		@Override

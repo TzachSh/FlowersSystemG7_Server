@@ -10,7 +10,7 @@ public class OrderReport implements Serializable {
 	private String creationDate;
 	private int productId;
 	private String productName;
-	private double price;
+	private String price;
 	private String paymentMethod;
 	private int deliveryNumber;
 	private String address;
@@ -65,11 +65,11 @@ public class OrderReport implements Serializable {
 		this.productName = productName;
 	}
 
-	public double getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 
@@ -114,7 +114,7 @@ public class OrderReport implements Serializable {
 	}
 
 	public OrderReport(String productCategory, int orderId, String creationDate, int productId, String productName,
-			double price, String paymentMethod, int deliveryNumber, String address, String phone, String receiver ,String status) {
+			String price, String paymentMethod, int deliveryNumber, String address, String phone, String receiver ,String status) {
 
 		this.productCategory = productCategory;
 		this.orderId = orderId;

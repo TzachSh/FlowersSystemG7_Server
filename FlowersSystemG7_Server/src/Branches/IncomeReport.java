@@ -7,9 +7,9 @@ public class IncomeReport implements Serializable {
 	
 	private int brId;
 	private String brName;
-	private double amount;
+	private String amount;
 	
-	public IncomeReport(int brId, String brName, double amount) {
+	public IncomeReport(int brId, String brName, String amount) {
 
 		this.brId = brId;
 		this.brName = brName;
@@ -27,10 +27,10 @@ public class IncomeReport implements Serializable {
 	public void setBrName(String brName) {
 		this.brName = brName;
 	}
-	public double getAmount() {
+	public String getAmount() {
 		return amount;
 	}
-	public void setAmount(double amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 	
