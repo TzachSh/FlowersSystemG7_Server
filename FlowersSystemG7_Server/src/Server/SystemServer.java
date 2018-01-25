@@ -22,6 +22,7 @@ import Branches.Employee;
 import Branches.Role;
 import Commons.ProductInOrder;
 import Commons.Refund;
+import Commons.Status;
 import Customers.Account;
 import Customers.AccountStatus;
 import Customers.Complain;
@@ -2365,10 +2366,8 @@ public class SystemServer extends AbstractServer{
 			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				
 				stmt.setInt(1, cId);
 				stmt.setInt(2, brId);
-				
 			}
 			/***
 			 * Initialize the query of the survey conclusion getting 
@@ -2392,8 +2391,20 @@ public class SystemServer extends AbstractServer{
 				int stId = rs.getInt(4);
 				int brId=account.getBranchId();
 				double total = rs.getDouble(5);
+				Status status=null;
+				switch(stId) {
+				case 1:
+					status = Status.Completed;
+					break;
+				case 2:
+					status = Status.Pending;
+					break;
+				case 3:
+					status = Status.Completed;
+					break;
+				}
 				
-				return new Order(id, creation, requested, cId, stId, brId, total);
+				return new Order(id, creation, requested, cId, status, brId, total);
 			}
 		});
 	}
@@ -3213,8 +3224,7 @@ public class SystemServer extends AbstractServer{
 				case addOrderRefund:
 					addOrderRefundHandler(db, key);
 					default:;
-				}
-				
+				}		
 			}
 			db.connectionClose();
 		}

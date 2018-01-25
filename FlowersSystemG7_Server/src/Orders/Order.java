@@ -20,7 +20,6 @@ public class Order implements Serializable {
 	private Refund Refund;
 	private Delivery deliery;
 	private int brId;
-	private int stId;
 	private double total;
 	
 	public int getoId() {
@@ -92,13 +91,13 @@ public class Order implements Serializable {
 		Refund = refund;
 		this.deliery = deliery;
 	}
-	public Order(int id,Date creationDate, Timestamp requestedDate,int cId,int stId,int brId,double total)
+	public Order(int id,Date creationDate, Timestamp requestedDate,int cId,Status status,int brId,double total)
 	{
 		this.id=id;
 		this.creationDate=creationDate;
 		this.setRequestedDate(requestedDate);
 		this.customerId=cId;
-		this.stId=stId;
+		this.status = status;
 		this.brId=brId;
 		this.setTotal(total);
 	}
