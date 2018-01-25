@@ -2804,7 +2804,7 @@ public class SystemServer extends AbstractServer{
 			valuesIn+=prodLine.get(i).getId()+",";
 		}
 		valuesIn+=prodLine.get(i).getId()+")";
-		String query = "Select * from flowerInProduct where pId in "+valuesIn+";";
+		String query = "Select pId,fId,quantity from flowerInProduct where pId in "+valuesIn+";";
 		// get the new product id
 			db.connectToDB();
 			Connection con = db.getConnection();
@@ -2819,7 +2819,7 @@ public class SystemServer extends AbstractServer{
 				int pId = rs.getInt(1);
 				int fId = rs.getInt(2);
 				int quantity = rs.getInt(3);
-				floInProd.add(new FlowerInProduct(pId,fId,quantity));
+				floInProd.add(new FlowerInProduct(fId,pId,quantity));
 			}
 	    	
 			con.close();
@@ -2860,7 +2860,7 @@ public class SystemServer extends AbstractServer{
 	private void getOrderPaymentsDetails(DbQuery db, Command key) {
 		DbGetter dbGetter = new DbGetter(db, key);
 		Packet pack =db.getPacket();
-		int oId = (Integer) pack.getParameterForCommand(key).get(0);
+		int brId = ((Account) pack.getParameterForCommand(key).get(0)).getBranchId();
 		dbGetter.performAction(new ISelect() {
 			/***
 			 * Initialize statements for the Selection query
@@ -2868,7 +2868,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				
-				stmt.setInt(1, oId);				
+				stmt.setInt(1, brId);				
 			}
 			/***
 			 * Initialize the query of the survey conclusion getting 
@@ -2876,7 +2876,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "SELECT pId,paymentMethod,amount,paymentDate FROM test.orderpayment where  oId=?;";
+				return "SELECT pId,orderpayment.oId,paymentMethod,amount,paymentDate FROM test.orderpayment inner join `order` on orderpayment.oId=`order`.oId where `order`.brId=?;";
 			}
 			/***
 			 * Parsing the result set in to a SurveyConclusion object
@@ -2884,9 +2884,10 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				int pId = rs.getInt(1);
-				String method = rs.getString(2);
-				double amount = rs.getDouble(3);
-				java.sql.Date date = rs.getDate(4);
+				int oId = rs.getInt(2);
+				String method = rs.getString(3);
+				double amount = rs.getDouble(4);
+				java.sql.Date date = rs.getDate(5);
 
 				return new OrderPayment(pId, oId, PaymentMethod.valueOf(method), amount, date);
 			}
@@ -3145,7 +3146,7 @@ public class SystemServer extends AbstractServer{
 				case getOrdersByCIdandBrId:
 					getOrderByCIdandBrId(db, key);
 					break;
-				case getOrderPaymentDetails:
+				case getPaymentDetails:
 					getOrderPaymentsDetails(db,key);
 					break;
 				case getOrderInProductsDetails:
