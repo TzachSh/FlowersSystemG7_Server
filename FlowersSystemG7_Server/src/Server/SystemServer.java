@@ -1348,8 +1348,6 @@ public class SystemServer extends AbstractServer{
 					status= AccountStatus.Active;
 				else if(statusString.equals((AccountStatus.Blocked).toString()))
 					status= AccountStatus.Blocked;
-				else if(statusString.equals((AccountStatus.Closed).toString()))
-					status= AccountStatus.Closed;
 				
 				newacc=new Account(acNum, cId, 0, balance, brId, status, creditCard);
 				return (Object)newacc;
@@ -2732,8 +2730,6 @@ public class SystemServer extends AbstractServer{
 					status= AccountStatus.Active;
 				else if(statusString.equals((AccountStatus.Blocked).toString()))
 					status= AccountStatus.Blocked;
-				else if(statusString.equals((AccountStatus.Closed).toString()))
-					status= AccountStatus.Closed;
 				
 				newacc=new Account(acNum, cId, 0, balance, brId, status, creditCard);
 				return (Object)newacc;
@@ -2784,8 +2780,6 @@ public class SystemServer extends AbstractServer{
 					status= AccountStatus.Active;
 				else if(statusString.equals((AccountStatus.Blocked).toString()))
 					status= AccountStatus.Blocked;
-				else if(statusString.equals((AccountStatus.Closed).toString()))
-					status= AccountStatus.Closed;
 				
 				newacc=new Account(acNum, cId, 0, balance, brId, status, creditCard);
 				return (Object)newacc;

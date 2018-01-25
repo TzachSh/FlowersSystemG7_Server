@@ -47,6 +47,7 @@ public class MemberShipDeleting {
 					"                           INNER JOIN customer c ON a.cId = c.cId " + 
 					"                           INNER JOIN user u ON u.uId = c.uId " + 
 					"WHERE TIMESTAMPDIFF(MONTH, msa.CreationDate, CURDATE()) >= IF(msa.mId = 1, 1, 12);";
+			//(select mId from membership where member='Monthly')
 					
 			PreparedStatement stmt = con.prepareStatement(qry);
 

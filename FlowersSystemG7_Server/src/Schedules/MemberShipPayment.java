@@ -48,7 +48,7 @@ public class MemberShipPayment {
 					"FROM `order` o INNER JOIN customer c ON c.cId = o.cId " + 
 					"			   INNER JOIN user u ON u.uId = c.uId " + 
 					"			   INNER JOIN orderpayment op ON op.oId = o.oId " + 
-					"WHERE year(o.creationDate) = ? AND month(o.creationDate) = ? AND op.paymentDate IS NULL " + 
+					"WHERE year(o.creationDate) = ? AND month(o.creationDate) = ? AND op.paymentDate IS NULL AND o.stId <> 3 " + 
 					"GROUP BY c.uId";
 					
 			PreparedStatement stmt = con.prepareStatement(qry);
@@ -89,7 +89,7 @@ public class MemberShipPayment {
 			    			"SET @creationMonth = ?; " + 
 			    			"UPDATE orderpayment op INNER JOIN `order` o ON op.oId = o.oId " + 
 			    			"SET op.paymentDate = CURDATE() " + 
-			    			"WHERE year(o.creationDate) = @creationYear AND month(o.creationDate) = @creationMonth AND op.paymentDate IS NULL;";
+			    			"WHERE year(o.creationDate) = @creationYear AND month(o.creationDate) = @creationMonth AND op.paymentDate IS NULL AND o.stId <> 3 ;";
 	    
 	    	PreparedStatement stmt = con.prepareStatement(query);
 	    	stmt.setInt(1, year);

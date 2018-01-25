@@ -3,7 +3,7 @@ package Customers;
 import java.io.Serializable;
 
 public enum AccountStatus implements Serializable {
-	Active (0),Blocked (1),Closed (2);
+	Active (0),Blocked (1);
 	
 	private final int code;
 	
