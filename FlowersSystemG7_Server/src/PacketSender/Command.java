@@ -38,7 +38,6 @@ public enum Command implements Serializable
 	getFlowersInProducts,
 	getCatalogImage,
 	getBranches,
-	updateAccounts,
 	updateCustomer,
 	getColors,
 	addFlower,
@@ -85,7 +84,6 @@ public enum Command implements Serializable
 	createOrder,
 	createProductsInOrder,
 	createOrderPayments,
-	updateAccountBalance,
 	getAccountByuId,
 	createDelivery,
 	getOrdersByCIdandBrId, 
@@ -95,5 +93,7 @@ public enum Command implements Serializable
 	getAllFlowersInOrder,
 	deleteMemberShipAccountByacNum,
 	getCustomers, 
-	getPaymentDetails
+	getPaymentDetails,
+	updateOrder,
+	addOrderRefund
 	}

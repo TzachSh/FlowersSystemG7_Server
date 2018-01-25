@@ -1576,7 +1576,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
-				return "update Account set creditCard=?, balance=?, status=? where brId=? and cId=?";
+				return "update Account set creditCard=?, balance=?, status=? where cId=? and brId=?";
 			}
 			/**
 			 * Initialize the relevant fields of the query
@@ -2920,8 +2920,60 @@ public class SystemServer extends AbstractServer{
 				return new ProductInOrder(oId, pId, quantity);
 			}
 		});
-			
 	}
+	
+	private void addOrderRefundHandler(DbQuery db , Command key)
+	{
+		DbUpdater<Refund> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<Refund>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Refund obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDate(1, obj.getCreationDate());
+				stmt.setDouble(2, obj.getAmount());
+				stmt.setInt(3, obj.getRefundAbleId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return "INSERT INTO refund (createDate, amount, reasId) VALUES (?, ?, ?);";
+			}
+		});
+	}
+	
+	/***
+	 * 
+	 * @param db - DB information
+	 * @param key - Command to perform
+	 * Handle updating of an order
+	 */
+	private void updateOrderHandler(DbQuery db, Command key) {
+		// TODO Auto-generated method stub
+		DbUpdater<Order> dbUpdater = new DbUpdater<>(db, key);
+		dbUpdater.performAction(new IUpdate<Order>() {
+			
+			@Override
+			public void setStatements(PreparedStatement stmt, Order obj) throws SQLException {
+				// TODO Auto-generated method stub
+				stmt.setDate(1, obj.getCreationDate());
+				stmt.setTimestamp(2, obj.getRequestedDate());
+				stmt.setInt(3, obj.getCustomerId());
+				stmt.setInt(4, obj.getStatus().toInt());
+				stmt.setInt(5, obj.getBrId());
+				stmt.setDouble(6,obj.getTotal());
+				stmt.setInt(7,obj.getoId());
+			}
+			
+			@Override
+			public String getQuery() {
+				// TODO Auto-generated method stub
+				return  "UPDATE `order` SET creationDate=?, requestedDate=?, cId=?, stId=?, brId=?, Total=?  WHERE oId = ?";
+			}
+		});
+	}
+	
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
@@ -3155,7 +3207,11 @@ public class SystemServer extends AbstractServer{
 				case getCustomers:
 					getCustomersHandler(db, key);
 					break;
-
+				case updateOrder:
+					updateOrderHandler(db,key);
+					break;
+				case addOrderRefund:
+					addOrderRefundHandler(db, key);
 					default:;
 				}
 				
