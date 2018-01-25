@@ -59,7 +59,9 @@ public class DbUpdater<T>
 			
 		    		stmt.executeUpdate();
 		    	}
-		    	catch (ClassCastException e) { }
+		    	catch (ClassCastException e) {
+		    		e.printStackTrace();
+		    	}
 		    }
 		} 
 		catch (Exception e)
