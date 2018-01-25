@@ -72,6 +72,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -258,13 +260,15 @@ public class SystemServer extends AbstractServer{
 		if(!isListening())//if start service has been pressed
 		{
 			if(database.isEmpty()) {
-				JOptionPane.showMessageDialog(null,"Please Fill DataBase name","Error",JOptionPane.ERROR_MESSAGE);
+				Alert alert = new Alert(AlertType.ERROR,"Please Fill DataBase name");
+				alert.show();
 				printlogMsg("database name missing\n\r");
 				return false;	
 			}
 			if(user.isEmpty())
 			{
-				JOptionPane.showMessageDialog(null,"Please Fill user name","Error",JOptionPane.ERROR_MESSAGE);
+				Alert alert = new Alert(AlertType.ERROR,"Please Fill user name");
+				alert.show();
 				printlogMsg("user name missing");
 				return false;
 			}
