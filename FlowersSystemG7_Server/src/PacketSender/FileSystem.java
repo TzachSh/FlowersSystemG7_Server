@@ -11,34 +11,71 @@ import java.io.Serializable;
 import java.nio.file.Paths;
 
 import javafx.scene.image.Image;
-
+/**
+ * Image handling class
+ */
 public class FileSystem implements Serializable {
 
+	/**
+	 * default library
+	 */
 	private final static String dir = "Uploads";
 	
+	/**
+	 * local path where img is saved
+	 */
 	private String localPath = "";
+	/**
+	 * extension of the image
+	 */
 	private String extenstion = "";
+	/**
+	 * product codes
+	 */
 	private int productId = -1;
+	/**
+	 * image size
+	 */
 	private int size = 0;
+	/**
+	 * image in byte array
+	 */
 	public byte[] mybytearray;
+	/**
+	 * if file is empty
+	 */
 	private boolean fileIsEmpty = false;
+	/**
+	 * if file is not exists
+	 */
 	private boolean fileIsNotExists = false;
 	
-	
+	/**
+	 * init the array
+	 * @param size size of new array
+	 */
 	public void initArray(int size) {
 		mybytearray = new byte[size];
 	}
-
+	/**
+	 * Constructor default
+	 */
 	public FileSystem() 
 	{
 		this("");
 	}
-	
+	/**
+	 * Constructor 
+	 * @param localPath local path to save the images
+	 */
 	public FileSystem(String localPath) 
 	{
 		loadImageFromLocal(localPath);
 	}
-	
+	/**
+	 * send image to the server to save
+	 * @throws IOException  if failed
+	 */
 	public void saveImageOnServer() throws IOException
 	{
 		File theDir = new File(dir);
@@ -58,12 +95,18 @@ public class FileSystem implements Serializable {
 			   fos.close();
 			}
 	}
-	
+	/**
+	 * get server path where images is saved
+	 * @return path on server
+	 */
 	public String getServerPath()
 	{
 		return String.format("%s/p%d.%s", dir, productId, extenstion);
 	}
-	
+	/**
+	 * load image from local path
+	 * @param localPath path from where to load
+	 */
 	public void loadImageFromLocal(String localPath)
 	{
 		File newFile = null;
@@ -110,17 +153,26 @@ public class FileSystem implements Serializable {
 			catch (IOException e) { }
 		}
 	}
-	
+	/**
+	 * get image extension
+	 * @return extension
+	 */
 	public String getExtenstion()
 	{
 		return extenstion; 
 	}
 	
+	/**
+	 * update image extension
+	 * @param extenstion extension
+	 */
 	public void setExtenstion(String extenstion)
 	{
 		this.extenstion = extenstion;
 	}
-
+	/**
+	 * @return local path
+	 */
 	public String getLocalFilePath() {
 		return localPath;
 	}

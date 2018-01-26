@@ -11,12 +11,18 @@ import java.util.LinkedHashMap;
  */
 public class Packet implements Serializable
 {
-	/**
-	 * private attributes
-	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * exception message from server
+	 */
 	private String exceptionMessage;
+	/**
+	 * contains commands as keys and data/result for commands as values
+	 */
 	private LinkedHashMap<Command, ArrayList<Object>> cmdParam = new LinkedHashMap<Command, ArrayList<Object>>();
+	/**
+	 * result from server success failed
+	 */
 	private boolean resultSuccess = true;
 	
 	/**
