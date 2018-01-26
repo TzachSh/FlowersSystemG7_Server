@@ -2,9 +2,17 @@ package Commons;
 
 import java.io.Serializable;
 
+/***
+ * 
+ * Enumeration to define a Status of order's state
+ *
+ */
 public enum Status implements Serializable {
+	/***
+	 * Possibly states
+	 */
 	Completed (1),Pending (2),Canceled (3);
-	
+
 	private final int code;
 	/**
 	 * 
