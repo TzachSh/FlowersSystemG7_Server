@@ -1,18 +1,42 @@
 package Customers;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-
-import Commons.Refund;
-
+/**
+ * Entity 
+ * Customer account with balance and credit card available for customer to order products
+ */
 public class Account implements Serializable {
+	/**
+	 * account number
+	 */
 	private int num;
+	/**
+	 * customer code
+	 */
 	private int customerId;
+	/**
+	 * balance in the customer's account of the branch
+	 */
 	private double balance;
+	/**
+	 * membership id possibly be a null
+	 */
 	private int mId;
+	/**
+	 * branch number
+	 */
 	private int branchId;
+	/**
+	 * account status 
+	 */
 	private AccountStatus accountStatus;
+	/**
+	 * credit card of the customer
+	 */
 	private String creditCard;
+	/**
+	 * membership with creation date
+	 */
 	private Membership memberShip;
 	/**
 	 * 

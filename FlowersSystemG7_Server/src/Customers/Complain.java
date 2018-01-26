@@ -1,41 +1,58 @@
 package Customers;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 
-import Branches.CustomerService;
 import Commons.IRefundAble;
-import Commons.Refund;
 
 /**
- * 
- * Complain entity class
+ * Entity
+ * Contains complain details
  *
  */
 public class Complain implements IRefundAble, Serializable {
 	
-	/***
-	 * Instance members
+
+	/**
+	 *  id complain
 	 */
 	private int id;
+	/**
+	 * creation date of a complain
+	 */
 	private Timestamp creationDate;
+	/**
+	 * complain subject
+	 */
 	private String title;
+	/**
+	 * complain message
+	 */
 	private String details;
+	/**
+	 * id of the customer
+	 */
 	private int customerId;
+	/**
+	 * customer service id who created complain
+	 */
 	private int customerServiceId;
+	/**
+	 * branch number
+	 */
 	private int branchId;
+	/**
+	 * if complain is active
+	 */
 	private boolean isActive;
-	/***
+	/**
 	 * 
 	 * @return branch id
 	 */
 	public int getBranchId() {
 		return branchId;
 	}
-
-	/***
-	 * 
+	/*** 
 	 * @param branchId to set
 	 */
 	public void setBranchId(int branchId) {
@@ -81,7 +98,6 @@ public class Complain implements IRefundAble, Serializable {
 	public String getTitle() {
 		return title;
 	}
-
 	/**
 	 * 
 	 * @param title - set a complain title
