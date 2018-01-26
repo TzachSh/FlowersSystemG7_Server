@@ -1,9 +1,10 @@
 package Customers;
 
 import java.io.Serializable;
-/**
- * Entity 
- * Customer account with balance and credit card available for customer to order products
+/***
+ * 
+ * Entity class to define Account of customer
+ *
  */
 public class Account implements Serializable {
 	/**
@@ -197,7 +198,7 @@ public class Account implements Serializable {
 	 * @param accountStatus the account status Blocked , active , closed
 	 * @param creditCard credit card
 	 */
-	public Account(int branchId, int customerId,double balance, AccountStatus accountStatus, String creditCard) {
+	public Account(int customerId,int branchId,double balance, AccountStatus accountStatus, String creditCard) {
 		super();
 		this.customerId = customerId;
 		this.balance = balance;

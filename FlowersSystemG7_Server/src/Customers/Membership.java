@@ -2,6 +2,10 @@ package Customers;
 
 import java.io.Serializable;
 
+/*** 
+ * Entity class to define Membership
+ *
+ */
 public class Membership implements Serializable {
 	private int num;
 	private MembershipType membershipType;

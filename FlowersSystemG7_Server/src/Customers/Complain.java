@@ -8,7 +8,6 @@ import Commons.IRefundAble;
 /**
  * Entity
  * Contains complain details
- *
  */
 public class Complain implements IRefundAble, Serializable {
 	

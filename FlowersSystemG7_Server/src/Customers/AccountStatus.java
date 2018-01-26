@@ -2,10 +2,14 @@ package Customers;
 
 import java.io.Serializable;
 /**
- * Enumeration to define account status
+ * 
+ * Enumeration to define Account Status 
  *
  */
 public enum AccountStatus implements Serializable {
+	/***
+	 * Account possibly states
+	 */
 	Active (0),Blocked (1);
 	
 	private final int code;

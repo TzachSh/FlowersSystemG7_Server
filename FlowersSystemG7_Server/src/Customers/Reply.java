@@ -3,15 +3,17 @@ package Customers;
 import java.io.Serializable;
 
 /**
- * 
- * Reply entity class
+ * Entity
+ * Contains reply message to the complain
  *
  */
 public class Reply implements Serializable{
 
-	//Instance members
+	/**reply id*/
 	private int id;
+	/**complain number*/
 	private int complainId;
+	/**reply message*/
 	private String replyment;
 	
 	/**
