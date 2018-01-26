@@ -7,17 +7,28 @@ import Survey.SurveyConclusion;
 import Users.Permission;
 
 public class ServiceExpert extends Employee implements Serializable {
-	
+	/**survey conclusions list */
 	private ArrayList<SurveyConclusion> surveyConclusionList;
-
+	/**returns the survey conclusions list*/
 	public ArrayList<SurveyConclusion> getSurveyConclusionList() {
 		return surveyConclusionList;
 	}
-
+	/**setting survey conclusion list*/
 	public void setSurveyConclusionList(ArrayList<SurveyConclusion> surveyConclusionList) {
 		this.surveyConclusionList = surveyConclusionList;
 	}
-
+	/**
+	 * 
+	 * @param uId user id
+	 * @param user user name
+	 * @param password user password
+	 * @param isLogged if the user is logged 
+	 * @param permission use's permission
+	 * @param eId employee id
+	 * @param role employee role
+	 * @param bId branch id
+	 * @param surveyConclusionList survey conclusion list
+	 */
 	public ServiceExpert(int uId, String user, String password, boolean isLogged,Permission permission, int eId, Role role, int bId,
 			ArrayList<SurveyConclusion> surveyConclusionList) {
 		super(uId, user, password, isLogged,permission, eId, role, bId);
