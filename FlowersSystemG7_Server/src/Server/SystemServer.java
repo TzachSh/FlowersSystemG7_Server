@@ -1218,7 +1218,7 @@ public class SystemServer extends AbstractServer{
 		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
-				return "SELECT uId, user, password, isLogged, permission FROM user where uId=? AND password=?";
+				return "SELECT uId, user, password, isLogged, permission FROM user where user=? AND password=?";
 			}
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
@@ -1244,7 +1244,7 @@ public class SystemServer extends AbstractServer{
 				ArrayList<Object> params = packet.getParameterForCommand(Command.getUserByNameAndPass);
 				User user = (User) params.get(0);
 
-				stmt.setString(1, user.getUser());
+				stmt.setString(1, us1Eer.getUser());
 				stmt.setString(2, user.getPassword());
 			}
 		});
