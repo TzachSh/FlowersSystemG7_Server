@@ -13,11 +13,29 @@ import ocsf.server.ConnectionToClient;
  *
  */
 public class DbQuery {
+	/**
+	 * user to connect to the database
+	 */
 	private String user;
+	/**
+	 * password to conncet to the database
+	 */
 	private String password;
+	/**
+	 * packet contains data and command to execute
+	 */
 	private Packet packet;
+	/**
+	 * client who sent the request
+	 */
 	private ConnectionToClient client;
+	/**
+	 * database name
+	 */
 	private String database;
+	/**
+	 * connection to the database
+	 */
 	private Connection conn;
 
 	/**
@@ -36,7 +54,12 @@ public class DbQuery {
 		this.client = client;
 		this.database = database;
 	}
-	//to check connection to the database
+	/**
+	 * init connection fields
+	 * @param user -user database
+	 * @param password - password database
+	 * @param database - database name
+	 */
 	public DbQuery(String user, String password, String database) {
 		this.user = user;
 		this.password = password;
@@ -55,7 +78,6 @@ public class DbQuery {
 	
 	/**
 	 * Getter for password to the database
-	 * 
 	 */
 	public String getPassword() {
 		return password;
@@ -87,11 +109,18 @@ public class DbQuery {
 		conn = DriverManager.getConnection("jdbc:mysql://localhost/" +database + "?allowMultiQueries=true", user, password);
 
 	}
+	/**
+	 * closing current connection to database
+	 * @throws SQLException message error when close database connection
+	 */
 	public void connectionClose() throws SQLException 
 	{
 		conn.close();
 	}
-
+	/**
+	 * get current connection
+	 * @return connection to the database
+	 */
 	public Connection getConnection() {
 		return conn;
 	}

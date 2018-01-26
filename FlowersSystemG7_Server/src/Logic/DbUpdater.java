@@ -13,8 +13,17 @@ import PacketSender.Packet;
  */
 public class DbUpdater<T>
 {
+	/**
+	 * database details
+	 */
 	private DbQuery db;
+	/**
+	 * packet contains data and command to execute
+	 */
 	private Packet packet;
+	/**
+	 * command to execute
+	 */
 	private Command cmd;
 	
 	/**

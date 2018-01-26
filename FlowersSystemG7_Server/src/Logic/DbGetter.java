@@ -16,8 +16,17 @@ import PacketSender.Packet;
 public class DbGetter {
 	/** the collection that used for the select result */
 	private ArrayList<Object> queryResult = new ArrayList<>();
+	/**
+	 * database details
+	 */
 	private DbQuery db;
+	/**
+	 * packet contains data and command to execute
+	 */
 	private Packet packet;
+	/**
+	 * command to execute
+	 */
 	private Command cmd;
 	
 	/**
