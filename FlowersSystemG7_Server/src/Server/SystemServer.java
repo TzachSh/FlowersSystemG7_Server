@@ -1424,7 +1424,7 @@ public class SystemServer extends AbstractServer{
 				int acNum = rs.getInt(1);
 				int brId =rs.getInt(2);
 				int cId = rs.getInt(3);
-				int balance=rs.getInt(4);
+				Double balance=rs.getDouble(4);
 				String creditCard=rs.getString(5);
 				String statusString=rs.getString(6);
 				AccountStatus status = AccountStatus.Active;
