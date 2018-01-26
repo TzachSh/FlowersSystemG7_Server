@@ -72,8 +72,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -92,26 +90,48 @@ public class SystemServer extends AbstractServer{
 
 	public SystemServer(int port) {
 		super(port);
-		// TODO Auto-generated constructor stub
 	}
 
-	//private static final int DEFAULT_PORT = 5555;
+	/**
+	 * default user
+	 */
 	private String user = "root";
+	/**
+	 * default password
+	 */
 	private String password = "1q2w3e!";
 	private String database;
 	private Timer timer = new Timer();
+	/**
+	 * default port
+	 */
 	private static final int DEFAULT_PORT = 5555;
 	private DbQuery dbConnection;
+	/**
+	 * Menu button run immediate scheduler
+	 */
     @FXML
-    private MenuButton btnSchedule;  
+    private MenuButton btnSchedule;
+    /**
+     * Charge all memberships account which didn't pay until now
+     */
     @FXML
     private MenuItem btnCharging;
+    /**
+     * Generate reports
+     */
     @FXML
     private MenuItem btnReport;
+    /**
+     * Clear memberships which are out of date
+     */
     @FXML
     private MenuItem btnDelete;
 	@FXML
 	private TextField txtPort;
+	/**
+	 * Run/Stop server
+	 */
 	@FXML
 	private Button btnSubmit;
 	@FXML
@@ -122,6 +142,9 @@ public class SystemServer extends AbstractServer{
 	private TextField txtUser;
 	@FXML
 	private PasswordField txtPass;
+	/**
+	 * clear log textField
+	 */
 	@FXML
 	private Button btnClear;
     @FXML
@@ -131,8 +154,8 @@ public class SystemServer extends AbstractServer{
 		super(DEFAULT_PORT);
 	}
 	/**
-	 * 
-	 * @param msg log message to see the information
+	 * print message to textField with date and time
+	 * @param msg message to write to the log
 	 */
 	public void printlogMsg(String msg)
 	{
@@ -194,24 +217,33 @@ public class SystemServer extends AbstractServer{
 			}
 	}
 	
-	
+	/**
+	 * printing error from scheduling 
+	 * @param msgError error message from scheduling
+	 */
 	public void logErrorSchedule(String msgError)
 	{
 		printlogMsg("Failed: " + msgError);
 	}
-	
+	/**
+	 * create reports when report button has been pressed
+	 */
 	public void onClickForceReportsButton()
 	{
 		ScheduleThread thread = new ScheduleThread(dbConnection, this, ThreadType.Reports);
 		thread.start();
 	}
-	
+	/**
+	 * Charge all memberships account which didn't pay until now
+	 */
 	public void onClickForceChargingButton()
 	{
 		ScheduleThread thread = new ScheduleThread(dbConnection, this, ThreadType.Paying);
 		thread.start();
 	}
-	
+	/**
+	 * Update memberships which is out of date
+	 */
 	public void onClickForceDeletingButton()
 	{
 		ScheduleThread thread = new ScheduleThread(dbConnection, this, ThreadType.DeleteMemberships);
@@ -225,6 +257,11 @@ public class SystemServer extends AbstractServer{
 	{
 		txtLog.clear();
 	}
+	/**
+	 * Show the scene view of the server	 * 
+	 * @param arg0 current stage to build
+	 * @throws Exception if failed to display
+	 */
 	public void start(Stage arg0) throws Exception {
 		
 		String title = "Server";
@@ -254,21 +291,26 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-
+	/**
+	 * turn on/off listening 
+	 * print the result to the log
+	 * @param database to check the connection before starting to listening
+	 * @param user user to connect to the database
+	 * @param password password to connect to the database
+	 * @return true if success else false
+	 */
 	public boolean changeListening(String database,String user, String password) 
 	{
 		if(!isListening())//if start service has been pressed
 		{
 			if(database.isEmpty()) {
-				Alert alert = new Alert(AlertType.ERROR,"Please Fill DataBase name");
-				alert.show();
+				JOptionPane.showMessageDialog(null,"Please Fill DataBase name","Error",JOptionPane.ERROR_MESSAGE);
 				printlogMsg("database name missing\n\r");
 				return false;	
 			}
 			if(user.isEmpty())
 			{
-				Alert alert = new Alert(AlertType.ERROR,"Please Fill user name");
-				alert.show();
+				JOptionPane.showMessageDialog(null,"Please Fill user name","Error",JOptionPane.ERROR_MESSAGE);
 				printlogMsg("user name missing");
 				return false;
 			}
@@ -297,6 +339,8 @@ public class SystemServer extends AbstractServer{
 	
 	/**
 	 * Get all active catalog products
+	 * @param db -Stores database information 
+	  * @param key  - Command operation which is performed
 	 */
 	public void getActiveCatalogProductsHandler(DbQuery db, Command key)
 	{	
@@ -332,6 +376,8 @@ public class SystemServer extends AbstractServer{
 	
 	/**
 	 * Get all catalog products ; active and not active
+	 * @param db -Stores database information 
+	  * @param key  - Command operation which is performed
 	 */
 	public void getAllCatalogProductsHandler(DbQuery db, Command key)
 	{	
@@ -363,7 +409,11 @@ public class SystemServer extends AbstractServer{
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
-	
+	/**
+	 * get all flowers which exists in products
+	 * @param db -Stores database information 
+	  * @param key  - Command operation which is performed
+	 */
 	public void getFlowersInProductHandler(DbQuery db, Command key)
 	{	
 		DbGetter dbGet = new DbGetter(db, key);
@@ -389,7 +439,11 @@ public class SystemServer extends AbstractServer{
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
-	
+	/**
+	 * create new flower
+	 * @param db -Stores database information 
+	  * @param key  - Command operation which is performed
+	 */
 	private void createFlower(DbQuery db, Command key) {
 		DbUpdater<Flower> dbUpdate = new DbUpdater<>(db, key);
 		
@@ -407,7 +461,11 @@ public class SystemServer extends AbstractServer{
 });
 
 }
-
+	/**
+	 * get all colors from database
+	 * @param db -Stores database information 
+	  * @param key  - Command operation which is performed
+	 */
 	private void getColors(DbQuery db, Command key) {
 	DbGetter dbGet = new DbGetter(db, key);
 		
@@ -431,7 +489,11 @@ public class SystemServer extends AbstractServer{
 		
 	}
 
-		
+	/**
+	 * get discounts by branch id 	
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	private void getDiscounts(DbQuery db,Command key) {
 		DbGetter dbGet = new DbGetter(db, key);
 		
@@ -455,7 +517,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/**
+	 * get all flowers from database 
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getFlowersHandler(DbQuery db, Command key)
 	{	
 		DbGetter dbGet = new DbGetter(db, key);
@@ -481,7 +547,11 @@ public class SystemServer extends AbstractServer{
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
-	
+	/**
+	 * get all product types
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getProductTypesHandler(DbQuery db, Command key)
 	{	
 		DbGetter dbGet = new DbGetter(db, key);
@@ -505,7 +575,11 @@ public class SystemServer extends AbstractServer{
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
-	
+	/**
+	 * update products set active to zero (to save history in orders)
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void setProductAsDeletedHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<Product> dbUpdate = new DbUpdater<>(db, key);
@@ -523,7 +597,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/**
+	 * get catalog products by name and the product is active
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getCatalogProductsByNameHandler(DbQuery db, Command key)
 	{	
 		DbGetter dbGet = new DbGetter(db, key);
@@ -561,7 +639,7 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	/**
-	 * this function delete membership from specific account
+	 * delete membership from specific account
 	 * @param db -Stores database information 
 	 * @param key  - Command operation which is performed
 	 */
@@ -583,6 +661,11 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
+	/**
+	 * get images from catalog products and the catalog products is active
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getCatalogImageHandler(DbQuery db,  Command key)
 	{
 		DbGetter dbGet = new DbGetter(db, key);
@@ -607,9 +690,9 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	/**
-	 * 
-	 * @param db
-	 * @param key
+	 * get all branches from database except service branch
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
 	 */
 	public void getBranchesHandler(DbQuery db,  Command key)
 	{
@@ -632,7 +715,11 @@ public class SystemServer extends AbstractServer{
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
-	
+	/**
+	 * get all branches include service
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getBranchesIncludeServiceHandler(DbQuery db,  Command key)
 	{
 		DbGetter dbGet = new DbGetter(db, key);
@@ -654,7 +741,11 @@ public class SystemServer extends AbstractServer{
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { }
 		});
 	}
-	
+	/**
+	 * find all sales for branch by branch id
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getBranchSalesHandler(DbQuery db,  Command key)
 	{
 		DbGetter dbGet = new DbGetter(db, key);
@@ -681,38 +772,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ delete this function @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	/*public void getOrderHandler(DbQuery db,  Command key)
-	{
-		DbGetter dbGet = new DbGetter(db, key);
-		
-		dbGet.performAction(new ISelect() {
-			@Override
-			public String getQuery() {
-				return "SELECT * FROM order WHERE brId = ?";
-			}
-
-			@Override
-			public Object createObject(ResultSet rs) throws SQLException {
-				int oId=rs.getInt(1);
-				Date creationDate=rs.getDate(2);
-				Date requestedDate=rs.getDate(3);
-				int cId=rs.getInt(4);
-				int stId=rs.getInt(5);
-				int brId=rs.getInt(6);
-				double total = rs.getDouble(7);
-				Order order=new Order();
-				return (Object)order;
-			}
-
-			@Override
-			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				int brId = (int)packet.getParameterForCommand(key).get(0);
-				stmt.setInt(1, brId);
-			}
-		});
-	}*/
-	
+	/**
+	 * update image for catalog product set new path for catalog product by pId 
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void updateImageInProductHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<FileSystem> dbUpdate = new DbUpdater<>(db, key);
@@ -740,7 +804,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/**
+	 * update product like type id or price by product id 
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void updateProductHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<Product> dbUpdate = new DbUpdater<>(db, key);
@@ -760,8 +828,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
-	
+	/**
+	 * 	update catalog product set new product name
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void updateCatalogProductHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<CatalogProduct> dbUpdate = new DbUpdater<>(db, key);
@@ -780,8 +851,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-
-	
+	/**
+	 * delete flowers from catalog product
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void deleteFlowersInProductHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<CatalogProduct> dbUpdate = new DbUpdater<>(db, key);
@@ -798,7 +872,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/**
+	 * insert new flower to product
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void updateFlowersInProductHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<FlowerInProduct> dbUpdate = new DbUpdater<>(db, key);
@@ -819,7 +897,11 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
-	/** Add Sale To Catalog In Branch  */
+	/**
+	 *  Add Sale To Catalog In Branch  
+	 *  @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 *  */
 	public void addSaleCatalogInBranchHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<CatalogInBranch> dbUpdate = new DbUpdater<>(db, key);
@@ -840,7 +922,11 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	
-	/** Delete Sale for Catalog In Branch  */
+	/** 
+	 * Delete Sale for Catalog In Branch 
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 *  */
 	public void deleteSaleCatalogInBranchHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<CatalogInBranch> dbUpdate = new DbUpdater<>(db, key);
@@ -859,10 +945,10 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
-	
 	/**
 	 * Insert a catalog product
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
 	 */
 	public void insertCatalogProductHandler(DbQuery db,  Command key)
 	{
@@ -926,8 +1012,7 @@ public class SystemServer extends AbstractServer{
 			packet.setExceptionMessage(e.getMessage());
 		}
 	}
-	
-	 /**
+	/**
 	  * getting all users 
 	  * @param db -Stores database information 
 	  * @param key  - Command operation which is performed
@@ -977,7 +1062,11 @@ public class SystemServer extends AbstractServer{
 		}	
 		);
 	}
-	
+	/**
+	 * get all customers
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	private void getCustomersHandler(DbQuery db , Command key)
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
@@ -1002,7 +1091,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	 /**
 	  * getting employee by user id  
 	  * @param db -Stores database information 
@@ -1094,7 +1182,11 @@ public class SystemServer extends AbstractServer{
 	});
 }
 	
-	/** Set user logged in state */
+	/** 
+	 * Set user logged in state
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 *  */
     public void updateUserIsLoggedHandler(DbQuery db,  Command key)
     {
         DbUpdater<User> dbUpdate = new DbUpdater<>(db, key);
@@ -1115,51 +1207,48 @@ public class SystemServer extends AbstractServer{
         });
     }
 	
-	/** Get User instance by it's username and password */
-		public void getUserByNameAndPassHandler(DbQuery db, Command key)
-		{
-			DbGetter dbGet = new DbGetter(db, key);
-			dbGet.performAction(new ISelect() {
+	/** 
+	 * Get User instance by it's username and password
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 *  */
+	public void getUserByNameAndPassHandler(DbQuery db, Command key)
+	{
+		DbGetter dbGet = new DbGetter(db, key);
+		dbGet.performAction(new ISelect() {
 			@Override
 			public String getQuery() {
-			return "SELECT uId, user, password, isLogged, permission FROM user where uId=? AND password=?";
-		}
+				return "SELECT uId, user, password, isLogged, permission FROM user where uId=? AND password=?";
+			}
+			@Override
+			public Object createObject(ResultSet rs) throws SQLException {
+				int uId = rs.getInt(1);
+				String user = rs.getString(2);
+				String password = rs.getString(3);
+				int islogged = rs.getInt(4);
+				String perm = rs.getString(5);
+				Permission permission = null;
+				boolean isloggedbool = (islogged == 1);
 
-		@Override
-		public Object createObject(ResultSet rs) throws SQLException {
-			int uId = rs.getInt(1);
-			String user =rs.getString(2);
-			String password = rs.getString(3);
-			int islogged = rs.getInt(4);
-			String perm=rs.getString(5);
-			Permission permission = null;
-			boolean isloggedbool=(islogged==1);
-			/**
-			 * checking the presmission
-			 */
-			if(perm.equals((Permission.Administrator).toString()))
-				permission= Permission.Administrator;
-			else if(perm.equals((Permission.Blocked).toString()))
-				permission= Permission.Blocked;
-			else if(perm.equals((Permission.Limited).toString()))
-				permission= Permission.Limited;
-		
-			return new User(uId, user, password, isloggedbool, permission);
-		}
-		/**
-		 * Initialize the relevant fields of the query
-		 */
-		@Override
-		public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException { 
-			ArrayList<Object> params = packet.getParameterForCommand(Command.getUserByNameAndPass);
-			User user = (User)params.get(0);
-			
-			stmt.setString(1, user.getUser());
-			stmt.setString(2, user.getPassword());
+				if (perm.equals((Permission.Administrator).toString()))
+					permission = Permission.Administrator;
+				else if (perm.equals((Permission.Blocked).toString()))
+					permission = Permission.Blocked;
+				else if (perm.equals((Permission.Limited).toString()))
+					permission = Permission.Limited;
+
+				return new User(uId, user, password, isloggedbool, permission);
+			}
+			@Override
+			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
+				ArrayList<Object> params = packet.getParameterForCommand(Command.getUserByNameAndPass);
+				User user = (User) params.get(0);
+
+				stmt.setString(1, user.getUser());
+				stmt.setString(2, user.getPassword());
 			}
 		});
 	}
-	
 	/**
 	  * getting user by user id
 	  * @param db -Stores database information 
@@ -1217,7 +1306,6 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
-
 	/**
 	  * getting user by user name
 	  * @param db -Stores database information 
@@ -1227,16 +1315,10 @@ public class SystemServer extends AbstractServer{
 	{
 		DbGetter dbGet = new DbGetter(db, key);
 		dbGet.performAction(new ISelect() {
-		/**
-		 * Perform a Select query to get the user 
-		 */
 		@Override
 		public String getQuery() {
 		return "SELECT * "+ "FROM User u where user=?";
 	}
-	/**
-	 * Parse the result set in to a User object
-	 */
 	@Override
 	public Object createObject(ResultSet rs) throws SQLException {
 		int uId = rs.getInt(1);
@@ -1304,7 +1386,6 @@ public class SystemServer extends AbstractServer{
 		}
 		});
 	}
-	
 	/**
 	  * getting account by customer id and branch number
 	  * @param db -Stores database information 
@@ -1388,7 +1469,6 @@ public class SystemServer extends AbstractServer{
 		}
 	});
 	}
-	
 	/**
 	  * adding account to db
 	  * @param db -Stores database information 
@@ -1398,18 +1478,12 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<Account> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Account>() {
-			/**
-			 * Perform a Insert query to add account
-			 */	
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT into Account (brId,cId,balance,creditCard,status) values(?,?,?,?,?)";
 				
 			}
-			/**
-			 * Initialize the relevant fields of the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Account obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1418,12 +1492,9 @@ public class SystemServer extends AbstractServer{
 				stmt.setDouble(3, obj.getBalance());
 				stmt.setString(4, obj.getCreditCard());
 				stmt.setString(5, obj.getAccountStatus().toString());
-			}
-			
-			
+			}	
 		});
 	}
-	
 	/**
 	 * Getting the branch name by brID
 	 * @param db -Stores database information 
@@ -1464,8 +1535,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
-	
 	/**
 	  * getting all memberships
 	  * @param db -Stores database information 
@@ -1542,23 +1611,20 @@ public class SystemServer extends AbstractServer{
 			
 		});
 	}
-	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@maybe delete this function
-	//updating Customer after updating by cId
+	/**
+	 * update customer by user id
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void updateCustomerByuIdHandler(DbQuery db,  Command key)
 	{
 		DbUpdater<Customer> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Customer>() {
-			/**
-			 * Perform a Select query to get all the complains
-			 */	
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "update customer set where uId=?";
 			}
-			/**
-			 * Initialize the relevant fields of the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Customer obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1575,17 +1641,11 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<Account> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Account>() {
-			/**
-			 * Perform a Update query to update Account 
-			 */	
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "update Account set creditCard=?, balance=?, status=? where cId=? and brId=?";
 			}
-			/**
-			 * Initialize the relevant fields of the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Account obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1607,19 +1667,12 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<Complain> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Complain>() {
-
-			/**
-			 * Initialize complain updating query
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "UPDATE complain SET creationDate=?, details=?, title=?, cId=?, eId=?,isActive=? " +
 					   "WHERE comId=?";
 			}
-			/**
-			 * Initialize the relevant fields of the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1644,18 +1697,12 @@ public class SystemServer extends AbstractServer{
 		DbUpdater<Reply> dbUpdate = new DbUpdater<>(db, key);
 		
 		dbUpdate.performAction(new IUpdate<Reply>() {
-			/**
-			 * Register the fields which is used for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Reply obj) throws SQLException {
 				// TODO Auto-generated method stub
 				stmt.setInt(1,obj.getComplainId());
 				stmt.setString(2, obj.getReplyment());
 			}
-			/**
-			 * Register an Insert query
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1667,16 +1714,13 @@ public class SystemServer extends AbstractServer{
 	
 	/**
 	 * Handle a new complain add
-	 * @param db
-	 * @param key
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
 	 */
 	public void addComplainHandler(DbQuery db , Command key)
 	{
 		DbUpdater<Complain> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Complain>() {
-			/**
-			 * Register the fields for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Complain obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1688,9 +1732,6 @@ public class SystemServer extends AbstractServer{
 				stmt.setBoolean(5, obj.isActive());
 				stmt.setInt(6, obj.getBranchId());
 			}
-			/**
-			 * Register an Insert query
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1707,16 +1748,10 @@ public class SystemServer extends AbstractServer{
 	public void addMemberShipAccountHandler(DbQuery db,Command key) {
 		DbUpdater<MemberShipAccount> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<MemberShipAccount>() {
-			/**
-			 * Perform a Insert query to add new membership account
-			 */	
 			@Override
 			public String getQuery() {
 				return "insert into MemberShipAccount values (?,?,?)";
 			}
-			/**
-			 * Parse the result set in to a Membership account object
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, MemberShipAccount obj) throws SQLException {
 				stmt.setInt(1, obj.getAcNum());
@@ -1727,7 +1762,11 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
-
+	/**
+	 * get order report to display on the client side by branch id year and quarter
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getOrderReportHandler(DbQuery db, Command key)
 	{
 		Packet packet = db.getPacket();
@@ -1749,7 +1788,11 @@ public class SystemServer extends AbstractServer{
 			packet.setExceptionMessage(e.getMessage());
 		}
 	}
-	
+	/**
+	 * get income to display on the client side by branch id year and quarter
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getIncomeReportHandler(DbQuery db, Command key)
 	{
 		Packet packet = db.getPacket();
@@ -1771,7 +1814,11 @@ public class SystemServer extends AbstractServer{
 			packet.setExceptionMessage(e.getMessage());
 		}
 	}
-	
+	/**
+	 * get complains report to display on the client side by branch id year and quarter
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getComplainsForReportHandler(DbQuery db, Command key)
 	{
 		Packet packet = db.getPacket();
@@ -1793,7 +1840,11 @@ public class SystemServer extends AbstractServer{
 			packet.setExceptionMessage(e.getMessage());
 		}
 	}
-	
+	/**
+	 * get satisfaction report to display on the client side by branch id year and quarter
+	 * @param db -Stores database information 
+	 * @param key  - Command operation which is performed
+	 */
 	public void getSatisfactionReportHandler(DbQuery db, Command key)
 	{
 		Packet packet = db.getPacket();
@@ -1815,22 +1866,13 @@ public class SystemServer extends AbstractServer{
 		}
 	}
 	/**
-	 * Handle adding a refund
+	 * Handle adding a refund by complain
 	 * @param db -Stores database information 
 	 * @param key - Command operation which is performed
 	 */
 	private void addComplainRefundHandler(DbQuery db, Command key) {
-		// TODO Auto-generated method stub
-		
 		DbUpdater<Refund> dbUpdate = new DbUpdater<>(db, key);
-		/**
-		 * Register fields for the query
-		 */
 		dbUpdate.performAction(new IUpdate<Refund>() {
-			
-			/***
-			 * Initialize statement data for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Refund obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1838,9 +1880,6 @@ public class SystemServer extends AbstractServer{
 				stmt.setDouble(2, obj.getAmount());
 				stmt.setInt(3, obj.getRefundAbleId());
 			}
-			/**
-			 * Register an Insert query
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -1849,7 +1888,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	/**
 	 * Handle getting all of the complains
 	 * @param db -Stores database information 
@@ -1859,26 +1897,16 @@ public class SystemServer extends AbstractServer{
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			/**
-			 *	No fields to register for this query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
 				
 			}
-			/**
-			 * Perform a Select query to get all the complains
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM complain";
 			}
-			
-			/***
-			 * Parse the result set in to a Complain object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1896,7 +1924,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	/***
 	 * Handle survey adding
 	 * @param db - database information
@@ -1906,19 +1933,12 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<Survey> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Survey>() {
-
-			/***
-			 * Insert query to be defined for survey adding
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO survey (subject,creatorId,isActive) " + 
 				"VALUES (?,?,?)";
 			}
-			/***
-			 * Set statement for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -1965,7 +1985,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	/***
 	 * Handle getting all the questions
 	 * @param db - database information
@@ -1975,25 +1994,16 @@ public class SystemServer extends AbstractServer{
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			/***
-			 * Statements to be initialized for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// No statements needed
 				
 			}
-			/***
-			 * Select query to get all the questions
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM question";
 			}
-			/***
-			 * Parsing the result set in to a Question object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2011,10 +2021,6 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<SurveyQuestion> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<SurveyQuestion>() {
-
-			/***
-			 * Initialize a query to be performed
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -2024,16 +2030,12 @@ public class SystemServer extends AbstractServer{
 						"		(SELECT * FROM question Q ORDER BY Q.qId DESC LIMIT 6) as LastQuestions" + 
 						");";
 			}
-			/***
-			 * Statements to be initialized for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, SurveyQuestion obj) throws SQLException {
 				// No statements needed
 			}
 		});
 	}
-	
 	/***
 	 * Handle adding a question
 	 * @param db - database information
@@ -2043,20 +2045,12 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<Question> dbUpdate = new DbUpdater<>(db, key);
 		dbUpdate.performAction(new IUpdate<Question>() {
-
-			/***
-			 * Initialize qury for Insert the question
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO question (question) " + 
 				"VALUES (?)";
 			}
-
-			/***
-			 * Statements to be initialized for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Question obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2074,26 +2068,16 @@ public class SystemServer extends AbstractServer{
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			
-			/**
-			 *  Statements to be set for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// TODO Auto-generated method stub
 				
 			}
-			/***
-			 * Initializing Select query to get all the survey question data
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM surveyquestion;";
 			}
-			/***
-			 * Parsing the result set in to a SurveyQuestion object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2109,10 +2093,6 @@ public class SystemServer extends AbstractServer{
 	private void updateSurveyHandler(DbQuery db, Command key) {
 		DbUpdater<Survey> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<Survey>() {
-
-			/***
-			 * Initialize a query for survey Updating to be performed
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -2120,9 +2100,6 @@ public class SystemServer extends AbstractServer{
 					   "SET subject = ?, creatorId = ?, isActive = ? ,activatedDate = ?,closedDate = ? " +
 				 	   "WHERE surId=?";
 			}
-			/***
-			 * Initialize statements for the updating query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Survey obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2135,7 +2112,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	/***
 	 * Handle adding an answer
 	 * @param db - database information
@@ -2145,18 +2121,11 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<AnswerSurvey> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<AnswerSurvey>() {
-
-			/***
-			 * Answer query Insertion to be performed
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO answersurvey (sqId, brId, answer) VALUES (?, ?, ?)";
 			}
-			/***
-			 * Initialize the statements for the answer insertion query 
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, AnswerSurvey obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2166,7 +2135,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	/***
 	 * Handle getting an average of a survey questions 
 	 * @param db - database information
@@ -2176,32 +2144,18 @@ public class SystemServer extends AbstractServer{
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			
-			/***
-			 * Setting statements for the Select questions average query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
-				// TODO Auto-generated method stub
 				Integer surveyId = (Integer)(packet.getParameterForCommand(Command.getAverageAnswersBySurveyId).get(0));
 				stmt.setInt(1, surveyId);
 			}
-			
-			/***
-			 * Initialize the query to be performed
-			 */
 			@Override
 			public String getQuery() {
-				// TODO Auto-generated method stub
 				return  "SELECT answersurvey.answerId, answersurvey.sqId,answersurvey.brId ,AVG(answersurvey.answer) as answer " +
 						"FROM surveyquestion , answersurvey , survey " +
 						"WHERE surveyquestion.surId = ? AND surveyquestion.sqId = answersurvey.sqId " +
 						"GROUP BY surveyquestion.sqId;";
 			}
-			
-			/***
-			 * Parsing the result set in to an AnswerSurvey object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2218,18 +2172,12 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<SurveyConclusion> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<SurveyConclusion>() {
-			/***
-			 * Initialize the Insertion query of the conclusion
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "INSERT INTO surveyconclusion (expertId,conclusion,surId) " +
 					   "VALUES (?,?,?);";
 			}
-			/***
-			 * Set statements for the Insert query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, SurveyConclusion obj) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2239,7 +2187,6 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	/***
 	 * Handle getting all conclusion 
 	 * @param db - database information
@@ -2249,25 +2196,16 @@ public class SystemServer extends AbstractServer{
 	{
 		DbGetter dbGetter = new DbGetter(db, key);
 		dbGetter.performAction(new ISelect() {
-			/***
-			 * Initialize statements for the Selection query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// No needed
 				
 			}
-			/***
-			 * Initialize the query of the survey conclusion getting 
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM surveyconclusion;";
 			}
-			/***
-			 * Parsing the result set in to a SurveyConclusion object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2275,6 +2213,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	/**
+	 * create custom product
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void createCustomProduct(DbQuery db , Command key) {
 		Packet packet = db.getPacket();
 		try {
@@ -2339,17 +2282,11 @@ public class SystemServer extends AbstractServer{
 	{
 		DbUpdater<User> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<User>() {
-			/**
-			 * Initialize statements for the Delete query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, User obj) throws SQLException {
 				// TODO Auto-generated method stub
 				stmt.setInt(1, obj.getuId());
 			}
-			/***
-			 * Initialize query of the user Deletion 
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
@@ -2358,6 +2295,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	/**
+	 * get orders by customer id and branch id
+	 * @param db - database information
+	 * @param key - operation to be performed
+	 */
 	private void getOrderByCIdandBrId(DbQuery db , Command key) {
 		DbGetter dbGetter = new DbGetter(db, key);
 		Packet pack =db.getPacket();
@@ -2365,25 +2307,15 @@ public class SystemServer extends AbstractServer{
 		int brId = account.getBranchId();
 		int cId = account.getCustomerId();
 		dbGetter.performAction(new ISelect() {
-			/***
-			 * Initialize statements for the Selection query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				stmt.setInt(1, cId);
 				stmt.setInt(2, brId);
 			}
-			/***
-			 * Initialize the query of the survey conclusion getting 
-			 */
 			@Override
 			public String getQuery() {
-				// TODO Auto-generated method stub
 				return "SELECT oId,creationDate,requestedDate,stId,total FROM test.`order` where cId=? and brId=?;";
 			}
-			/***
-			 * Parsing the result set in to a SurveyConclusion object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2418,29 +2350,17 @@ public class SystemServer extends AbstractServer{
 	 * @param key - command operation to perform
 	 */
 	private void getRefundsHandler(DbQuery db, Command key) {
-		// TODO Auto-generated method stub
 		DbGetter dbGetter = new DbGetter(db, key);
-		
 		dbGetter.performAction(new ISelect() {
-			/**
-			 * Statements to initialize for the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// No statements needed
 			}
-			
-			/**
-			 * Perform Select query to get all the refunds
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM refund;";
 			}
-			/**
-			 * Parse the result set to a Refund object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2448,6 +2368,12 @@ public class SystemServer extends AbstractServer{
 			}
 		});	
 	}
+	/**
+	 * get all products from order
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 * @throws Exception message error
+	 */
 	private void getProductsInOrder(DbQuery db, Command key) throws Exception {
 		db.getPacket().addCommand(Command.getAllProductsInOrder);
 		Packet packet = db.getPacket();
@@ -2469,7 +2395,7 @@ public class SystemServer extends AbstractServer{
 		"from product inner join customproduct\r\n" + 
 		"	on product.pId= customproduct.pId \r\n" + 
 		"where product.pId in "+valuesIn+";";
-		// get the new product id
+			// get the new product id
 			db.connectToDB();
 			Connection con = db.getConnection();
 	    	// set the statements from the implemention
@@ -2507,25 +2433,15 @@ public class SystemServer extends AbstractServer{
 		DbGetter dbGetter = new DbGetter(db, key);
 		
 		dbGetter.performAction(new ISelect() {
-			
-			/***
-			 * Adding statements to the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				// No statements needed
 			}
-			/***
-			 * Define Select query to get all of the replies
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT * FROM reply;";
 			}
-			/***
-			 * Parsing the data result to a Reply object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2534,7 +2450,6 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
-
 	/**
 	 *updating membership account  
 	 * @param db - database information
@@ -2545,16 +2460,10 @@ public class SystemServer extends AbstractServer{
 		DbUpdater<MemberShipAccount> dbUpdate = new DbUpdater<>(db, key);
 		
 		dbUpdate.performAction(new IUpdate<MemberShipAccount>() {
-			/**
-			 * Perform a Update query to Update membership account 
-			 */	
 			@Override
 			public String getQuery() {
 				return "UPDATE MemberShipAccount SET mId=? , CreationDate=?  WHERE acNum = ?";
 			}
-			/**
-			 * Adding statements to the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, MemberShipAccount obj) throws SQLException {
 				stmt.setInt(1, obj.getmId());
@@ -2573,25 +2482,15 @@ public class SystemServer extends AbstractServer{
 		DbGetter dbGetter = new DbGetter(db, key);
 		
 		dbGetter.performAction(new ISelect() {
-			/**
-			 * Adding statements to the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				int acNum = (int)packet.getParameterForCommand(key).get(0);
 				stmt.setInt(1, acNum);
-
 			}
-			/**
-			 * Perform a Select query to membership account by account number
-			 */	
 			@Override
 			public String getQuery() {
 				return "Select * from MemberShipAccount where acNum=?";
 			}
-			/***
-			 * Parsing the data result to a membership account object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				int acNum=rs.getInt(1);
@@ -2611,27 +2510,17 @@ public class SystemServer extends AbstractServer{
 		DbGetter dbGetter = new DbGetter(db, key);
 		
 		dbGetter.performAction(new ISelect() {
-			/**
-			 * Adding statements to the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				int acNum = (int)packet.getParameterForCommand(key).get(0);
 				stmt.setInt(1, acNum);
 
 			}
-			/**
-			 * Perform a Select query to get membserhip account by customer id
-			 */	
 			@Override
 			public String getQuery() {
-				// TODO Auto-generated method stub
 				return "Select membershipaccount.acNum,membershipaccount.mId,membershipaccount.CreationDate from  account inner join MemberShipAccount on account.acNum= membershipaccount.acNum\r\n" + 
 						"where cId=?";
 			}
-			/***
-			 * Parsing the data result to a membership account object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				int acNum=rs.getInt(1);
@@ -2643,6 +2532,11 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
+	/**
+	 * create new order with products inside, delivery and payment options 
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 */
 	private void createOrder(DbQuery db, Command key) {
 		Packet packet = db.getPacket();
 		try {
@@ -2710,25 +2604,16 @@ public class SystemServer extends AbstractServer{
 	{
 		DbGetter dbGet = new DbGetter(db, key);
 		dbGet.performAction(new ISelect() {
-			/**
-			 * Adding statements to the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountByuId).get(0);
 				stmt.setInt(1, customerCid);
 
 			}
-			/**
-			 * Perform a Select query to get account by user id 
-			 */	
 			@Override
 			public String getQuery() {
 				return "SELECT acNum,brId,account.cId,balance,creditCard,status FROM account inner join customer on customer.cId=account.cId  where customer.uId=?";
 			}
-			/***
-			 * Parsing the data result to a Account account object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2760,25 +2645,16 @@ public class SystemServer extends AbstractServer{
 	private void getAccountbycID(DbQuery db, Command key) {
 		DbGetter dbGet = new DbGetter(db, key);
 		dbGet.performAction(new ISelect() {
-			/**
-			 * Adding statements to the query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				Integer customerCid = (Integer) packet.getParameterForCommand(Command.getAccountbycID).get(0);
 				stmt.setInt(1, customerCid);
 
 			}
-			/**
-			 * Perform a Select query to get account by customer id
-			 */	
 			@Override
 			public String getQuery() {
 				return "SELECT * FROM account  where account.cId=?";
 			}
-			/***
-			 * Parsing the data result to a Account account object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
@@ -2803,6 +2679,12 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
+	/**
+	 * get flowers in product and it's quantity
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 * @throws Exception message error
+	 */
 	private void getFlowerInProductInOrder(DbQuery db, Command key) throws Exception {
 		Packet packet = db.getPacket();
 		ArrayList<Product> prodLine = packet.<Product>convertedResultListForCommand(Command.getFlowersInProductInOrder);
@@ -2836,6 +2718,12 @@ public class SystemServer extends AbstractServer{
 			packet.addCommand(Command.getAllFlowersInOrder);
 			packet.setParametersForCommand(Command.getAllFlowersInOrder, floInProd);
 	}
+	/**
+	 * get all flower details which exists in product from order
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 * @throws Exception message error
+	 */
 	private void getAllFlowersFromOrder(DbQuery db, Command key) throws Exception {
 		Packet packet = db.getPacket();
 		ArrayList<FlowerInProduct> prodLine = packet.<FlowerInProduct>convertedResultListForCommand(Command.getAllFlowersInOrder);
@@ -2866,6 +2754,11 @@ public class SystemServer extends AbstractServer{
 			con.close();
 			packet.setParametersForCommand(Command.getAllFlowersInOrder, floList);
 	}
+	/**
+	 * get payment details by order
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 */
 	private void getOrderPaymentsDetails(DbQuery db, Command key) {
 		DbGetter dbGetter = new DbGetter(db, key);
 		Packet pack =db.getPacket();
@@ -2903,30 +2796,26 @@ public class SystemServer extends AbstractServer{
 		});
 		
 	}
+	/**
+	 * get order product in order details
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 */
 	private void getOrderProductsDetails(DbQuery db, Command key) {
 		DbGetter dbGetter = new DbGetter(db, key);
 		Packet packet =db.getPacket();
 		int oId = (Integer) packet.getParameterForCommand(key).get(0);
 		dbGetter.performAction(new ISelect() {
-			/***
-			 * Initialize statements for the Selection query
-			 */
 			@Override
 			public void setStatements(PreparedStatement stmt, Packet packet) throws SQLException {
 				
 				stmt.setInt(1, oId);
 			}
-			/***
-			 * Initialize the query of the survey conclusion getting 
-			 */
 			@Override
 			public String getQuery() {
 				// TODO Auto-generated method stub
 				return "SELECT pId,quantity FROM test.productinorder where  oId=?;";
 			}
-			/***
-			 * Parsing the result set in to a SurveyConclusion object
-			 */
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				int pId = rs.getInt(1);
@@ -2936,7 +2825,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
+	/**
+	 * add refund by order
+	 * @param db - database information
+	 * @param key - command operation to perform
+	 */
 	private void addOrderRefundHandler(DbQuery db , Command key)
 	{
 		DbUpdater<Refund> dbUpdater = new DbUpdater<>(db, key);
@@ -2944,7 +2837,6 @@ public class SystemServer extends AbstractServer{
 			
 			@Override
 			public void setStatements(PreparedStatement stmt, Refund obj) throws SQLException {
-				// TODO Auto-generated method stub
 				stmt.setDate(1, obj.getCreationDate());
 				stmt.setDouble(2, obj.getAmount());
 				stmt.setInt(3, obj.getRefundAbleId());
@@ -2957,9 +2849,8 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	
 	/***
-	 * 
+	 * update order 
 	 * @param db - DB information
 	 * @param key - Command to perform
 	 * Handle updating of an order
@@ -2971,7 +2862,6 @@ public class SystemServer extends AbstractServer{
 			
 			@Override
 			public void setStatements(PreparedStatement stmt, Order obj) throws SQLException {
-				// TODO Auto-generated method stub
 				stmt.setDate(1, obj.getCreationDate());
 				stmt.setTimestamp(2, obj.getRequestedDate());
 				stmt.setInt(3, obj.getCustomerId());
@@ -2988,6 +2878,11 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	/**
+	 * update order status from pending to completed if current 
+	 * @param db - DB information
+	 * @param key - Command to perform
+	 */
 	private void updateOrderStatus(DbQuery db, Command key) {
 		DbUpdater<Account> dbUpdater = new DbUpdater<>(db, key);
 		dbUpdater.performAction(new IUpdate<Account>() {
@@ -3007,6 +2902,16 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
+	
+	/**
+	 * receive the package 
+	 * complete commands
+	 * return data to the client
+	 * and status of execution
+	 * if failed return exception message
+	 * @param msg - message from client with command and data for the query 
+	 * @param client - from who the message come
+	 */
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Packet packet = (Packet) msg;
