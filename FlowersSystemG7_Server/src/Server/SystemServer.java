@@ -1244,7 +1244,7 @@ public class SystemServer extends AbstractServer{
 				ArrayList<Object> params = packet.getParameterForCommand(Command.getUserByNameAndPass);
 				User user = (User) params.get(0);
 
-				stmt.setString(1, us1Eer.getUser());
+				stmt.setString(1, user.getUser());
 				stmt.setString(2, user.getPassword());
 			}
 		});
