@@ -3,7 +3,6 @@ package Commons;
 import java.io.Serializable;
 
 /**
- * @author VladimirB
  * Storage products in order in it's quantity
  */
 public class ProductInOrder implements Serializable {
