@@ -14,17 +14,27 @@ import Customers.Customer;
  *
  */
 public class Order implements Serializable,IRefundAble {
+	/**order number*/
 	private int id;
+	/**creation order date*/
 	private Date creationDate;
+	/**requested date and time*/
 	private Timestamp requestedDate;
+	/** customer number*/
 	private int customerId;
+	/**order status */
 	private Status status;
-	private int orderPaymentId;
+	/**List of product and their quantity in the order*/
 	private ArrayList<ProductInOrder> productInOrderList;
+	/**list of payments for the order*/
 	private ArrayList<OrderPayment> orderPaymentList;
+	/**refund if it was a reason for*/
 	private Refund Refund;
+	/**delivery details if it included in the order*/
 	private Delivery deliery;
+	/**brach number where the order was created*/
 	private int brId;
+	/**total order cost*/
 	private double total;
 	
 	/***
@@ -99,20 +109,6 @@ public class Order implements Serializable,IRefundAble {
 	}
 	/***
 	 * 
-	 * @return order payment id
-	 */
-	public int getOrderPaymentId() {
-		return orderPaymentId;
-	}
-	/***
-	 * 
-	 * @param orderPaymentId to set
-	 */
-	public void setOrderPaymentId(int orderPaymentId) {
-		this.orderPaymentId = orderPaymentId;
-	}
-	/***
-	 * 
 	 * @return product in order list
 	 */
 	public ArrayList<ProductInOrder> getProductInOrderList() {
@@ -155,18 +151,17 @@ public class Order implements Serializable,IRefundAble {
 	}
 	/***
 	 * Constructor for server side
-	 * @param id
-	 * @param creationDate
-	 * @param requestedDate
-	 * @param customer
-	 * @param status
-	 * @param orderPayment
-	 * @param productInOrderList
-	 * @param refund
-	 * @param deliery
+	 * @param id order number
+	 * @param creationDate creation order date
+	 * @param requestedDate requested to be ready
+	 * @param customer customer
+	 * @param status order status
+	 * @param productInOrderList product in order
+	 * @param refund refund from the order
+	 * @param deliery delivery option
 	 */
 	public Order(int id, Date creationDate, Timestamp requestedDate, Customer customer, Status status,
-			OrderPayment orderPayment, ArrayList<ProductInOrder> productInOrderList, Commons.Refund refund,
+			ArrayList<ProductInOrder> productInOrderList, Commons.Refund refund,
 			Delivery deliery) {
 
 		this.id = id;
@@ -174,20 +169,19 @@ public class Order implements Serializable,IRefundAble {
 		this.setRequestedDate(requestedDate);
 		this.customerId = customerId;
 		this.status = status;
-		this.orderPaymentId = orderPaymentId;
 		this.productInOrderList = productInOrderList;
 		Refund = refund;
 		this.deliery = deliery;
 	}
 	/***
 	 * Constructor for client side
-	 * @param id
-	 * @param creationDate
-	 * @param requestedDate
-	 * @param cId
-	 * @param status
-	 * @param brId
-	 * @param total
+	 * @param id order number
+	 * @param creationDate creation of the order
+	 * @param requestedDate requested to be read
+	 * @param cId customer number
+	 * @param status status of the order
+	 * @param brId branch code
+	 * @param total total cost of the order
 	 */
 	public Order(int id,Date creationDate, Timestamp requestedDate,int cId,Status status,int brId,double total)
 	{
