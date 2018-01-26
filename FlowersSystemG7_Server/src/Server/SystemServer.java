@@ -2576,7 +2576,7 @@ public class SystemServer extends AbstractServer{
 			db.connectToDB();
 			Connection con = db.getConnection();
 			
-			String query = "INSERT INTO `order` (`creationDate`,`requestedDate`,`cId`,`stId`,`brId`,`Total`) VALUES (curdate(), ?,?,1,?,?); " + 
+			String query = "INSERT INTO `order` (`creationDate`,`requestedDate`,`cId`,`stId`,`brId`,`Total`) VALUES (curdate(), ?,?,2,?,?); " + 
 	    				"SET @oId = LAST_INSERT_ID(); "  
 	    				 + formatSqlPaymentsLines + ";"+
 	    				"INSERT INTO `test`.`productinorder`(`pId`,`oId`,`quantity`)VALUES" + formatSqlProdLines+";";
