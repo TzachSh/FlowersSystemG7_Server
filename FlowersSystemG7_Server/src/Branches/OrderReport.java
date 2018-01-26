@@ -1,8 +1,10 @@
 package Branches;
 
 import java.io.Serializable;
-import java.sql.Date;
-
+/**
+ * Entity
+ * Contains ready orders details for displaying in report
+ */
 public class OrderReport implements Serializable {
 	/** category of the product */
 	private String productCategory;

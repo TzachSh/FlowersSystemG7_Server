@@ -1,7 +1,10 @@
 package Branches;
 
 import java.io.Serializable;
-
+/**
+ * Entity satisfaction report contain question average grade for the question
+ *
+ */
 public class SatisfactionReport implements Serializable{
 	/**satisfaction question  */
 	private String question;

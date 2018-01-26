@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 import Survey.SurveyConclusion;
 import Users.Permission;
-
+/**
+ * Entity
+ * Service expert with list of survey conclusions
+ *
+ */
 public class ServiceExpert extends Employee implements Serializable {
 	/**survey conclusions list */
 	private ArrayList<SurveyConclusion> surveyConclusionList;
