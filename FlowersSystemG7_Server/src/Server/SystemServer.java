@@ -2544,7 +2544,12 @@ public class SystemServer extends AbstractServer{
 			Order order = (Order)packet.getParameterForCommand(Command.createOrder).get(0);
 			ArrayList<ProductInOrder> prodInOrderList = packet.<ProductInOrder>convertedResultListForCommand(Command.createProductsInOrder);
 			ArrayList<OrderPayment> paymentList = packet.<OrderPayment>convertedResultListForCommand(Command.createOrderPayments);
-			Delivery delivery = (Delivery)packet.getParameterForCommand(Command.createDelivery).get(0);
+			Delivery delivery;
+			try {
+			delivery= (Delivery)packet.getParameterForCommand(Command.createDelivery).get(0);
+			}catch(Exception e) {
+				delivery=null;
+			}
 			// prepare the values string for query
 			String formatSqlProdLines = "";
 			String formatSqlPaymentsLines="";
@@ -2574,11 +2579,11 @@ public class SystemServer extends AbstractServer{
 			String query = "INSERT INTO `order` (`creationDate`,`requestedDate`,`cId`,`stId`,`brId`,`Total`) VALUES (curdate(), ?,?,1,?,?); " + 
 	    				"SET @oId = LAST_INSERT_ID(); "  
 	    				 + formatSqlPaymentsLines + ";"+
-	    				"INSERT INTO `test`.`productinorder`(`pId`,`oId`,`quantity`)VALUES" + formatSqlProdLines+";"+
-	    				"INSERT INTO `test`.`delivery`(`Address`,`phone`,`receiver`,`oId`)"
-	    				+ "VALUES('"+delivery.getAddress()+"','"+delivery.getPhone()+"','"+delivery.getReceiver()+"',@oId);"
-	    				;
-	    	
+	    				"INSERT INTO `test`.`productinorder`(`pId`,`oId`,`quantity`)VALUES" + formatSqlProdLines+";";
+	    				
+	    	if(delivery!=null)
+	    		query+="INSERT INTO `test`.`delivery`(`Address`,`phone`,`receiver`,`oId`)"
+	    				+ "VALUES('"+delivery.getAddress()+"','"+delivery.getPhone()+"','"+delivery.getReceiver()+"',@oId);";
 	 
 	    	// set the statements from the implemention
 	    	PreparedStatement stmt = con.prepareStatement(query);
