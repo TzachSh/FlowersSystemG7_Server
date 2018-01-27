@@ -61,7 +61,7 @@ public class MemberShipPayment {
 				String user = rs.getString(2);
 				double totalPayment = rs.getDouble(3);
 				
-				String format = String.format("Charged -> %d (%s) | Total: %.2f¤", uId, user, totalPayment);
+				String format = String.format("Charged -> %d (%s) | Total: %.2f$", uId, user, totalPayment);
 				accounts.add(format);
 			}			
 		}
