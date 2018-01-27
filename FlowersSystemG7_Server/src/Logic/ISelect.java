@@ -14,7 +14,7 @@ public interface ISelect
 {
 	/**
 	 * Return the relevant query for the request
-	 * 
+	 * @return sql query
 	 */
 	String getQuery();
 	

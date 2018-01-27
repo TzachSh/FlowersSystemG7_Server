@@ -10,7 +10,7 @@ public interface IUpdate<T>
 {
 	/**
 	 * Return the relevant query for the request
-	 * 
+	 * @return sql query
 	 */
 	String getQuery();
 	

@@ -54,6 +54,7 @@ public abstract class ReportGeneration implements IReport
 	/**
 	 * Get The collection of all branches in the database
 	 * @throws Exception Exception when failed to get all branches
+	 * @return all list of branches
 	 */
 	private ArrayList<Branch> getAllBranches() throws Exception
 	{
@@ -215,6 +216,7 @@ public abstract class ReportGeneration implements IReport
 	 * get the report path from the database
 	 * @param branchId The branch id for report
 	 * @throws Exception Throws when there was an exception during the saving in database
+	 * @return report path
 	 */
 	private String getReportPathFromDb(int branchId) throws Exception
 	{
@@ -277,6 +279,7 @@ public abstract class ReportGeneration implements IReport
 	 * Each column is shown as string array
 	 * @param branchId The branch id to perform for it the csv data
 	 * @return The csv data of all branches as ArrayList
+	 * @throws Exception error message
 	 */
 	private ArrayList<String[]> createCsvData(int branchId) throws Exception {
 
@@ -361,6 +364,7 @@ public abstract class ReportGeneration implements IReport
 	/**
 	 * Read and return the collection from csv file
 	 * @param csvFile The csv file name and path
+	 * @return data from csv file stored in list
 	 */
 	private ArrayList<String[]> readCSVFile(String csvFile) {
 		ArrayList<String[]> csvDataFile = new ArrayList<>();

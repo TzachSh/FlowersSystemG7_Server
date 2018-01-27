@@ -6,15 +6,14 @@ import javafx.stage.Stage;
 public class ServerUI extends Application {
 
 	
-	/**
-	 * initialize the window of the server
-	 * 
-	 * */
 	
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	/**
+	 * create GUI
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub

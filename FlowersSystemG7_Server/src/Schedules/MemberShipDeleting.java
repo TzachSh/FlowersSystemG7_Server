@@ -29,6 +29,7 @@ public class MemberShipDeleting {
 	/**
 	 * Get The list of all accounts that system delete their membership account
 	 * @throws Exception Exception when failed to get all accounts
+	 * @return all accounts that must be deleted
 	 */
 	private ArrayList<String> getAllAccountThatDeleted() throws Exception
 	{

@@ -27,6 +27,7 @@ public class Quarter {
 
 	/**
 	 * Get the last quarter 
+	 * @return last quarter
 	 */
 	public static Quarter getLastQuarter() {
 		Calendar c = Calendar.getInstance();

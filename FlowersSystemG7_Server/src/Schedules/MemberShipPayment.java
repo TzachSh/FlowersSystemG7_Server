@@ -21,6 +21,7 @@ public class MemberShipPayment {
 	 * Constructor for initialize the month for payment
 	 * @param db The database object details
 	 * @param month The month for paying
+	 * @param year The year for paying
 	 */
 	public MemberShipPayment(DbQuery db, int year, int month)
 	{
@@ -32,6 +33,7 @@ public class MemberShipPayment {
 	/**
 	 * Get The list of all accounts that system performed payment for them
 	 * @throws Exception Exception when failed to get all accounts
+	 * @return list of all accounts that system performed payment for them
 	 */
 	private ArrayList<String> getAllAccountThatPerformedPayment() throws Exception
 	{
@@ -125,8 +127,8 @@ public class MemberShipPayment {
 	
 	/**
 	 * Check if date is the first day of the month
-	 * @param calender The calendar date for checking
-	 * @return
+	 * @param calendar The calendar date for checking
+	 * @return true if it the first day of month else false
 	 */
 	public static boolean isFirstDayofMonth(Calendar calendar){
 	    if(calendar == null)

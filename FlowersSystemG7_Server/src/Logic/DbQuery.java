@@ -68,7 +68,7 @@ public class DbQuery {
 	
 	/**
 	 * Send the final packet to the client 
-	 * @throws IOException 
+	 * @throws IOException error message
 	 * 
 	 */
 	public void sendToClient() throws IOException
@@ -78,6 +78,7 @@ public class DbQuery {
 	
 	/**
 	 * Getter for password to the database
+	 * @return passwor
 	 */
 	public String getPassword() {
 		return password;
@@ -85,7 +86,7 @@ public class DbQuery {
 
 	/**
 	 * Getter for the packet that received from the client
-	 *
+	 * @return packet with commands and data
 	 */
 	public Packet getPacket() {
 		return packet;
@@ -93,7 +94,7 @@ public class DbQuery {
 
 	/**
 	 * Getter for the client that send the request
-	 * 
+	 * @return client connection details 
 	 */
 	public ConnectionToClient getClient() {
 		return client;
@@ -101,7 +102,7 @@ public class DbQuery {
 
 	/**
 	 * Create the connection to the database based on the user and password
-	 * 
+	 * @throws Exception message error
 	 */
 	public void connectToDB() throws Exception{
 		conn = null;

@@ -167,6 +167,7 @@ public class SystemServer extends AbstractServer{
 	 * the function check if server already listen to port 
 	 * if yes then stop to listen
 	 *  otherwise start listen and update button text
+	 *  @param event actual event
 	 * */
 	public void onSubmitClicked(ActionEvent event)
 	{
@@ -252,6 +253,7 @@ public class SystemServer extends AbstractServer{
 	
 	/***
 	 * clear log text area
+	 * @param event actual event
 	 */
 	public void onClearClicked(ActionEvent event)
 	{
@@ -275,7 +277,6 @@ public class SystemServer extends AbstractServer{
 			scene.getStylesheets().add(getClass().getResource(srcCSS).toExternalForm());
 			arg0.setTitle(title);
 			arg0.setScene(scene);
-			arg0.setResizable(false);
 			arg0.show();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -2015,8 +2016,8 @@ public class SystemServer extends AbstractServer{
 	}
 	/***
 	 * Handle Attaching question to survey 
-	 * @param db
-	 * @param key
+	 * @param db - database information
+	 * @param key - operation to be performed
 	 */
 	private void addQuestionsToSurveyHandler(DbQuery db , Command key)
 	{

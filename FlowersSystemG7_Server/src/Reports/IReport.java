@@ -7,7 +7,7 @@ package Reports;
  */
  public interface IReport {
  	/**
- 	 * return the query for generation report<br>
+ 	 * @return the query for generation report<br>
  	 * The query must contains in the where condition the prepared statements in this order:<br>
  	 * <b>branchId, year, quarter</b><br><br>
  	 * In Example:
@@ -24,6 +24,7 @@ package Reports;
  	/**
  	 * Create and return concrete object based on the row
  	 * @param row The row to create from it the object
+ 	 * @return new object
  	 */
  	Object createObject(String[] row);
 }
