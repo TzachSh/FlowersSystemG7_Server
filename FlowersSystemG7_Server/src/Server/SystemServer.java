@@ -85,7 +85,12 @@ import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
 
-
+/**
+ * This class contain GUI and buttons behavior on the server side
+ * Available to set up connection to the database and selecting port to listen
+ * Also contains main function to get command from client and 
+ * send it to relevant function in the class
+ */
 public class SystemServer extends AbstractServer{
 
 	public SystemServer(int port) {
