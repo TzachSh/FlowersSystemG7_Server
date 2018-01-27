@@ -40,7 +40,7 @@ public class OrderReportGeneration extends ReportGeneration {
 		int productId = Integer.valueOf(row[3]);
 		String status = row[4];
 		String productName = row[5];
-		String price = row[6]+" ₪";
+		String price = row[6]+" $";
 		String paymentMethod = row[7];
 		
 		int deliveryNumber = 0;
