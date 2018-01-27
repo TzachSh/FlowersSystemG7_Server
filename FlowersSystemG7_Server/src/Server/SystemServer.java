@@ -2371,7 +2371,12 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				// TODO Auto-generated method stub
-				return new Refund(rs.getInt(1),rs.getDate(2),rs.getDouble(3),rs.getInt(5));
+				Refund refund = null;
+				if(rs.getInt(4) != 0)
+					refund = new Refund(rs.getInt(1),rs.getDate(2),rs.getDouble(3),rs.getInt(4));
+				else if(rs.getInt(5) != 0)
+					refund = new Refund(rs.getInt(1),rs.getDate(2),rs.getDouble(3),rs.getInt(5));
+				return refund; 
 			}
 		});	
 	}
@@ -2834,7 +2839,7 @@ public class SystemServer extends AbstractServer{
 			@Override
 			public Object createObject(ResultSet rs) throws SQLException {
 				int pId = rs.getInt(1);
-				int quantity = rs.getInt(1);
+				int quantity = rs.getInt(2);
 
 				return new ProductInOrder(oId, pId, quantity);
 			}
