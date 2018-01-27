@@ -21,7 +21,7 @@ public class OrderReportGeneration extends ReportGeneration {
 				"						IF(EXISTS(SELECT * FROM catalogproduct cp WHERE cp.pId = p.pId), " + 
 				"							(SELECT cp.productName FROM catalogproduct cp WHERE cp.pId = p.pId), " + 
 				"							'Custom Product') as 'Product Name', " + 
-				"						p.price as 'Price',op.paymentMethod,d.delId as 'Delivery Number',d.Address,d.phone,d.receiver " + 
+				"						cast(o.Total as decimal(8,2)) as 'Price',op.paymentMethod,d.delId as 'Delivery Number',d.Address,d.phone,d.receiver " + 
 				"						FROM `order` o  INNER JOIN orderpayment op ON op.oId=o.oId " + 
 				"									    INNER JOIN productinorder pio ON o.oId=pio.oId " + 
 				"										INNER JOIN product p ON  p.pId = pio.pId " + 
