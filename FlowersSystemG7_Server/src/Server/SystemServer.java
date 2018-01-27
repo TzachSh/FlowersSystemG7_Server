@@ -1640,6 +1640,64 @@ public class SystemServer extends AbstractServer{
 		});
 	}
 	/**
+	  * updating account balance
+	  * @param db -Stores database information 
+	  * @param key  - Command operation which is performed
+	  */
+	public void updateAccountBalance(DbQuery db,Command key)
+	{
+		int brId = (Integer)db.getPacket().getParameterForCommand(Command.updateAccountBalance).get(0);
+		int custId =(Integer)db.getPacket().getParameterForCommand(Command.updateAccountBalance).get(1);
+		double amount = (Double)db.getPacket().getParameterForCommand(Command.updateAccountBalance).get(2);
+		try {
+			// create the connection to database
+			db.connectToDB();
+			Connection con = db.getConnection();
+			
+			String query = "update Account set balance=balance+? where cId=? and brId=?";
+	    	
+	 
+	    	// set the statements from the implemention
+	    	PreparedStatement stmt = con.prepareStatement(query);
+	    	stmt.setDouble(1, amount);
+			stmt.setInt(2, custId);
+			stmt.setInt(3, brId);
+	    	stmt.executeUpdate();
+	    
+	    	
+	    	// get the updated account
+	    	query = "SELECT acNum,brId,account.cId,balance,creditCard,status "
+	    			+ "FROM account "
+	    			+ "  where cId=? and brId=?";
+	    	stmt=con.prepareStatement(query);
+			stmt.setInt(1, custId);
+			stmt.setInt(2, brId);
+	    	ResultSet rs = stmt.executeQuery();
+	    	ArrayList<Object> newAccount = new ArrayList<>();
+			while (rs.next()) {
+				int acNum = rs.getInt(1);
+				int cId = rs.getInt(3);
+				double balance=rs.getDouble(4);
+				String creditCard=rs.getString(5);
+				String statusString=rs.getString(6);
+				AccountStatus status = AccountStatus.Active;			
+				Account newacc;
+				if(statusString.equals((AccountStatus.Active).toString()))
+					status= AccountStatus.Active;
+				else if(statusString.equals((AccountStatus.Blocked).toString()))
+					status= AccountStatus.Blocked;
+				newacc=new Account(acNum, cId, 0, balance, brId, status, creditCard);
+				newAccount.add(newacc);
+			}
+			db.getPacket().setParametersForCommand(Command.updateAccountBalance,newAccount);
+			con.close();
+		}
+		catch (Exception e)
+		{
+			db.getPacket().setExceptionMessage(e.getMessage());
+		}
+	}
+	/**
 	  * updating account after updating by cId
 	  * @param db -Stores database information 
 	  * @param key  - Command operation which is performed
@@ -2640,7 +2698,7 @@ public class SystemServer extends AbstractServer{
 				int acNum = rs.getInt(1);
 				int brId =rs.getInt(2);
 				int cId = rs.getInt(3);
-				int balance=rs.getInt(4);
+				double balance=rs.getDouble(4);
 				String creditCard=rs.getString(5);
 				String statusString=rs.getString(6);
 				AccountStatus status = AccountStatus.Active;
@@ -2681,7 +2739,7 @@ public class SystemServer extends AbstractServer{
 				int acNum = rs.getInt(1);
 				int brId =rs.getInt(2);
 				int cId = rs.getInt(3);
-				int balance=rs.getInt(4);
+				Double balance=rs.getDouble(4);
 				String creditCard=rs.getString(5);
 				String statusString=rs.getString(6);
 				AccountStatus status = AccountStatus.Active;
@@ -3171,6 +3229,8 @@ public class SystemServer extends AbstractServer{
 					break;
 				case addOrderRefund:
 					addOrderRefundHandler(db, key);
+				case updateAccountBalance:
+					updateAccountBalance(db, key);
 					default:;
 				}		
 			}

@@ -95,5 +95,6 @@ public enum Command implements Serializable
 	getCustomers, 
 	getPaymentDetails,
 	updateOrder,
-	addOrderRefund
+	addOrderRefund,
+	updateAccountBalance
 	}
