@@ -33,7 +33,7 @@
       <MenuButton fx:id="btnSchedule" disable="true" layoutX="258.0" layoutY="449.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="120.0" text="Force Schedule" AnchorPane.bottomAnchor="14.0">
         <items>
           <MenuItem fx:id="btnReport" mnemonicParsing="false" onAction="#onClickForceReportsButton" text="Last Quarter Report" />
-          <MenuItem fx:id="btnCharging" mnemonicParsing="false" onAction="#onClickForceChargingButton" text="Charging Memberships" />
+          <MenuItem fx:id="btnCharging" mnemonicParsing="false" onAction="#onClickForceChargingButton" text="Charging Memberships In Last Month" />
             <MenuItem fx:id="btnDelete" mnemonicParsing="false" onAction="#onClickForceDeletingButton" text="Deleting Passed Memberships" />
         </items>
       </MenuButton>
