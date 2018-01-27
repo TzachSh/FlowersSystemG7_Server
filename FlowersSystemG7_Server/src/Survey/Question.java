@@ -9,10 +9,9 @@ import java.io.Serializable;
  */
 public class Question implements Serializable {
 	
-	/***
-	 * Instance variables
-	 */
+	/**question id*/
 	private int id;
+	/**question*/
 	private String quesiton;
 	
 	/***
@@ -47,8 +46,8 @@ public class Question implements Serializable {
 	/***
 	 * Constructor to be used by server
 	 *  
-	 * @param id
-	 * @param quesiton
+	 * @param id question id
+	 * @param quesiton question
 	 */
 	public Question(int id, String quesiton) {
 
@@ -58,7 +57,7 @@ public class Question implements Serializable {
 	
 	/***
 	 * Constructor to be used by client side
-	 * @param quesiton
+	 * @param quesiton quesiton
 	 */
 	public Question(String quesiton) {
 

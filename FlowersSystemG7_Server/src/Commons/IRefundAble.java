@@ -1,9 +1,8 @@
 package Commons;
+
 /***
- * 
- * Interface to define an object which having a refund operation
- *
+ * Interface to define an object which can be refounded
  */
 public interface IRefundAble {
-
+	
 }

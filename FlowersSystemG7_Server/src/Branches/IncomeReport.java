@@ -30,6 +30,7 @@ public class IncomeReport implements Serializable {
 	
 	/**
 	 * Getter for get the branch id
+	 * @return branch number
 	 */
 	public int getBrId() {
 		return brId;
@@ -45,6 +46,7 @@ public class IncomeReport implements Serializable {
 	
 	/**
 	 * Getter for get the branch name
+	 * @return branch name
 	 */
 	public String getBrName() {
 		return brName;
@@ -60,6 +62,7 @@ public class IncomeReport implements Serializable {
 	
 	/**
 	 * Getter for get the income amount
+	 * @return income amount
 	 */
 	public String getAmount() {
 		return amount;

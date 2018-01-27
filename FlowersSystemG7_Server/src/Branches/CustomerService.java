@@ -16,6 +16,7 @@ public class CustomerService extends Employee implements Serializable {
 
 	/**
 	 * Getter for get the complain list
+	 * @return complain list
 	 */
 	public ArrayList<Complain> getComplainList() {
 		return complainList;

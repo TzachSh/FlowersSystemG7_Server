@@ -156,13 +156,13 @@ public class Complain implements IRefundAble, Serializable {
 	 * 
 	 * Constructor which initialize the following fields:
 	 * 
-	 * @param creationDate
-	 * @param title
-	 * @param details
-	 * @param customerId
-	 * @param customerServiceId
-	 * @param isActive
-	 * 
+	 * @param creationDate creation date of complain
+	 * @param title complain title
+	 * @param details details of the complain
+	 * @param customerId customer id who complained
+	 * @param customerServiceId customer service id
+	 * @param isActive if complain is active
+	 * @param branchId branch number
 	 * for Client side use
 	 */
 	public Complain(Timestamp creationDate, String title, String details, int customerId,
@@ -180,14 +180,14 @@ public class Complain implements IRefundAble, Serializable {
 	/**
 	 * Constructor which initialize the following fields:
 	 * 
-	 * @param id
-	 * @param creationDate
-	 * @param title
-	 * @param details
-	 * @param customerId
-	 * @param customerServiceId
-	 * @param isActive
-	 * 
+	 * @param id complain id
+	 * @param creationDate creation date of complain
+	 * @param title complain title
+	 * @param details details of the complain
+	 * @param customerId customer id who complained
+	 * @param customerServiceId customer service id
+	 * @param isActive if complain is active
+	 * @param branchId branch number
 	 * for server side use
 	 */
 	public Complain(int id, Timestamp creationDate, String title, String details, int customerId,

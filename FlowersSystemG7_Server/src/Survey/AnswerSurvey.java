@@ -8,14 +8,25 @@ import java.io.Serializable;
  *
  */
 public class AnswerSurvey implements Serializable {
-	
-	/***
-	 * Instance variables
+	/**
+	 * answer survey id
 	 */
 	private int id;
+	/**
+	 * question id
+	 */
 	private int surveyQuestionId;
+	/**
+	 * branch number
+	 */
 	private int branchId;
+	/**
+	 * customer answer
+	 */
 	private int answer;
+	/**
+	 * average answer for question
+	 */
 	private double avgaAnswerForQuestion;
 	
 	/***
@@ -27,7 +38,7 @@ public class AnswerSurvey implements Serializable {
 	}
 	/***
 	 * 
-	 * @param branchId to set
+	 * @param branchId branch number to update
 	 */
 	public void setBranchId(int branchId) {
 		this.branchId = branchId;
@@ -41,7 +52,7 @@ public class AnswerSurvey implements Serializable {
 	}
 	/***
 	 * 
-	 * @param answer to set
+	 * @param answer answer to update
 	 */
 	public void setAnswer(int answer) {
 		this.answer = answer;
@@ -55,7 +66,7 @@ public class AnswerSurvey implements Serializable {
 	}
 	/***
 	 * 
-	 * @param id to set
+	 * @param id answer survey id
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -69,7 +80,7 @@ public class AnswerSurvey implements Serializable {
 	}
 	/***
 	 * 
-	 * @param surveyQuestionId to set 
+	 * @param surveyQuestionId update survey question id 
 	 */
 	public void setSurveyQuestionId(int surveyQuestionId) {
 		this.surveyQuestionId = surveyQuestionId;
@@ -92,10 +103,10 @@ public class AnswerSurvey implements Serializable {
 	/***
 	 * Constructor to be used by server
 	 * 
-	 * @param id
-	 * @param surveyQuestionId
-	 * @param branchId
-	 * @param answer
+	 * @param id answer survey id
+	 * @param surveyQuestionId survey question id
+	 * @param branchId branch number
+	 * @param answer answer for the question
 	 */
 	public AnswerSurvey(int id, int surveyQuestionId,int branchId,int answer) {
 		super();
@@ -108,10 +119,10 @@ public class AnswerSurvey implements Serializable {
 	/***
 	 * Constructor to be used by server to return the average answers for a question
 	 * 
-	 * @param id
-	 * @param surveyQuestionId
-	 * @param branchId
-	 * @param avgaAnswerForQuestion
+	 * @param id answer survey id
+	 * @param surveyQuestionId survey question id
+	 * @param branchId branch number
+	 * @param avgaAnswerForQuestion average answer for current question
 	 */
 	public AnswerSurvey(int id, int surveyQuestionId,int branchId,double avgaAnswerForQuestion) {
 		super();
@@ -123,9 +134,9 @@ public class AnswerSurvey implements Serializable {
 	/***
 	 * Constructor to be used by client side to create an AnswerSurvey object
 	 * 
-	 * @param surveyQuestionId
-	 * @param branchId
-	 * @param answer
+	 * @param surveyQuestionId survey question id
+	 * @param branchId branch number
+	 * @param answer answer for the question
 	 */
 	public AnswerSurvey(int surveyQuestionId,int branchId,int answer) {
 		super();

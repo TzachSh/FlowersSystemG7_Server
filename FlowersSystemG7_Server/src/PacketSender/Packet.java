@@ -37,6 +37,7 @@ public class Packet implements Serializable
 	
 	/**
 	 * get all commands registered to the packet
+	 * @return all commands
 	 */
 	public ArrayList<Command> getCommands()
 	{
@@ -49,11 +50,10 @@ public class Packet implements Serializable
 		
 		return commands;
 	}
-	
 	/**
 	 * Convert the result list to specific type for client uses
+	 * @param cmd command to find by
 	 * @param <T> The excepted type to convert
-	 * 
 	 * @return the result list on type excepted
 	 */
 	@SuppressWarnings("unchecked")
@@ -91,7 +91,7 @@ public class Packet implements Serializable
 	
 	/**
 	 * Get the result state from the server
-	 * 
+	 * @return success/failed
 	 */
 	public boolean getResultState()
 	{

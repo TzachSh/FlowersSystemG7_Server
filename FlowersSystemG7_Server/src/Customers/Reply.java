@@ -61,9 +61,9 @@ public class Reply implements Serializable{
 	
 	/**
 	 * Constructor to initialize the following fields:
-	 * @param id
-	 * @param complainId
-	 * @param replyment
+	 * @param id reply id
+	 * @param complainId complain id
+	 * @param replyment message in reply
 	 * For server using
 	 */
 	public Reply(int id, int complainId, String replyment) {
@@ -74,8 +74,8 @@ public class Reply implements Serializable{
 	}
 	/**
 	 * Constructor to initialize the following fields:
-	 * @param complainId
-	 * @param replyment
+	 * @param complainId complain id
+	 * @param replyment message in reply
 	 * For client using
 	 */
 	public Reply(int complainId, String replyment) {

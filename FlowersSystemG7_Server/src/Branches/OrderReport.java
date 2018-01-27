@@ -30,99 +30,160 @@ public class OrderReport implements Serializable {
 	private String receiver;
 	/**delivery status */
 	private String status;
-	/** return the status of the delivery*/
+	/**
+	 * @return order status
+	 */
 	public String getStatus() {
 		return status;
 	}
-	/** setting the delivery status*/
+	/**
+	 *  setting the delivery status
+	 *  @param status to set
+	 *  */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	/** returns the category of the product*/
+	/** 
+	 * @return category of the product
+	 * returns the category of the product*/
 	public String getProductCategory() {
 		return productCategory;
 	}
-	/**setting category for product */
+	/**
+	 * setting category for product 
+	 * @param productCategory to set
+	 */
 	public void setProductCategory(String productCategory) {
 		this.productCategory = productCategory;
 	}
-	/**returns order id*/
+	/**
+	 * 	
+	 * @return order number
+	 */
 	public int getOrderId() {
 		return orderId;
 	}
-	/**setting order id */
+	/**
+	 * 
+	 * @param orderId to set
+	 */
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
 	}
-	/** returns creation date*/
+	/**
+	 * 
+	 * @return creation date
+	 */
 	public String getCreationDate() {
 		return creationDate;
 	}
-	/** setting creation date */
+	/**
+	 * 
+	 * @param creationDate to set
+	 */
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
-	/**returns product id*/
+	/**
+	 * 
+	 * @return product code
+	 */
 	public int getProductId() {
 		return productId;
 	}
-	/**setting product id */
+	/**
+	 * 
+	 * @param productId product code to set
+	 */
 	public void setProductId(int productId) {
 		this.productId = productId;
 	}
-	/** returns product name*/
+	/**
+	 * 
+	 * @return product name
+	 */
 	public String getProductName() {
 		return productName;
 	}
-	/**setting product name */
+	/**
+	 * @param productName product name
+	 */
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	/**getting price*/
+	/**
+	 * 
+	 * @return product price
+	 */
 	public String getPrice() {
 		return price;
 	}
-	/**setting price*/
+	/**
+	 * 
+	 * @param price to set
+	 */
 	public void setPrice(String price) {
 		this.price = price;
 	}
-	/** returns payment method*/
+	/**
+	 * 
+	 * @return payment option
+	 */
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
-	/** setting payment method*/
+	
+	/**
+	 * @param paymentMethod to set
+	 */
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	/** returns the delivery number */
+	/**
+	 * @return delivery number
+	 */
 	public int getDeliveryNumber() {
 		return deliveryNumber;
 	}
-	/** setting delivery number*/
+	/**
+	 * @param deliveryNumber to set
+	 */
 	public void setDeliveryNumber(int deliveryNumber) {
 		this.deliveryNumber = deliveryNumber;
 	}
-	/** returns the address*/
+	/**
+	 * @return delivery address
+	 */
 	public String getAddress() {
 		return address;
 	}
-	/**setting the address */
+	/**
+	 * @param address to set
+	 */
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	/** returns phone number */
+	/**
+	 * @return phone of receiver
+	 */
 	public String getPhone() {
 		return phone;
 	}
-	/** setting phone  number*/
+	/**
+	 * @param phone to set
+	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	/** returns the receiver*/
+	/**
+	 * @return receiver
+	 */
 	public String getReceiver() {
 		return receiver;
 	}
-	/**setting receiver*/
+	/**
+	 * @param receiver to set
+	 */
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}

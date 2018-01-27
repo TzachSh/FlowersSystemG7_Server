@@ -82,10 +82,10 @@ public class Refund implements Serializable {
 
 	/***
 	 * Constructor for the server side use
-	 * @param id
-	 * @param creationDate
-	 * @param amount
-	 * @param refundAbleId
+	 * @param id refund id
+	 * @param creationDate creation of refund
+	 * @param amount amount of refund
+	 * @param refundAbleId purpose of the refund
 	 */
 	public Refund(int id, Date creationDate, double amount, int refundAbleId) {
 		super();
@@ -96,9 +96,9 @@ public class Refund implements Serializable {
 	}
 	/***
 	 * Constructor for the client side
-	 * @param creationDate
-	 * @param amount
-	 * @param refundAbleId
+	 * @param creationDate creation of refund
+	 * @param amount amount of refund
+	 * @param refundAbleId purpose of the refund
 	 */
 	public Refund(Date creationDate, double amount, int refundAbleId) {
 		super();

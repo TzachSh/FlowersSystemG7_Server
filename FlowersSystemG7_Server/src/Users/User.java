@@ -8,13 +8,26 @@ import java.io.Serializable;
  *
  */
 public class User implements Serializable {
-	/***
-	 * Instance variables
+	
+	/**
+	 * user id
 	 */
 	private int uId;
+	/**
+	 * user name for log in
+	 */
 	private String user;
+	/**
+	 * password for log in
+	 */
 	private String password;
+	/**
+	 * state is logged in
+	 */
 	private boolean isLogged;
+	/**
+	 * permission  of the user
+	 */
 	private Permission permission;
 	/***
 	 * 
@@ -89,11 +102,11 @@ public class User implements Serializable {
 	/***
 	 * Constructor for the server side use
 	 * 
-	 * @param uId
-	 * @param user
-	 * @param password
-	 * @param isLogged
-	 * @param permission
+	 * @param uId user id 
+	 * @param user user name
+	 * @param password password
+	 * @param isLogged is online
+	 * @param permission permission
 	 */
 	public User(int uId, String user, String password, boolean isLogged , Permission permission) {
 		super();
@@ -106,10 +119,10 @@ public class User implements Serializable {
 	/***
 	 * Constructor for the client side use
 	 * 
-	 * @param user
-	 * @param password
-	 * @param isLogged
-	 * @param permission
+	 * @param user user name
+	 * @param password password
+	 * @param isLogged is online
+	 * @param permission permission
 	 */
 	public User(String user, String password, boolean isLogged , Permission permission) {
 		super();
@@ -120,8 +133,8 @@ public class User implements Serializable {
 	}
 	/***
 	 * Minimal constructor
-	 * @param user
-	 * @param password
+	 * @param user user name
+	 * @param password password
 	 */
 	public User(String user, String password) {
 		super();
@@ -130,7 +143,7 @@ public class User implements Serializable {
 	}
 	/***
 	 * Initialize only uId
-	 * @param uId
+	 * @param uId user id 
 	 */
 	public User(int uId) {
 		super();
@@ -138,7 +151,7 @@ public class User implements Serializable {
 	}
 	/***
 	 * Copy Constructor
-	 * @param user
+	 * @param user user name
 	 */
 	public User(User user) {
 		this(user.uId, user.user, user.password, user.isLogged, user.permission);

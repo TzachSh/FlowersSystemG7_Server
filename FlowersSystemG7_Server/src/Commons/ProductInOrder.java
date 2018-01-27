@@ -29,7 +29,7 @@ public class ProductInOrder implements Serializable {
 	}
 	/**
 	 * 
-	 * @param order number
+	 * @param orderId order number number
 	 */
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
@@ -43,7 +43,7 @@ public class ProductInOrder implements Serializable {
 	}
 	/**
 	 * 
-	 * @param product number
+	 * @param productId product number
 	 */
 	public void setProductId(int productId) {
 		this.productId = productId;

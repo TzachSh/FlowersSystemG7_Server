@@ -19,6 +19,7 @@ public class Branch implements Serializable {
 	
 	/**
 	 * Getter for get the branch name
+	 * @return name
 	 */
 	public String getName() {
 		return name;
@@ -34,6 +35,7 @@ public class Branch implements Serializable {
 	
 	/**
 	 * Get The Employee list of the Branch
+	 * @return list of employees
 	 */
 	public ArrayList<Employee> getEmployeeList() {
 		return employeeList;
@@ -49,6 +51,7 @@ public class Branch implements Serializable {
 	
 	/**
 	 * Getter for get the branch id
+	 * @return branch number
 	 * 	 */
 	public int getbId() {
 		return id;

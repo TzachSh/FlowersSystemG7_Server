@@ -4,23 +4,40 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import Branches.CustomerService;
-
 /***
  * 
  * Entity class to define the Survey
  *
  */
 public class Survey implements Serializable {
-	/***
-	 * Instance variables
+
+	/**
+	 * survey id 
 	 */
 	private int id;
+	/**
+	 * survey subject
+	 */
 	private String subject;
+	/**
+	 * creator id
+	 */
 	private int creatorId;
+	/**
+	 * if survey is active
+	 */
 	private boolean isActive;
+	/**
+	 * when survey has been activated
+	 */
 	private Date activatedDate;
+	/**
+	 * when survey has been closed
+	 */
 	private Date closedDate;
+	/**
+	 * all questions in survey
+	 */
 	private ArrayList<SurveyQuestion> surveyQuestionList;
 	
 	/***
@@ -124,12 +141,12 @@ public class Survey implements Serializable {
 	/***
 	 * Constructor for the server use
 	 * 
-	 * @param id
-	 * @param subject
-	 * @param creatorId
-	 * @param isActive
-	 * @param activatedDate
-	 * @param closedDate
+	 * @param id survey id
+	 * @param subject survey subject
+	 * @param creatorId creator id
+	 * @param isActive if survey is active
+	 * @param activatedDate when activated
+	 * @param closedDate when closed
 	 */
 	public Survey(int id, String subject, int creatorId,boolean isActive,Date activatedDate,Date closedDate) {
 	
@@ -143,9 +160,9 @@ public class Survey implements Serializable {
 	/***
 	 * Constructor for the client's side
 	 * 
-	 * @param subject
-	 * @param creatorId
-	 * @param isActive
+	 * @param subject survey subject
+	 * @param creatorId creator id
+	 * @param isActive if survey is active
 	 */
 	public Survey(String subject, int creatorId,boolean isActive) {	
 		this.subject = subject;

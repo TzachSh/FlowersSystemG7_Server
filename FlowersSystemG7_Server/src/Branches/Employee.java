@@ -2,7 +2,7 @@ package Branches;
 
 import java.io.Serializable;
 
-import Users.*;
+import Users.User;
 
 /**
  * Entity class that contains the employee details
@@ -18,6 +18,7 @@ public class Employee extends User implements Serializable {
 	
 	/**
 	 * Getter for get the branch id
+	 * @return branch number
 	 */
 	public int getBranchId() {
 		return branchId;
@@ -33,6 +34,7 @@ public class Employee extends User implements Serializable {
 
 	/**
 	 * Getter for get the role of employee
+	 * @return role of employee
 	 */
 	public Role getRole() {
 		return role;
@@ -48,6 +50,7 @@ public class Employee extends User implements Serializable {
 
 	/**
 	 * Getter of get the employee id
+	 * @return employee number
 	 */
 	public int geteId() {
 		return eId;
@@ -55,7 +58,7 @@ public class Employee extends User implements Serializable {
 
 	/**
 	 * Setter for set the employee id
-	 * @param eId
+	 * @param eId to set
 	 */
 	public void seteId(int eId) {
 		this.eId = eId;

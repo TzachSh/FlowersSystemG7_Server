@@ -2,8 +2,6 @@ package Survey;
 
 import java.io.Serializable;
 
-import Branches.ServiceExpert;
-
 /***
  * 
  * Entity to define the Conclusion of a Survey
@@ -11,12 +9,22 @@ import Branches.ServiceExpert;
  */
 public class SurveyConclusion implements Serializable {
 	
-	/***
-	 * Instance variables
+	
+	/**
+	 * survey conclusion id 
 	 */
 	private int id;
+	/**
+	 * creator of the conclusion
+	 */
 	private int serviceExpertId;
+	/**
+	 * survey id which was concluded
+	 */
 	private int surId;
+	/**
+	 * conclusion message
+	 */
 	private String conclusion;
 	/***
 	 * 
@@ -77,10 +85,10 @@ public class SurveyConclusion implements Serializable {
 	/***
 	 * Constructor for the server side
 	 * 
-	 * @param id
-	 * @param serviceExpertId
-	 * @param conclusion
-	 * @param surId
+	 * @param id conclusion id
+	 * @param serviceExpertId service expert id
+	 * @param conclusion conclusion message
+	 * @param surId survey id
 	 */
 	public SurveyConclusion(int id,int serviceExpertId, String conclusion, int surId) {
 		super();
@@ -92,9 +100,9 @@ public class SurveyConclusion implements Serializable {
 	
 	/***
 	 * Constructor for the client side
-	 * @param serviceExpertId
-	 * @param conclusion
-	 * @param surId
+	 * @param serviceExpertId service expert id
+	 * @param conclusion conclusion message
+	 * @param surId survey id
 	 */
 	public SurveyConclusion(int serviceExpertId, String conclusion, int surId) {
 		super();

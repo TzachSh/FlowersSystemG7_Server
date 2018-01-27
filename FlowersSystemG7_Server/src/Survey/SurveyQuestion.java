@@ -1,7 +1,6 @@
 package Survey;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 /***
  * 
  * Entity class to define Question in Survey
@@ -9,11 +8,17 @@ import java.util.ArrayList;
  */
 public class SurveyQuestion implements Serializable {
 	
-	/***
-	 * Instance variables
+	/**
+	 *  survey question number
 	 */
 	private int id;
+	/**
+	 * survey id
+	 */
 	private int surveyId;
+	/**
+	 *  question number
+	 */
 	private int questionId;
 	/***
 	 * 
@@ -60,9 +65,9 @@ public class SurveyQuestion implements Serializable {
 	/***
 	 * Constructor for the server side
 	 * 
-	 * @param id
-	 * @param surveyId
-	 * @param questionId
+	 * @param id   survey question number
+	 * @param surveyId survey id
+	 * @param questionId question id
 	 */
 	public SurveyQuestion(int id, int surveyId,int questionId) {
 		super();
@@ -73,8 +78,8 @@ public class SurveyQuestion implements Serializable {
 	/***
 	 * Constructor for the client side
 	 * 
-	 * @param surveyId
-	 * @param questionId
+	 * @param surveyId survey id
+	 * @param questionId question id
 	 */
 	public SurveyQuestion(int surveyId, int questionId) {
 		super();

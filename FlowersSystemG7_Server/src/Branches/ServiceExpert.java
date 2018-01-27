@@ -13,11 +13,17 @@ import Users.Permission;
 public class ServiceExpert extends Employee implements Serializable {
 	/**survey conclusions list */
 	private ArrayList<SurveyConclusion> surveyConclusionList;
-	/**returns the survey conclusions list*/
+	/**
+	 * 
+	 * @return conclusions for survey
+	 */
 	public ArrayList<SurveyConclusion> getSurveyConclusionList() {
 		return surveyConclusionList;
 	}
-	/**setting survey conclusion list*/
+	/**
+	 * 
+	 * @param surveyConclusionList to set
+	 */
 	public void setSurveyConclusionList(ArrayList<SurveyConclusion> surveyConclusionList) {
 		this.surveyConclusionList = surveyConclusionList;
 	}
