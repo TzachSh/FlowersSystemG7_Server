@@ -2904,7 +2904,7 @@ public class SystemServer extends AbstractServer{
 			}
 		});
 	}
-	/**
+	/**addOrderRefundHandler
 	 * add refund by order
 	 * @param db - database information
 	 * @param key - command operation to perform
@@ -3230,6 +3230,7 @@ public class SystemServer extends AbstractServer{
 					break;
 				case addOrderRefund:
 					addOrderRefundHandler(db, key);
+					break;
 				case updateAccountBalance:
 					updateAccountBalance(db, key);
 					default:;
