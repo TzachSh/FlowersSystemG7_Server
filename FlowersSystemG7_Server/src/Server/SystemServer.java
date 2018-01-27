@@ -2387,18 +2387,21 @@ public class SystemServer extends AbstractServer{
 		ArrayList<ProductInOrder> prodLine = packet.<ProductInOrder>convertedResultListForCommand(Command.getOrderInProductsDetails);
 		String valuesIn = new String("(");
 		int i;
-		for(i = 0 ; i < prodLine.size()-1;i++)
+		for(i = 0 ; i < prodLine.size();i++)
 		{
-			valuesIn+=prodLine.get(i).getProductId()+",";
+			valuesIn+=prodLine.get(i).getProductId();
+			
+			if (i != prodLine.size() - 1)
+				valuesIn+= ",";
 		}
-		valuesIn+=prodLine.get(i).getProductId()+")";
+		valuesIn+=")";
 		
 		String query = "select productName,price,typeId,product.pId \r\n" + 
 		"from product inner join catalogproduct \r\n" + 
 		"	on product.pId= catalogproduct.pId \r\n" + 
 		"where product.pId in "+valuesIn+"\r\n" + 
 		"union\r\n" + 
-		"select 'custom product' as productName,price,typeId,product.pId \r\n" + 
+		"select 'Custom Product' as productName,price,typeId,product.pId \r\n" + 
 		"from product inner join customproduct\r\n" + 
 		"	on product.pId= customproduct.pId \r\n" + 
 		"where product.pId in "+valuesIn+";";
@@ -2417,7 +2420,7 @@ public class SystemServer extends AbstractServer{
 				double price = rs.getDouble(2);
 				int typeId = rs.getInt(3);
 				int pId = rs.getInt(4);
-				if(prodName.equals("custom"))
+				if(prodName.toLowerCase().equals("custom"))
 					prodList.add(new CustomProduct(price,typeId,pId));
 				else
 					prodList.add(new CatalogProduct(price,typeId,prodName,pId));
