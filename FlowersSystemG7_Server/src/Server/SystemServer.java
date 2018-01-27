@@ -275,6 +275,7 @@ public class SystemServer extends AbstractServer{
 			scene.getStylesheets().add(getClass().getResource(srcCSS).toExternalForm());
 			arg0.setTitle(title);
 			arg0.setScene(scene);
+			arg0.setResizable(false);
 			arg0.show();
 		} catch (Exception e) {
 			// TODO: handle exception
