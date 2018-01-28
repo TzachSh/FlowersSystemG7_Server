@@ -1,6 +1,21 @@
 Birthday,36,2017-02-15,3,Completed,Spring Delight,90.00,Cash, , , , 
 Birthday,35,2017-01-27,3,Completed,Spring Delight,68.00,Cash, , , , 
-Exotic,38,2017-01-10,2,Completed,Van Gogh,47.00,Cash, , , , 
+Birthday,23,2017-01-29,3,Completed,Spring Delight,112.50,Cash,11,Tiberias,032323633,Tzach
+Birthday,21,2017-02-18,3,Completed,Spring Delight,102.50,BalancePayment,10,Carmiel,042362363,Or
+Birthday,21,2017-02-18,3,Completed,Spring Delight,102.50,CreditCard,10,Carmiel,042362363,Or
+Exotic,21,2017-02-18,2,Completed,Van Gogh,102.50,BalancePayment,10,Carmiel,042362363,Or
+Exotic,21,2017-02-18,2,Completed,Van Gogh,102.50,CreditCard,10,Carmiel,042362363,Or
 Exotic,37,2017-02-05,2,Completed,Van Gogh,47.00,Cash, , , , 
+Exotic,28,2017-03-27,2,Completed,Van Gogh,112.99,BalancePayment,13,Tiberias,0503236033,Dan
+Exotic,28,2017-03-27,2,Completed,Van Gogh,112.99,Cash,13,Tiberias,0503236033,Dan
+Exotic,38,2017-01-10,2,Completed,Van Gogh,47.00,Cash, , , , 
 Flower Arrangement,36,2017-02-15,4,Completed,Flaming Heart,90.00,Cash, , , , 
+Flower Arrangement,23,2017-01-29,4,Completed,Flaming Heart,112.50,Cash,11,Tiberias,032323633,Tzach
+Flowering Plant,28,2017-03-27,79,Completed,Custom Product,112.99,BalancePayment,13,Tiberias,0503236033,Dan
+Flowering Plant,28,2017-03-27,79,Completed,Custom Product,112.99,Cash,13,Tiberias,0503236033,Dan
+Flowering Plant,28,2017-03-27,5,Completed,Blooming Summer,112.99,BalancePayment,13,Tiberias,0503236033,Dan
+Flowering Plant,28,2017-03-27,5,Completed,Blooming Summer,112.99,Cash,13,Tiberias,0503236033,Dan
 Wedding,35,2017-01-27,1,Completed,Ruby Red,68.00,Cash, , , , 
+Wedding,23,2017-01-29,76,Completed,Custom Product,112.50,Cash,11,Tiberias,032323633,Tzach
+Wedding,21,2017-02-18,74,Completed,Custom Product,102.50,BalancePayment,10,Carmiel,042362363,Or
+Wedding,21,2017-02-18,74,Completed,Custom Product,102.50,CreditCard,10,Carmiel,042362363,Or

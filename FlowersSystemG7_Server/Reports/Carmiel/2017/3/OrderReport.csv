@@ -1,6 +1,11 @@
-Birthday,50,2017-09-27,3,Completed,Spring Delight,90.00,Cash, , , , 
 Birthday,49,2017-08-17,3,Completed,Spring Delight,92.50,CreditCard, , , , 
 Birthday,44,2017-08-27,3,Completed,Spring Delight,92.50,Cash, , , , 
+Birthday,19,2017-09-09,3,Completed,Spring Delight,92.50,Cash,9,Haifa,035235235,Yossi
+Birthday,50,2017-09-27,3,Completed,Spring Delight,90.00,Cash, , , , 
+Exotic,18,2017-08-15,2,Canceled,Van Gogh,431.50,Cash,8,Tiberias,045235352,Dana
 Exotic,49,2017-08-17,2,Completed,Van Gogh,92.50,CreditCard, , , , 
 Exotic,44,2017-08-27,2,Completed,Van Gogh,92.50,Cash, , , , 
+Exotic,19,2017-09-09,2,Completed,Van Gogh,92.50,Cash,9,Haifa,035235235,Yossi
 Flower Arrangement,50,2017-09-27,4,Completed,Flaming Heart,90.00,Cash, , , , 
+Wedding,18,2017-08-15,73,Canceled,Custom Product,431.50,Cash,8,Tiberias,045235352,Dana
+Wedding,18,2017-08-15,1,Canceled,Ruby Red,431.50,Cash,8,Tiberias,045235352,Dana
