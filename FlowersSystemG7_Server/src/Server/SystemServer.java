@@ -208,7 +208,7 @@ public class SystemServer extends AbstractServer{
 					paneDetails.setDisable(true);
 					btnSchedule.setDisable(false);
 					btnSubmit.setText("Stop service");//update button
-
+					
 				}
 				else//if it was listen
 				{
